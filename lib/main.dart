@@ -1,28 +1,36 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hunger_hub/core/di/injection.dart';
+import 'package:hunger_hub/core/router/app_router.dart';
+import 'package:hunger_hub/core/theme/app_theme.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // ── Firebase Init ──
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  // ── Dependencies Init ──
+  await configureDependencies();
+
+  runApp(const HungryHubApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class HungryHubApp extends StatelessWidget {
+  const HungryHubApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Hunger Hub',
+    return MaterialApp.router(
+      title: 'HungryHub',
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: Text('HungryHub 🍔'),
-        ),
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light,
+      routerConfig: AppRouter.router,
     );
   }
 }

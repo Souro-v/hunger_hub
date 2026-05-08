@@ -10,8 +10,6 @@ class Validators {
     }
     return null;
   }
-
-
   // ── Password ──
   static String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {

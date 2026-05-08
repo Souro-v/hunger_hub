@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "411217346388",
+    "project_id": "hungerhub-9ae1f",
+    "storage_bucket": "hungerhub-9ae1f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411217346388:android:84b07493f69fe8812952c1",
+        "android_client_info": {
+          "package_name": "com.example.hunger_hub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASI0B8PEj3dLEOK1i5vcRKgZh67B9WYFA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

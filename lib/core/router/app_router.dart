@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/onboarding/welcome_screen.dart';
 import '../storage/local_storage.dart';
 
 class AppRouter {
@@ -49,9 +50,7 @@ class AppRouter {
       GoRoute(
         path: onboarding,
         name: 'onboarding',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Onboarding — Coming Soon')),
-        ),
+        builder: (context, state) => const WelcomeScreen(),
       ),
       GoRoute(
         path: signIn,

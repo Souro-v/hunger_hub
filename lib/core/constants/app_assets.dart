@@ -13,4 +13,7 @@ class AppAssets {
   static const String iconOrders = 'assets/icons/orders.png';
   static const String iconChat = 'assets/icons/chat.png';
   static const String iconProfile = 'assets/icons/profile.png';
+  // ── Icons ──
+  static const String facebook = 'assets/icons/facebook.png';
+  static const String google = 'assets/icons/google.png';
 }

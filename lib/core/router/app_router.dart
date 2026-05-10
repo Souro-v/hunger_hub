@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/auth/otp_screen.dart';
+import '../../features/auth/sign_in_screen.dart';
+import '../../features/auth/sign_up_screen.dart';
+import '../../features/auth/verify_phone_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../storage/local_storage.dart';
 
@@ -55,16 +59,12 @@ class AppRouter {
       GoRoute(
         path: signIn,
         name: 'signIn',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Sign In — Coming Soon')),
-        ),
+        builder: (context, state) => const SignInScreen(),
       ),
       GoRoute(
         path: signUp,
         name: 'signUp',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Sign Up — Coming Soon')),
-        ),
+        builder: (context, state) => const SignUpScreen(),
       ),
       GoRoute(
         path: verifyEmail,
@@ -76,16 +76,12 @@ class AppRouter {
       GoRoute(
         path: verifyPhone,
         name: 'verifyPhone',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Verify Phone — Coming Soon')),
-        ),
+        builder: (context, state) => const VerifyPhoneScreen(),
       ),
       GoRoute(
         path: otp,
         name: 'otp',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('OTP — Coming Soon')),
-        ),
+        builder: (context, state) => const OtpScreen(),
       ),
       GoRoute(
         path: home,

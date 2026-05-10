@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/otp_screen.dart';
 import '../../features/auth/sign_in_screen.dart';
 import '../../features/auth/sign_up_screen.dart';
+import '../../features/auth/verify_email_screen.dart';
 import '../../features/auth/verify_phone_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../storage/local_storage.dart';
@@ -69,9 +70,7 @@ class AppRouter {
       GoRoute(
         path: verifyEmail,
         name: 'verifyEmail',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Verify Email — Coming Soon')),
-        ),
+        builder: (context, state) => const VerifyEmailScreen(),
       ),
       GoRoute(
         path: verifyPhone,

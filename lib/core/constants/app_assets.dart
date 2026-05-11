@@ -28,6 +28,12 @@ class AppAssets {
 // ── Restaurants ──
   static const String rest1 = 'assets/images/rest1.png';
   static const String rest2 = 'assets/images/rest2.png';
+  static const String rest3 = 'assets/images/rest3.png';
+  static const String rest4 = 'assets/images/rest4.png';
+  static const String rest5 = 'assets/images/rest5.png';
+  static const String rest6 = 'assets/images/rest6.png';
+  static const String rest7 = 'assets/images/rest7.png';
+  static const String rest8 = 'assets/images/rest8.png';
 
 // ── Foods ──
   static const String food1 = 'assets/images/food1.png';
@@ -37,6 +43,8 @@ class AppAssets {
 
 // ── Icons ──
   static const String locationPin = 'assets/icons/location.png';
+  static const String clock = 'assets/icons/clock.png';
+  static const String delivery = 'assets/icons/delivery.png';
 // ── Categories ──
   static const String catNonVeg = 'assets/icons/cat_nonveg.png';
   static const String catVeg = 'assets/icons/cat_veg.png';

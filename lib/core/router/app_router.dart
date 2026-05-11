@@ -6,6 +6,7 @@ import '../../features/auth/sign_up_screen.dart';
 import '../../features/auth/verify_email_screen.dart';
 import '../../features/auth/verify_phone_screen.dart';
 import '../../features/delivery/delivery_address_screen.dart';
+import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../storage/local_storage.dart';
 
@@ -91,9 +92,7 @@ class AppRouter {
       GoRoute(
         path: home,
         name: 'home',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Home — Coming Soon')),
-        ),
+        builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
         path: restaurant,

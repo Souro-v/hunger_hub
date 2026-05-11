@@ -40,7 +40,7 @@ class _OtpScreenState extends State<OtpScreen> {
     // TODO: FirebaseAuthService OTP verify connect করবো
     await Future.delayed(const Duration(seconds: 2));
     setState(() => _isLoading = false);
-    if (mounted) context.go(AppRouter.home);
+    if (mounted) context.go(AppRouter.deliveryAddress);
   }
 
   void _resendOtp() {

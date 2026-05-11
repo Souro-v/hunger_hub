@@ -32,9 +32,10 @@ dependencies:
   # ── Storage ──
   shared_preferences: ^2.2.2
   flutter_secure_storage: ^9.0.0
-
+  # ── Map ──
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
   # ── Location & Map ──
-  google_maps_flutter: ^2.5.3
   geolocator: ^11.0.0
 
   # ── UI ──

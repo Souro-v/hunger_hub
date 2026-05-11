@@ -5,6 +5,7 @@ import '../../features/auth/sign_in_screen.dart';
 import '../../features/auth/sign_up_screen.dart';
 import '../../features/auth/verify_email_screen.dart';
 import '../../features/auth/verify_phone_screen.dart';
+import '../../features/delivery/delivery_address_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../storage/local_storage.dart';
 
@@ -33,6 +34,7 @@ class AppRouter {
   static const String review = '/review';
   static const String refer = '/refer';
   static const String help = '/help';
+  static const String deliveryAddress = '/delivery-address';
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
@@ -81,6 +83,10 @@ class AppRouter {
         path: otp,
         name: 'otp',
         builder: (context, state) => const OtpScreen(),
+      ),GoRoute(
+        path: deliveryAddress,
+        name: 'deliveryAddress',
+        builder: (context, state) => const DeliveryAddressScreen(),
       ),
       GoRoute(
         path: home,

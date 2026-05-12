@@ -109,6 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _currentNavIndex,
         onTap: (index) {
           setState(() => _currentNavIndex = index);
+          if (index == 0) context.go(AppRouter.home);
+          if (index == 1) context.go(AppRouter.restaurant);
           if (index == 2) context.go(AppRouter.orderStatus);
           if (index == 3) context.go(AppRouter.profile);
         },

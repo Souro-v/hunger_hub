@@ -8,6 +8,7 @@ import '../../features/auth/verify_phone_screen.dart';
 import '../../features/delivery/delivery_address_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
+import '../../features/restaurant/restaurant_screen.dart';
 import '../storage/local_storage.dart';
 
 class AppRouter {
@@ -97,9 +98,7 @@ class AppRouter {
       GoRoute(
         path: restaurant,
         name: 'restaurant',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Restaurant — Coming Soon')),
-        ),
+        builder: (context, state) => const RestaurantScreen(),
       ),
       GoRoute(
         path: cart,

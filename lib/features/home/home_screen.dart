@@ -362,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index) {
               final rest = _restaurants[index];
               return GestureDetector(
-                onTap: () => context.go(AppRouter.restaurant),
+                onTap: () => context.go(AppRouter.menuList),
                 child: Container(
                   width: 200,
                   margin: const EdgeInsets.only(right: 16),

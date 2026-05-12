@@ -8,6 +8,7 @@ import '../../features/auth/verify_phone_screen.dart';
 import '../../features/delivery/delivery_address_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
+import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
 import '../storage/local_storage.dart';
 
@@ -24,6 +25,7 @@ class AppRouter {
   static const String otp = '/otp';
   static const String home = '/home';
   static const String restaurant = '/restaurant';
+  static const String menuList = '/menu-list';
   static const String cart = '/cart';
   static const String checkout = '/checkout';
   static const String paymentMethod = '/payment-method';
@@ -37,6 +39,7 @@ class AppRouter {
   static const String refer = '/refer';
   static const String help = '/help';
   static const String deliveryAddress = '/delivery-address';
+
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
@@ -99,6 +102,11 @@ class AppRouter {
         path: restaurant,
         name: 'restaurant',
         builder: (context, state) => const RestaurantScreen(),
+      ),
+      GoRoute(
+        path: menuList,
+        name: 'menuList',
+        builder: (context, state) => const MenuListScreen(),
       ),
       GoRoute(
         path: cart,

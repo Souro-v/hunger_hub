@@ -181,18 +181,18 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 itemBuilder: (context, index) {
                   final rest = _filteredRestaurants[index];
                   return GestureDetector(
-                    onTap: () => context.go(AppRouter.restaurant),
+                    onTap: () => context.go(AppRouter.menuList),
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         borderRadius:
                         BorderRadius.circular(AppConstants.radiusLG),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: AppColors.shadow,
                             blurRadius: 8,
-                            offset: const Offset(0, 2),
+                            offset:  Offset(0, 2),
                           ),
                         ],
                       ),

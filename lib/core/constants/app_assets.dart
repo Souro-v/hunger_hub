@@ -50,4 +50,19 @@ class AppAssets {
   static const String catVeg = 'assets/icons/cat_veg.png';
   static const String catSpicy = 'assets/icons/cat_spicy.png';
   static const String catPizza = 'assets/icons/cat_pizza.png';
+
+  // ── Food Categories ──
+  static const String foodCat1 = 'assets/images/food_cat1.png';
+  static const String foodCat2 = 'assets/images/food_cat2.png';
+  static const String foodCat3 = 'assets/images/food_cat3.png';
+  static const String foodCat4 = 'assets/images/food_cat4.png';
+
+// ── Menu Items ──
+  static const String menu1 = 'assets/images/menu1.png';
+  static const String menu2 = 'assets/images/menu2.png';
+  static const String menu3 = 'assets/images/menu3.png';
+  static const String menu4 = 'assets/images/menu4.png';
+  static const String menu5 = 'assets/images/menu5.png';
+  static const String menu6 = 'assets/images/menu6.png';
+
 }

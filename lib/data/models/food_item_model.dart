@@ -8,6 +8,7 @@ class FoodItemModel {
   final String category;
   final bool isAvailable;
   final bool isPopular;
+  final double rating;
   final List<String> ingredients;
   final DateTime? createdAt;
 
@@ -20,6 +21,7 @@ class FoodItemModel {
     required this.price,
     required this.category,
     required this.isAvailable,
+    this.rating = 0.0,
     this.isPopular = false,
     this.ingredients = const [],
     this.createdAt,
@@ -37,6 +39,7 @@ class FoodItemModel {
       category: map['category'] ?? '',
       isAvailable: map['isAvailable'] ?? true,
       isPopular: map['isPopular'] ?? false,
+      rating: (map['rating'] ?? 0.0).toDouble(),
       ingredients: List<String>.from(map['ingredients'] ?? []),
       createdAt: map['createdAt']?.toDate(),
     );
@@ -54,6 +57,7 @@ class FoodItemModel {
       'category': category,
       'isAvailable': isAvailable,
       'isPopular': isPopular,
+      'rating': rating,
       'ingredients': ingredients,
     };
   }
@@ -69,6 +73,7 @@ class FoodItemModel {
     String? category,
     bool? isAvailable,
     bool? isPopular,
+    double? rating,
     List<String>? ingredients,
     DateTime? createdAt,
   }) {
@@ -82,6 +87,7 @@ class FoodItemModel {
       category: category ?? this.category,
       isAvailable: isAvailable ?? this.isAvailable,
       isPopular: isPopular ?? this.isPopular,
+      rating: rating ?? this.rating,
       ingredients: ingredients ?? this.ingredients,
       createdAt: createdAt ?? this.createdAt,
     );

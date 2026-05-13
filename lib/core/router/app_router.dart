@@ -5,6 +5,7 @@ import '../../features/auth/sign_in_screen.dart';
 import '../../features/auth/sign_up_screen.dart';
 import '../../features/auth/verify_email_screen.dart';
 import '../../features/auth/verify_phone_screen.dart';
+import '../../features/checkout/payment_method_screen.dart';
 import '../../features/delivery/delivery_address_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
@@ -118,9 +119,7 @@ class AppRouter {
       GoRoute(
         path: checkout,
         name: 'checkout',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Checkout — Coming Soon')),
-        ),
+        builder: (context, state) => const PaymentMethodScreen(),
       ),
       GoRoute(
         path: paymentMethod,

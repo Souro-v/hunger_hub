@@ -64,5 +64,15 @@ class AppAssets {
   static const String menu4 = 'assets/images/menu4.png';
   static const String menu5 = 'assets/images/menu5.png';
   static const String menu6 = 'assets/images/menu6.png';
+  // ── Payment Icons ──
+  static const String paypal = 'assets/icons/paypal.png';
+  static const String mastercard = 'assets/icons/mastercard.png';
+  static const String gpay = 'assets/icons/gpay.png';
+  static const String amazonPay = 'assets/icons/amazon_pay.png';
+  static const String visa = 'assets/icons/visa.png';
+
+// ── Images ──
+  static const String error404 = 'assets/images/error_404.png';
+  static const String addCardBg = 'assets/images/add_card_bg.png';
 
 }

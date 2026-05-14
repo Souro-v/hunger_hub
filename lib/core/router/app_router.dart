@@ -9,6 +9,7 @@ import '../../features/checkout/payment_method_screen.dart';
 import '../../features/delivery/delivery_address_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
+import '../../features/orders/order_status_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
 import '../storage/local_storage.dart';
@@ -138,9 +139,7 @@ class AppRouter {
       GoRoute(
         path: orderStatus,
         name: 'orderStatus',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Order Status — Coming Soon')),
-        ),
+        builder: (context, state) => const OrderStatusScreen(),
       ),
       GoRoute(
         path: trackingMap,

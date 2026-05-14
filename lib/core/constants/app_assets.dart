@@ -74,5 +74,7 @@ class AppAssets {
 // ── Images ──
   static const String error404 = 'assets/images/error_404.png';
   static const String addCardBg = 'assets/images/add_card_bg.png';
+  static const String success = 'assets/icons/success.png';
+  static const String deliveryBike = 'assets/icons/delivery_bike.png';
 
 }

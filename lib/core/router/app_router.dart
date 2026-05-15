@@ -14,6 +14,7 @@ import '../../features/onboarding/welcome_screen.dart';
 import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
 import '../../features/rating/rating_screen.dart';
+import '../../features/rating/review_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
 import '../storage/local_storage.dart';
@@ -45,7 +46,6 @@ class AppRouter {
   static const String refer = '/refer';
   static const String help = '/help';
   static const String deliveryAddress = '/delivery-address';
-
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
@@ -94,7 +94,8 @@ class AppRouter {
         path: otp,
         name: 'otp',
         builder: (context, state) => const OtpScreen(),
-      ),GoRoute(
+      ),
+      GoRoute(
         path: deliveryAddress,
         name: 'deliveryAddress',
         builder: (context, state) => const DeliveryAddressScreen(),
@@ -170,9 +171,7 @@ class AppRouter {
       GoRoute(
         path: review,
         name: 'review',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Review — Coming Soon')),
-        ),
+        builder: (context, state) => const ReviewScreen(),
       ),
       GoRoute(
         path: refer,

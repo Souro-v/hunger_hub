@@ -8,6 +8,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../data/models/cart_model.dart';
 import '../../shared/widgets/app_button.dart';
 import 'cart_cubit.dart';
+import '../../core/di/injection.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -28,7 +29,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CartCubit(),
+      create:(_)=> sl<CartCubit>(),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(

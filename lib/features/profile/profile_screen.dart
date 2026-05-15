@@ -5,6 +5,11 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/di/injection.dart';
+import '../auth/auth_bloc.dart';
+import '../auth/auth_event.dart';
+import '../auth/auth_state.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -27,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     {'icon': Icons.favorite_outline, 'label': 'Favourite'},
     {'icon': Icons.notifications_outlined, 'label': 'Notification'},
     {'icon': Icons.payment_outlined, 'label': 'Payment Method'},
+    {'icon': Icons.person_add_outlined, 'label': 'Refer a Friend'},
   ];
 
   final List<Map<String, dynamic>> _menuGroup3 = [
@@ -37,103 +43,113 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // ── Header ──
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => context.pop(),
-                      child: Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: AppColors.divider,
-                          borderRadius:
-                              BorderRadius.circular(AppConstants.radiusCircle),
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new,
-                          size: 16,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Text('Profile', style: AppTextStyles.h3),
-                    const Spacer(),
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: AppColors.divider,
-                        borderRadius:
-                            BorderRadius.circular(AppConstants.radiusCircle),
-                      ),
-                      child: const Icon(
-                        Icons.more_horiz,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // ── Avatar ──
-              Column(
+    return BlocProvider(
+      create: (_) => sl<AuthBloc>(),
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthUnauthenticated) {
+            context.go(AppRouter.signIn);
+          }
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.background,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  const CircleAvatar(
-                    radius: 48,
-                    backgroundColor: AppColors.divider,
-                    child: Icon(
-                      Icons.person,
-                      size: 48,
-                      color: AppColors.textSecondary,
+                  // ── Header ──
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 16),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => context.pop(),
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: AppColors.divider,
+                              borderRadius: BorderRadius.circular(
+                                  AppConstants.radiusCircle),
+                            ),
+                            child: const Icon(
+                              Icons.arrow_back_ios_new,
+                              size: 16,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text('Profile', style: AppTextStyles.h3),
+                        const Spacer(),
+                        Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: AppColors.divider,
+                            borderRadius: BorderRadius.circular(
+                                AppConstants.radiusCircle),
+                          ),
+                          child: const Icon(
+                            Icons.more_horiz,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
+                  // ── Avatar ──
+                  Column(
+                    children: [
+                      const CircleAvatar(
+                        radius: 48,
+                        backgroundColor: AppColors.divider,
+                        child: Icon(
+                          Icons.person,
+                          size: 48,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text('Pranav Raji', style: AppTextStyles.h3),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Explore the food',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // ── Menu Group 1 ──
+                  _buildMenuGroup(_menuGroup1, context),
                   const SizedBox(height: 12),
-                  Text('Pranav Raji', style: AppTextStyles.h3),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Explore the food',
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
+
+                  // ── Menu Group 2 ──
+                  _buildMenuGroup(_menuGroup2, context),
+                  const SizedBox(height: 12),
+
+                  // ── Menu Group 3 ──
+                  _buildMenuGroup(_menuGroup3, context),
+                  const SizedBox(height: 24),
                 ],
               ),
-              const SizedBox(height: 24),
-
-              // ── Menu Group 1 ──
-              _buildMenuGroup(_menuGroup1, context),
-              const SizedBox(height: 12),
-
-              // ── Menu Group 2 ──
-              _buildMenuGroup(_menuGroup2, context),
-              const SizedBox(height: 12),
-
-              // ── Menu Group 3 ──
-              _buildMenuGroup(_menuGroup3, context),
-              const SizedBox(height: 24),
-            ],
+            ),
+          ),
+          bottomNavigationBar: AppBottomNav(
+            currentIndex: _currentNavIndex,
+            onTap: (index) {
+              setState(() => _currentNavIndex = index);
+              if (index == 0) context.go(AppRouter.home);
+              if (index == 1) context.go(AppRouter.restaurant);
+              if (index == 2) context.go(AppRouter.orderStatus);
+            },
           ),
         ),
-      ),
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: _currentNavIndex,
-        onTap: (index) {
-          setState(() => _currentNavIndex = index);
-          if (index == 0) context.go(AppRouter.home);
-          if (index == 1) context.go(AppRouter.restaurant);
-          if (index == 2) context.go(AppRouter.orderStatus);
-        },
       ),
     );
   }
@@ -208,14 +224,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 'Payment Method':
         context.go(AppRouter.checkout);
         break;
+      case 'Sign Out':
+        context.read<AuthBloc>().add(SignOutEvent());
+        break;
       case 'Refer a Friend':
         context.go(AppRouter.refer);
-        break;
-      case 'Sign Out':
-        //sign out work left......
-        context.go(AppRouter.signIn);
-        break;
-      default:
         break;
     }
   }

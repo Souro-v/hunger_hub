@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/auth/auth_bloc.dart';
+import '../../features/cart/cart_cubit.dart';
 import '../storage/local_storage.dart';
 import '../../firebase/auth/firebase_auth_service.dart';
 import '../../firebase/firestore/restaurant_service.dart';
@@ -63,5 +64,9 @@ Future<void> configureDependencies() async {
         () => AuthBloc(
       authRepository: sl<AuthRepository>(),
     ),
+  );
+  // ── Cubits ──
+  sl.registerFactory<CartCubit>(
+        () => CartCubit(),
   );
 }

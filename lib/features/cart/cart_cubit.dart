@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/cart_model.dart';
 import '../../data/models/food_item_model.dart';
 
+
 class CartCubit extends Cubit<CartModel> {
   CartCubit()
       :  super(const CartModel(

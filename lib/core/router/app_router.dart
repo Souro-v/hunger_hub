@@ -13,6 +13,7 @@ import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
+import '../../features/profile/profile_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/rating/review_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
@@ -152,9 +153,7 @@ class AppRouter {
       GoRoute(
         path: profile,
         name: 'profile',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Profile — Coming Soon')),
-        ),
+        builder: (context, state) => const ProfileScreen(),
       ),
       GoRoute(
         path: editProfile,

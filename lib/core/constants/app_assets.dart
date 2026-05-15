@@ -79,4 +79,6 @@ class AppAssets {
   static const String mapPlaceholder = 'assets/images/map_placeholder.png';
   static const String courierAvatar = 'assets/images/courier_avatar.png';
   static const String messenger = 'assets/icons/messenger.png';
+  static const String referCard = 'assets/images/refer_card.png';
+
 }

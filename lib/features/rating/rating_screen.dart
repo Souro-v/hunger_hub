@@ -164,6 +164,81 @@ class _RatingScreenState extends State<RatingScreen> {
                       color: AppColors.error,
                       onPressed: () => context.go(AppRouter.review),
                     ),
+                    // ── Reviews ──
+                    Text('Reviews', style: AppTextStyles.h3),
+                    const SizedBox(height: 12),
+
+// ── Write Review ──
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: AppColors.divider,
+                          child: Icon(Icons.person, color: AppColors.textSecondary),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => context.go(AppRouter.review),
+                            child: Container(
+                              height: 44,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.border),
+                                borderRadius: BorderRadius.circular(AppConstants.radiusMD),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Write your review...',
+                                  style: AppTextStyles.bodySmall.copyWith(
+                                    color: AppColors.textHint,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+// ── John Wick Review ──
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: AppColors.divider,
+                          child: Icon(Icons.person, color: AppColors.textSecondary),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('John wick', style: AppTextStyles.label),
+                                  Text('25/06/2020', style: AppTextStyles.caption),
+                                  const Icon(Icons.more_vert,
+                                      color: AppColors.textSecondary, size: 18),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                'Really convenient and the points system helps benefit loyalty. Some mild glitches here and there, but nothing too egregious. Obviously needs to roll out to more remote.',
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: AppColors.textSecondary,
+                                  height: 1.6,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 24),
                   ],
                 ),

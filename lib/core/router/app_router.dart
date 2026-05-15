@@ -8,6 +8,7 @@ import '../../features/auth/verify_phone_screen.dart';
 import '../../features/checkout/add_card_screen.dart';
 import '../../features/checkout/payment_method_screen.dart';
 import '../../features/delivery/delivery_address_screen.dart';
+import '../../features/help/help_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../../features/orders/order_status_screen.dart';
@@ -184,9 +185,7 @@ class AppRouter {
       GoRoute(
         path: help,
         name: 'help',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Help — Coming Soon')),
-        ),
+        builder: (context, state) => const HelpScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

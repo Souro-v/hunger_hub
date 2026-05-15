@@ -45,8 +45,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               // ── Header ──
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -56,8 +56,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 36,
                         decoration: BoxDecoration(
                           color: AppColors.divider,
-                          borderRadius: BorderRadius.circular(
-                              AppConstants.radiusCircle),
+                          borderRadius:
+                              BorderRadius.circular(AppConstants.radiusCircle),
                         ),
                         child: const Icon(
                           Icons.arrow_back_ios_new,
@@ -74,8 +74,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 36,
                       decoration: BoxDecoration(
                         color: AppColors.divider,
-                        borderRadius: BorderRadius.circular(
-                            AppConstants.radiusCircle),
+                        borderRadius:
+                            BorderRadius.circular(AppConstants.radiusCircle),
                       ),
                       child: const Icon(
                         Icons.more_horiz,
@@ -89,10 +89,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // ── Avatar ──
               Column(
                 children: [
-                 const CircleAvatar(
+                  const CircleAvatar(
                     radius: 48,
                     backgroundColor: AppColors.divider,
-                    child:  Icon(
+                    child: Icon(
                       Icons.person,
                       size: 48,
                       color: AppColors.textSecondary,
@@ -145,8 +145,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.radiusLG),
-        boxShadow:const [
-         BoxShadow(
+        boxShadow: const [
+          BoxShadow(
             color: AppColors.shadow,
             blurRadius: 8,
             offset: Offset(0, 2),
@@ -164,8 +164,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   child: Row(
                     children: [
                       Icon(
@@ -188,8 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                if (!isLast)
-                  const Divider(height: 1, indent: 54),
+                if (!isLast) const Divider(height: 1, indent: 54),
               ],
             ),
           );
@@ -209,8 +208,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 'Payment Method':
         context.go(AppRouter.checkout);
         break;
+      case 'Refer a Friend':
+        context.go(AppRouter.refer);
+        break;
       case 'Sign Out':
-      //sign out work left......
+        //sign out work left......
         context.go(AppRouter.signIn);
         break;
       default:

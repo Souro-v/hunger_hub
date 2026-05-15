@@ -16,6 +16,7 @@ import '../../features/orders/tracking_map_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/rating/review_screen.dart';
+import '../../features/refer/refer_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
 import '../storage/local_storage.dart';
@@ -175,9 +176,7 @@ class AppRouter {
       GoRoute(
         path: refer,
         name: 'refer',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Refer — Coming Soon')),
-        ),
+        builder: (context, state) => const ReferScreen(),
       ),
       GoRoute(
         path: help,

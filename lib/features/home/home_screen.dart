@@ -369,8 +369,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(AppConstants.radiusLG),
-                    boxShadow: const[
-                       BoxShadow(
+                    boxShadow: const [
+                      BoxShadow(
                         color: AppColors.shadow,
                         blurRadius: 8,
                         offset: Offset(0, 2),

@@ -13,6 +13,7 @@ import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
+import '../../features/rating/rating_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
 import '../storage/local_storage.dart';
@@ -164,9 +165,7 @@ class AppRouter {
       GoRoute(
         path: rating,
         name: 'rating',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Rating — Coming Soon')),
-        ),
+        builder: (context, state) => const RatingScreen(),
       ),
       GoRoute(
         path: review,

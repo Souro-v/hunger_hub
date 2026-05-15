@@ -76,5 +76,7 @@ class AppAssets {
   static const String addCardBg = 'assets/images/add_card_bg.png';
   static const String success = 'assets/icons/success.png';
   static const String deliveryBike = 'assets/icons/delivery_bike.png';
-
+  static const String mapPlaceholder = 'assets/images/map_placeholder.png';
+  static const String courierAvatar = 'assets/images/courier_avatar.png';
+  static const String messenger = 'assets/icons/messenger.png';
 }

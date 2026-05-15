@@ -5,11 +5,13 @@ import '../../features/auth/sign_in_screen.dart';
 import '../../features/auth/sign_up_screen.dart';
 import '../../features/auth/verify_email_screen.dart';
 import '../../features/auth/verify_phone_screen.dart';
+import '../../features/checkout/add_card_screen.dart';
 import '../../features/checkout/payment_method_screen.dart';
 import '../../features/delivery/delivery_address_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../../features/orders/order_status_screen.dart';
+import '../../features/orders/tracking_map_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
 import '../storage/local_storage.dart';
@@ -132,9 +134,7 @@ class AppRouter {
       GoRoute(
         path: addCard,
         name: 'addCard',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Add Card — Coming Soon')),
-        ),
+        builder: (context, state) => const AddCardScreen(),
       ),
       GoRoute(
         path: orderStatus,
@@ -144,9 +144,7 @@ class AppRouter {
       GoRoute(
         path: trackingMap,
         name: 'trackingMap',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Tracking Map — Coming Soon')),
-        ),
+        builder: (context, state) => const TrackingMapScreen(),
       ),
       GoRoute(
         path: profile,

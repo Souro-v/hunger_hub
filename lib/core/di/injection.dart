@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/auth/auth_bloc.dart';
 import '../../features/cart/cart_cubit.dart';
 import '../../features/home/home_cubit.dart';
+import '../../features/orders/order_bloc.dart';
 import '../../features/restaurant/restaurant_bloc.dart';
 import '../storage/local_storage.dart';
 import '../../firebase/auth/firebase_auth_service.dart';
@@ -14,7 +15,9 @@ import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/restaurant_repository.dart';
 import '../../data/repositories/order_repository.dart';
 import '../../data/repositories/user_repository.dart';
+
 final GetIt sl = GetIt.instance;
+
 Future<void> configureDependencies() async {
   // ── Local Storage ──
   await LocalStorage.instance.init();
@@ -63,26 +66,33 @@ Future<void> configureDependencies() async {
   );
   // ── BLoCs ──
   sl.registerFactory<AuthBloc>(
-        () => AuthBloc(
+    () => AuthBloc(
       authRepository: sl<AuthRepository>(),
     ),
   );
   // ── Cubits ──
   sl.registerFactory<CartCubit>(
-        () => CartCubit(),
+    () => CartCubit(),
   );
 
   sl.registerFactory<RestaurantBloc>(
-        () => RestaurantBloc(
+    () => RestaurantBloc(
       restaurantRepository: sl<RestaurantRepository>(),
     ),
   );
   // ── HomeCubit ──
   sl.registerFactory<HomeCubit>(
-        () => HomeCubit(
+    () => HomeCubit(
       restaurantRepository: sl<RestaurantRepository>(),
       userRepository: sl<UserRepository>(),
       localStorage: LocalStorage.instance,
+    ),
+  );
+
+  // ── OrderBloc ──
+  sl.registerFactory<OrderBloc>(
+    () => OrderBloc(
+      orderRepository: sl<OrderRepository>(),
     ),
   );
 }

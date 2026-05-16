@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/auth/auth_bloc.dart';
 import '../../features/cart/cart_cubit.dart';
+import '../../features/home/home_cubit.dart';
 import '../../features/restaurant/restaurant_bloc.dart';
 import '../storage/local_storage.dart';
 import '../../firebase/auth/firebase_auth_service.dart';
@@ -74,6 +75,14 @@ Future<void> configureDependencies() async {
   sl.registerFactory<RestaurantBloc>(
         () => RestaurantBloc(
       restaurantRepository: sl<RestaurantRepository>(),
+    ),
+  );
+  // ── HomeCubit ──
+  sl.registerFactory<HomeCubit>(
+        () => HomeCubit(
+      restaurantRepository: sl<RestaurantRepository>(),
+      userRepository: sl<UserRepository>(),
+      localStorage: LocalStorage.instance,
     ),
   );
 }

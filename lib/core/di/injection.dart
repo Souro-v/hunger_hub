@@ -4,6 +4,7 @@ import '../../features/auth/auth_bloc.dart';
 import '../../features/cart/cart_cubit.dart';
 import '../../features/home/home_cubit.dart';
 import '../../features/orders/order_bloc.dart';
+import '../../features/rating/rating_cubit.dart';
 import '../../features/restaurant/restaurant_bloc.dart';
 import '../storage/local_storage.dart';
 import '../../firebase/auth/firebase_auth_service.dart';
@@ -93,6 +94,13 @@ Future<void> configureDependencies() async {
   sl.registerFactory<OrderBloc>(
     () => OrderBloc(
       orderRepository: sl<OrderRepository>(),
+    ),
+  );
+  // ── RatingCubit ──
+  sl.registerFactory<RatingCubit>(
+        () => RatingCubit(
+      userRepository: sl<UserRepository>(),
+      localStorage: LocalStorage.instance,
     ),
   );
 }

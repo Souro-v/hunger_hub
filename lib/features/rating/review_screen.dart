@@ -36,109 +36,110 @@ class _ReviewScreenState extends State<ReviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ── Header ──
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => context.pop(),
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: AppColors.divider,
-                        borderRadius:
-                            BorderRadius.circular(AppConstants.radiusCircle),
-                      ),
-                      child: const Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 16,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Text('Review', style: AppTextStyles.h3),
-                ],
-              ),
-            ),
-
-            // ── Write Review ──
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  // ── User Avatar ──
-                  const CircleAvatar(
-                    radius: 20,
-                    backgroundColor: AppColors.divider,
-                    child: Icon(
-                      Icons.person,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-
-                  // ── Input ──
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => context.go(AppRouter.rating),
-                      child: Container(
-                        height: 44,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.border),
-                          borderRadius:
-                              BorderRadius.circular(AppConstants.radiusMD),
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // ── Header ──
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => context.pop(),
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: AppColors.divider,
+                            borderRadius: BorderRadius.circular(
+                                AppConstants.radiusCircle),
+                          ),
+                          child: const Icon(
+                            Icons.arrow_back_ios_new,
+                            size: 16,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Write your review...',
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.textHint,
+                      ),
+                      const SizedBox(width: 16),
+                      Text('Review', style: AppTextStyles.h3),
+                    ],
+                  ),
+                ),
+
+                // ── Write Review ──
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      // ── User Avatar ──
+                      const CircleAvatar(
+                        radius: 20,
+                        backgroundColor: AppColors.divider,
+                        child: Icon(
+                          Icons.person,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+
+                      // ── Input ──
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => context.go(AppRouter.rating),
+                          child: Container(
+                            height: 44,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.border),
+                              borderRadius:
+                                  BorderRadius.circular(AppConstants.radiusMD),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Write your review...',
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: AppColors.textHint,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Divider(),
+                ),
+                const SizedBox(height: 8),
+                const Divider(),
 
-            // ── Reviews List ──
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: _reviews.length,
-                itemBuilder: (context, index) {
-                  final review = _reviews[index];
-                  return _ReviewCard(review: review);
-                },
-              ),
+                // ── Reviews List ──
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemCount: _reviews.length,
+                    itemBuilder: (context, index) {
+                      final review = _reviews[index];
+                      return _ReviewCard(review: review);
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: _currentNavIndex,
-        onTap: (index) {
-          setState(() => _currentNavIndex = index);
-          if (index == 0) context.go(AppRouter.home);
-          if (index == 1) context.go(AppRouter.restaurant);
-          if (index == 2) context.go(AppRouter.orderStatus);
-          if (index == 3) context.go(AppRouter.profile);
-        },
-      ),
+          ),
+          bottomNavigationBar: AppBottomNav(
+            currentIndex: _currentNavIndex,
+            onTap: (index) {
+              setState(() => _currentNavIndex = index);
+              if (index == 0) context.go(AppRouter.home);
+              if (index == 1) context.go(AppRouter.restaurant);
+              if (index == 2) context.go(AppRouter.orderStatus);
+              if (index == 3) context.go(AppRouter.profile);
+            },
+          ),
     );
   }
 }

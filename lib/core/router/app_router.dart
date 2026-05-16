@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../features/auth/otp_screen.dart';
+import '../../core/storage/local_storage.dart';
 import '../../features/auth/sign_in_screen.dart';
 import '../../features/auth/sign_up_screen.dart';
 import '../../features/auth/verify_email_screen.dart';
 import '../../features/auth/verify_phone_screen.dart';
+import '../../features/auth/otp_screen.dart';
+import '../../features/cart/cart_screen.dart';
 import '../../features/checkout/add_card_screen.dart';
 import '../../features/checkout/payment_method_screen.dart';
 import '../../features/delivery/delivery_address_screen.dart';
@@ -19,7 +21,6 @@ import '../../features/rating/review_screen.dart';
 import '../../features/refer/refer_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
-import '../storage/local_storage.dart';
 
 class AppRouter {
   AppRouter._();
@@ -32,6 +33,7 @@ class AppRouter {
   static const String verifyEmail = '/verify-email';
   static const String verifyPhone = '/verify-phone';
   static const String otp = '/otp';
+  static const String deliveryAddress = '/delivery-address';
   static const String home = '/home';
   static const String restaurant = '/restaurant';
   static const String menuList = '/menu-list';
@@ -47,16 +49,26 @@ class AppRouter {
   static const String review = '/review';
   static const String refer = '/refer';
   static const String help = '/help';
-  static const String deliveryAddress = '/delivery-address';
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
     redirect: (context, state) {
       final isLoggedIn = LocalStorage.instance.isLoggedIn();
       final isFirstTime = LocalStorage.instance.isFirstTime();
+      final location = state.uri.toString();
+
+      // ── Auth routes ──
+      final isAuthRoute = location == signIn ||
+          location == signUp ||
+          location == verifyEmail ||
+          location == verifyPhone ||
+          location == otp ||
+          location == onboarding ||
+          location == splash;
 
       if (isFirstTime) return onboarding;
-      if (!isLoggedIn) return signIn;
+      if (!isLoggedIn && !isAuthRoute) return signIn;
+      if (isLoggedIn && isAuthRoute) return home;
       return null;
     },
     routes: [
@@ -120,21 +132,12 @@ class AppRouter {
       GoRoute(
         path: cart,
         name: 'cart',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Cart — Coming Soon')),
-        ),
+        builder: (context, state) => const CartScreen(),
       ),
       GoRoute(
         path: checkout,
         name: 'checkout',
         builder: (context, state) => const PaymentMethodScreen(),
-      ),
-      GoRoute(
-        path: paymentMethod,
-        name: 'paymentMethod',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Payment Method — Coming Soon')),
-        ),
       ),
       GoRoute(
         path: addCard,
@@ -155,13 +158,6 @@ class AppRouter {
         path: profile,
         name: 'profile',
         builder: (context, state) => const ProfileScreen(),
-      ),
-      GoRoute(
-        path: editProfile,
-        name: 'editProfile',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Edit Profile — Coming Soon')),
-        ),
       ),
       GoRoute(
         path: rating,

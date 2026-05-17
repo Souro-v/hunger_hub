@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hunger_hub/features/orders/order_bloc.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/di/injection.dart';
 import '../../core/router/app_router.dart';
+import '../../core/storage/local_storage.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
+import 'order_event.dart';
 
 class OrderStatusScreen extends StatefulWidget {
   const OrderStatusScreen({super.key});
@@ -20,21 +25,24 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: _showCoupon
-            ? _buildCouponScreen(context)
-            : _buildSuccessScreen(context),
-      ),
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: _currentNavIndex,
-        onTap: (index) {
-          setState(() => _currentNavIndex = index);
-          if (index == 0) context.go(AppRouter.home);
-          if (index == 1) context.go(AppRouter.restaurant);
-          if (index == 3) context.go(AppRouter.profile);
-        },
+    return BlocProvider(
+      create: (_) => sl<OrderBloc>(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: _showCoupon
+              ? _buildCouponScreen(context)
+              : _buildSuccessScreen(context),
+        ),
+        bottomNavigationBar: AppBottomNav(
+          currentIndex: _currentNavIndex,
+          onTap: (index) {
+            setState(() => _currentNavIndex = index);
+            if (index == 0) context.go(AppRouter.home);
+            if (index == 1) context.go(AppRouter.restaurant);
+            if (index == 3) context.go(AppRouter.profile);
+          },
+        ),
       ),
     );
   }
@@ -78,12 +86,17 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
             width: double.infinity,
             height: 54,
             child: ElevatedButton(
-              onPressed: () => setState(() => _showCoupon = true),
+              onPressed: () {
+                final userId = LocalStorage.instance.getUserId() ?? '';
+                context.read<OrderBloc>().add(
+                      FetchOrdersEvent(userId: userId),
+                    );
+                setState(() => _showCoupon = true);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.error.withValues(alpha: 0.6),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                  BorderRadius.circular(AppConstants.radiusLG),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLG),
                 ),
               ),
               child: Text('TRACK YOUR ORDER', style: AppTextStyles.button),
@@ -133,12 +146,10 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
           // ── Coupon Code ──
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(
-                horizontal: 20, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
               color: AppColors.divider,
-              borderRadius:
-              BorderRadius.circular(AppConstants.radiusMD),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMD),
             ),
             child: Text(
               '#hby6791i',
@@ -167,8 +178,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.error.withValues(alpha: 0.6),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                  BorderRadius.circular(AppConstants.radiusLG),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLG),
                 ),
               ),
               child: Text('VIEW TRACKER', style: AppTextStyles.button),

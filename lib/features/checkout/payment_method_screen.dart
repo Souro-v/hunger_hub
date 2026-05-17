@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/di/injection.dart';
 import '../../core/router/app_router.dart';
+import '../../core/storage/local_storage.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
+import '../cart/cart_cubit.dart';
+import '../orders/order_bloc.dart';
+import '../orders/order_event.dart';
+import '../orders/order_state.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
   const PaymentMethodScreen({super.key});
@@ -16,7 +23,8 @@ class PaymentMethodScreen extends StatefulWidget {
 
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   int _currentNavIndex = 2;
-  bool _hasCard = false;
+  final bool _hasCard = false;
+  String _selectedPayment = '';
 
   final List<Map<String, dynamic>> _paymentMethods = [
     {'icon': AppAssets.paypal, 'name': 'Paypal'},
@@ -28,54 +36,76 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ── Header ──
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 20, vertical: 16),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => context.pop(),
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: AppColors.divider,
-                        borderRadius: BorderRadius.circular(
-                            AppConstants.radiusCircle),
-                      ),
-                      child: const Icon(Icons.arrow_back_ios_new,
-                          size: 16, color: AppColors.textPrimary),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Text('Payment', style: AppTextStyles.h3),
-                ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => sl<CartCubit>()),
+        BlocProvider(create: (_) => sl<OrderBloc>()),
+      ],
+      child: BlocListener<OrderBloc, OrderState>(
+        listener: (context, state) {
+          if (state is OrderPlaced) {
+            context.go(AppRouter.orderStatus);
+          }
+          if (state is OrderError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: AppColors.error,
+                behavior: SnackBarBehavior.floating,
               ),
-            ),
-
-            Expanded(
-              child: _hasCard
-                  ? _buildPaymentList(context)
-                  : _buildNoCard(context),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: _currentNavIndex,
-        onTap: (index) {
-          setState(() => _currentNavIndex = index);
-          if (index == 0) context.go(AppRouter.home);
-          if (index == 1) context.go(AppRouter.restaurant);
-          if (index == 3) context.go(AppRouter.profile);
+            );
+          }
         },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // ── Header ──
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => context.pop(),
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: AppColors.divider,
+                            borderRadius: BorderRadius.circular(
+                                AppConstants.radiusCircle),
+                          ),
+                          child: const Icon(Icons.arrow_back_ios_new,
+                              size: 16, color: AppColors.textPrimary),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Text('Payment', style: AppTextStyles.h3),
+                    ],
+                  ),
+                ),
+
+                Expanded(
+                  child: _hasCard
+                      ? _buildPaymentList(context)
+                      : _buildNoCard(context),
+                ),
+              ],
+            ),
+          ),
+          bottomNavigationBar: AppBottomNav(
+            currentIndex: _currentNavIndex,
+            onTap: (index) {
+              setState(() => _currentNavIndex = index);
+              if (index == 0) context.go(AppRouter.home);
+              if (index == 1) context.go(AppRouter.restaurant);
+              if (index == 3) context.go(AppRouter.profile);
+            },
+          ),
+        ),
       ),
     );
   }
@@ -111,21 +141,37 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
             itemBuilder: (context, index) {
               final method = _paymentMethods[index];
               return GestureDetector(
-                onTap: () => context.go(AppRouter.orderStatus),
+                onTap: () {
+                  setState(() => _selectedPayment = method['name']);
+                  final userId = LocalStorage.instance.getUserId() ?? '';
+                  context.read<OrderBloc>().add(
+                        PlaceOrderEvent(
+                          userId: userId,
+                          restaurantId: 'house_of_bbq',
+                          restaurantName: 'House of BBQ',
+                          deliveryAddress: 'Peelamedu home town',
+                          paymentMethod: method['name'],
+                        ),
+                      );
+                },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                    BorderRadius.circular(AppConstants.radiusMD),
-                    border: Border.all(color: AppColors.border),
+                    color: _selectedPayment == method['name']
+                        ? AppColors.error.withValues(alpha: 0.05)
+                        : Colors.white,
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMD),
+                    border: Border.all(
+                      color: _selectedPayment == method['name']
+                          ? AppColors.error
+                          : AppColors.border,
+                    ),
                   ),
                   child: Row(
                     children: [
-                      Image.asset(method['icon'],
-                          width: 40, height: 40),
+                      Image.asset(method['icon'], width: 40, height: 40),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Text(method['name'],
@@ -151,8 +197,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius:
-                BorderRadius.circular(AppConstants.radiusMD),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMD),
                 border: Border.all(color: AppColors.border),
               ),
               child: Row(
@@ -219,7 +264,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 ),
                 const TextSpan(
                     text:
-                    ', seems you dont\'t\nhave anty card yet.Let\'s\nquickly add one for you.'),
+                        ', seems you dont\'t\nhave anty card yet.Let\'s\nquickly add one for you.'),
               ],
             ),
           ),
@@ -235,8 +280,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 gradient: const LinearGradient(
                   colors: [Color(0xFF6B4EFF), Color(0xFFFF4E9F)],
                 ),
-                borderRadius:
-                BorderRadius.circular(AppConstants.radiusMD),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMD),
               ),
               child: Center(
                 child: Text(
@@ -254,8 +298,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
             height: 54,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius:
-              BorderRadius.circular(AppConstants.radiusMD),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMD),
               border: Border.all(color: AppColors.border),
             ),
             child: Center(

@@ -3,9 +3,12 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
+import '../../core/di/injection.dart';
 import '../../core/router/app_router.dart';
+import '../../core/storage/local_storage.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../data/repositories/user_repository.dart';
 import '../../shared/widgets/app_button.dart';
 
 class DeliveryAddressScreen extends StatefulWidget {
@@ -62,10 +65,33 @@ class _DeliveryAddressScreenState extends State<DeliveryAddressScreen> {
     setState(() => _isLoadingLocation = false);
   }
 
-  void _saveAddress() {
+  void _saveAddress() async {
     if (_flatController.text.isEmpty || _areaController.text.isEmpty) return;
-    // TODO: UserRepository addAddress connect করবো
-    context.go(AppRouter.home);
+    setState(() => _isLoadingLocation = true);
+
+    try {
+      final userId = LocalStorage.instance.getUserId();
+      if (userId != null) {
+        final userRepo = sl<UserRepository>();
+        await userRepo.addAddress(
+          userId: userId,
+          address: {
+            'flat': _flatController.text,
+            'area': _areaController.text,
+            'landmark': _landmarkController.text,
+            'orderFor': _orderFor,
+            'saveAs': _saveAs,
+            'lat': _currentLocation.latitude,
+            'lng': _currentLocation.longitude,
+          },
+        );
+      }
+    } catch (e) {
+      // ignore error, still navigate
+    }
+
+    setState(() => _isLoadingLocation = false);
+    if (mounted) context.go(AppRouter.home);
   }
 
   @override
@@ -85,8 +111,7 @@ class _DeliveryAddressScreenState extends State<DeliveryAddressScreen> {
               ),
               children: [
                 TileLayer(
-                  urlTemplate:
-                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   userAgentPackageName: 'com.hungryhub.app',
                 ),
                 MarkerLayer(
@@ -148,7 +173,8 @@ class _DeliveryAddressScreenState extends State<DeliveryAddressScreen> {
 
                     // ── Who are you ordering for ──
                     // ── Who are you ordering for ──
-                    Text('Who are you ordering for?', style: AppTextStyles.label),
+                    Text('Who are you ordering for?',
+                        style: AppTextStyles.label),
                     const SizedBox(height: 8),
                     Row(
                       children: ['Myself', 'Someone else'].map((option) {
@@ -163,21 +189,23 @@ class _DeliveryAddressScreenState extends State<DeliveryAddressScreen> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: isSelected ? AppColors.error : AppColors.border,
+                                    color: isSelected
+                                        ? AppColors.error
+                                        : AppColors.border,
                                     width: 2,
                                   ),
                                 ),
                                 child: isSelected
                                     ? Center(
-                                  child: Container(
-                                    width: 10,
-                                    height: 10,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColors.error,
-                                    ),
-                                  ),
-                                )
+                                        child: Container(
+                                          width: 10,
+                                          height: 10,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: AppColors.error,
+                                          ),
+                                        ),
+                                      )
                                     : null,
                               ),
                               const SizedBox(width: 6),

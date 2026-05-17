@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/router/app_router.dart';
@@ -6,8 +7,14 @@ import '../../core/theme/app_text_styles.dart';
 import '../../shared/widgets/app_button.dart';
 
 class OtpScreen extends StatefulWidget {
+  final String verificationId;
   final String phoneNumber;
-  const OtpScreen({super.key, this.phoneNumber = '+880 9985 956654'});
+
+  const OtpScreen({
+    super.key,
+    required this.verificationId,
+    required this.phoneNumber,
+  });
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -31,16 +38,45 @@ class _OtpScreenState extends State<OtpScreen> {
     super.dispose();
   }
 
-  String get _otp =>
-      _controllers.map((c) => c.text).join();
+  String get _otp => _controllers.map((c) => c.text).join();
 
-  void _verifyOtp() async {
+  Future<void> _verifyOtp() async {
     if (_otp.length < 4) return;
     setState(() => _isLoading = true);
-    // TODO: FirebaseAuthService OTP verify connect করবো
-    await Future.delayed(const Duration(seconds: 2));
-    setState(() => _isLoading = false);
-    if (mounted) context.go(AppRouter.deliveryAddress);
+
+    try {
+      final credential = PhoneAuthProvider.credential(
+        verificationId: widget.verificationId,
+        smsCode: _otp,
+      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      if (mounted) context.go(AppRouter.deliveryAddress);
+    } on FirebaseAuthException catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.message ?? 'Invalid OTP'),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
   }
 
   void _resendOtp() {
@@ -53,7 +89,8 @@ class _OtpScreenState extends State<OtpScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          padding: const EdgeInsets.symmetric(
+              horizontal: 24, vertical: 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,7 +106,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                   children: [
                     const TextSpan(
-                        text: 'Enter the 4-Digit code sent to you\non '),
+                        text:
+                        'Enter the 4-Digit code sent to you\non '),
                     TextSpan(
                       text: widget.phoneNumber,
                       style: AppTextStyles.bodySmall.copyWith(
@@ -137,7 +175,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
               // ── Verify Button ──
               AppButton(
-                text: 'RESEND LINK',
+                text: 'VERIFY',
                 isLoading: _isLoading,
                 color: AppColors.error,
                 onPressed: _verifyOtp,
@@ -152,7 +190,8 @@ class _OtpScreenState extends State<OtpScreen> {
                     style: AppTextStyles.caption,
                     children: [
                       const TextSpan(
-                          text: 'By signing up, you have agreed to our\n'),
+                          text:
+                          'By signing up, you have agreed to our\n'),
                       TextSpan(
                         text: 'Terms and conditions',
                         style: AppTextStyles.caption.copyWith(

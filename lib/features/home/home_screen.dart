@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/di/injection.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
+import '../../shared/widgets/loading_widget.dart';
+import 'home_cubit.dart';
+import 'home_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,25 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
     {'image': AppAssets.catPizza, 'label': 'Pizza'},
   ];
 
-  final List<Map<String, dynamic>> _restaurants = [
-    {
-      'image': AppAssets.rest1,
-      'name': 'Sri Ganapathy Mess',
-      'address': 'Peelamedu house, coimbatore',
-      'rating': 4.2,
-      'time': '32 min',
-      'delivery': 'Free delivery',
-    },
-    {
-      'image': AppAssets.rest2,
-      'name': 'White Restaurant',
-      'address': 'Peelamedu, coimbatore',
-      'rating': 4.5,
-      'time': '25 min',
-      'delivery': 'Free delivery',
-    },
-  ];
-
   final List<String> _foods = [
     AppAssets.food1,
     AppAssets.food2,
@@ -69,57 +55,87 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // ── Top Bar ──
-            _buildTopBar(),
+    return BlocProvider(
+      create: (_) => sl<HomeCubit>()..loadHomeData(),
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        body: SafeArea(
+          child: BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              return Column(
+                children: [
+                  // ── Top Bar ──
+                  _buildTopBar(state),
 
-            // ── Body ──
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    _buildGreeting(),
-                    const SizedBox(height: 16),
-                    _buildSearchBar(),
-                    const SizedBox(height: 20),
-                    _buildCategories(),
-                    const SizedBox(height: 20),
-                    _buildBanners(),
-                    const SizedBox(height: 20),
-                    _buildFeaturedBanner(),
-                    const SizedBox(height: 20),
-                    _buildFeaturedHotels(),
-                    const SizedBox(height: 20),
-                    _buildFoodsSection(),
-                    const SizedBox(height: 20),
-                  ],
-                ),
-              ),
-            ),
-          ],
+                  // ── Body ──
+                  Expanded(
+                    child: state is HomeLoading
+                        ? const LoadingWidget()
+                        : state is HomeError
+                        ? Center(
+                      child: Column(
+                        mainAxisAlignment:
+                        MainAxisAlignment.center,
+                        children: [
+                          Text(state.message,
+                              style: AppTextStyles.bodyMedium),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () => context
+                                .read<HomeCubit>()
+                                .loadHomeData(),
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    )
+                        : SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 16),
+                          _buildGreeting(state),
+                          const SizedBox(height: 16),
+                          _buildSearchBar(),
+                          const SizedBox(height: 20),
+                          _buildCategories(state),
+                          const SizedBox(height: 20),
+                          _buildBanners(),
+                          const SizedBox(height: 20),
+                          _buildFeaturedBanner(),
+                          const SizedBox(height: 20),
+                          _buildFeaturedHotels(state),
+                          const SizedBox(height: 20),
+                          _buildFoodsSection(),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
-      ),
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: _currentNavIndex,
-        onTap: (index) {
-          setState(() => _currentNavIndex = index);
-          if (index == 0) context.go(AppRouter.home);
-          if (index == 1) context.go(AppRouter.restaurant);
-          if (index == 2) context.go(AppRouter.orderStatus);
-          if (index == 3) context.go(AppRouter.profile);
-        },
+        bottomNavigationBar: AppBottomNav(
+          currentIndex: _currentNavIndex,
+          onTap: (index) {
+            setState(() => _currentNavIndex = index);
+            if (index == 1) context.go(AppRouter.restaurant);
+            if (index == 2) context.go(AppRouter.orderStatus);
+            if (index == 3) context.go(AppRouter.profile);
+          },
+        ),
       ),
     );
   }
 
   // ── Top Bar ──
-  Widget _buildTopBar() {
+  Widget _buildTopBar(HomeState state) {
+    final address = state is HomeLoaded
+        ? state.deliveryAddress
+        : 'Select address';
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
@@ -140,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 children: [
                   Text(
-                    'Peelamedu home town',
+                    address,
                     style: AppTextStyles.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -156,10 +172,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const Spacer(),
-          // ── Avatar ──
-          const CircleAvatar(
+          CircleAvatar(
             radius: 20,
-            backgroundImage: AssetImage(AppAssets.rest1),
+            backgroundColor: AppColors.divider,
+            child: const Icon(
+              Icons.person,
+              color: AppColors.textSecondary,
+            ),
           ),
         ],
       ),
@@ -167,14 +186,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ── Greeting ──
-  Widget _buildGreeting() {
+  Widget _buildGreeting(HomeState state) {
+    final name = state is HomeLoaded ? state.userName : 'User';
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: RichText(
         text: TextSpan(
           style: AppTextStyles.h2,
           children: [
-            const TextSpan(text: 'Hey Pranav , '),
+            TextSpan(text: 'Hey $name , '),
             TextSpan(
               text: 'Have a good Day!',
               style: AppTextStyles.h2.copyWith(color: AppColors.error),
@@ -210,7 +230,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const Icon(Icons.mic_outlined, color: AppColors.textSecondary),
+              const Icon(Icons.mic_outlined,
+                  color: AppColors.textSecondary),
               const SizedBox(width: 16),
             ],
           ),
@@ -220,14 +241,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ── Categories ──
-  Widget _buildCategories() {
+  Widget _buildCategories(HomeState state) {
+    final categories = state is HomeLoaded && state.categories.isNotEmpty
+        ? state.categories
+        .map((c) => {'image': c.iconUrl, 'label': c.name})
+        .toList()
+        : _categories;
+
     return SizedBox(
       height: 100,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: _categories.length,
+        itemCount: categories.length,
         itemBuilder: (context, index) {
+          final cat = categories[index];
           return GestureDetector(
             onTap: () {},
             child: Container(
@@ -240,14 +268,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       image: DecorationImage(
-                        image: AssetImage(_categories[index]['image']!),
+                        image: cat['image']!.startsWith('assets')
+                            ? AssetImage(cat['image']!)
+                        as ImageProvider
+                            : NetworkImage(cat['image']!),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    _categories[index]['label']!,
+                    cat['label']!,
                     style: AppTextStyles.caption.copyWith(
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w500,
@@ -270,13 +301,15 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 160,
           child: PageView.builder(
             controller: _bannerController,
-            onPageChanged: (index) => setState(() => _currentBanner = index),
+            onPageChanged: (index) =>
+                setState(() => _currentBanner = index),
             itemCount: _banners.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppConstants.radiusLG),
+                  borderRadius:
+                  BorderRadius.circular(AppConstants.radiusLG),
                   child: Image.asset(
                     _banners[index],
                     fit: BoxFit.cover,
@@ -288,7 +321,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        // ── Banner Dots ──
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(_banners.length, (index) {
@@ -327,10 +359,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ── Featured Hotels ──
-  Widget _buildFeaturedHotels() {
+  Widget _buildFeaturedHotels(HomeState state) {
+    final restaurants = state is HomeLoaded &&
+        state.featuredRestaurants.isNotEmpty
+        ? state.featuredRestaurants
+        : null;
+
     return Column(
       children: [
-        // ── Header ──
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
@@ -338,7 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Text('Featured hotels', style: AppTextStyles.h3),
               GestureDetector(
-                onTap: () {},
+                onTap: () => context.go(AppRouter.restaurant),
                 child: Text(
                   'See all',
                   style: AppTextStyles.bodySmall.copyWith(
@@ -352,42 +388,171 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 12),
 
-        // ── Restaurant List ──
         SizedBox(
           height: 220,
-          child: ListView.builder(
+          child: restaurants != null
+              ? ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: _restaurants.length,
+            padding:
+            const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: restaurants.length,
             itemBuilder: (context, index) {
-              final rest = _restaurants[index];
+              final rest = restaurants[index];
               return GestureDetector(
-                onTap: () => context.go(AppRouter.menuList),
+                onTap: () =>
+                    context.go(AppRouter.menuList),
                 child: Container(
                   width: 200,
                   margin: const EdgeInsets.only(right: 16),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(AppConstants.radiusLG),
-                    boxShadow: const [
+                    borderRadius: BorderRadius.circular(
+                        AppConstants.radiusLG),
+                    boxShadow: [
                       BoxShadow(
                         color: AppColors.shadow,
                         blurRadius: 8,
-                        offset: Offset(0, 2),
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
                     children: [
-                      // Image
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                        child: Image.network(
+                          rest.imageUrl,
+                          width: double.infinity,
+                          height: 120,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) =>
+                              Image.asset(
+                                AppAssets.rest1,
+                                width: double.infinity,
+                                height: 120,
+                                fit: BoxFit.cover,
+                              ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            Text(rest.name,
+                                style: AppTextStyles.label,
+                                maxLines: 1,
+                                overflow:
+                                TextOverflow.ellipsis),
+                            const SizedBox(height: 2),
+                            Text(rest.address,
+                                style: AppTextStyles.caption,
+                                maxLines: 1,
+                                overflow:
+                                TextOverflow.ellipsis),
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
+                                Container(
+                                  padding:
+                                  const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.star,
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                        4),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.star,
+                                          size: 10,
+                                          color: AppColors
+                                              .textWhite),
+                                      const SizedBox(width: 2),
+                                      Text(
+                                        rest.rating
+                                            .toStringAsFixed(1),
+                                        style: AppTextStyles
+                                            .caption
+                                            .copyWith(
+                                          color: AppColors
+                                              .textWhite,
+                                          fontWeight:
+                                          FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  '• ${rest.deliveryTime} min',
+                                  style: AppTextStyles.caption,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          )
+              : ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding:
+            const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              final images = [AppAssets.rest1, AppAssets.rest2];
+              final names = [
+                'Sri Ganapathy Mess',
+                'White Restaurant'
+              ];
+              final addresses = [
+                'Peelamedu house, coimbatore',
+                'Peelamedu, coimbatore'
+              ];
+              return GestureDetector(
+                onTap: () =>
+                    context.go(AppRouter.menuList),
+                child: Container(
+                  width: 200,
+                  margin: const EdgeInsets.only(right: 16),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(
+                        AppConstants.radiusLG),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.shadow,
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                    children: [
                       ClipRRect(
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(16),
                           topRight: Radius.circular(16),
                         ),
                         child: Image.asset(
-                          rest['image'],
+                          images[index],
                           width: double.infinity,
                           height: 120,
                           fit: BoxFit.cover,
@@ -396,54 +561,61 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(
                         padding: const EdgeInsets.all(10),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              rest['name'],
-                              style: AppTextStyles.label,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            Text(names[index],
+                                style: AppTextStyles.label,
+                                maxLines: 1,
+                                overflow:
+                                TextOverflow.ellipsis),
                             const SizedBox(height: 2),
-                            Text(
-                              rest['address'],
-                              style: AppTextStyles.caption,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            Text(addresses[index],
+                                style: AppTextStyles.caption,
+                                maxLines: 1,
+                                overflow:
+                                TextOverflow.ellipsis),
                             const SizedBox(height: 6),
                             Row(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
+                                  padding:
+                                  const EdgeInsets.symmetric(
                                     horizontal: 6,
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
                                     color: AppColors.star,
-                                    borderRadius: BorderRadius.circular(4),
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                        4),
                                   ),
                                   child: Row(
                                     children: [
                                       const Icon(Icons.star,
-                                          size: 10, color: AppColors.textWhite),
+                                          size: 10,
+                                          color: AppColors
+                                              .textWhite),
                                       const SizedBox(width: 2),
                                       Text(
-                                        rest['rating'].toString(),
-                                        style: AppTextStyles.caption.copyWith(
-                                          color: AppColors.textWhite,
-                                          fontWeight: FontWeight.w600,
+                                        '4.2',
+                                        style: AppTextStyles
+                                            .caption
+                                            .copyWith(
+                                          color: AppColors
+                                              .textWhite,
+                                          fontWeight:
+                                          FontWeight.w600,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                Text('• ${rest['time']}',
-                                    style: AppTextStyles.caption),
-                                const SizedBox(width: 6),
-                                Text('• ${rest['delivery']}',
-                                    style: AppTextStyles.caption),
+                                Text(
+                                  '• 32 min',
+                                  style: AppTextStyles.caption,
+                                ),
                               ],
                             ),
                           ],
@@ -464,7 +636,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildFoodsSection() {
     return Column(
       children: [
-        // ── Header ──
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
@@ -485,8 +656,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(height: 12),
-
-        // ── Food List ──
         SizedBox(
           height: 100,
           child: ListView.builder(
@@ -498,7 +667,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 90,
                 margin: const EdgeInsets.only(right: 12),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppConstants.radiusMD),
+                  borderRadius:
+                  BorderRadius.circular(AppConstants.radiusMD),
                   image: DecorationImage(
                     image: AssetImage(_foods[index]),
                     fit: BoxFit.cover,

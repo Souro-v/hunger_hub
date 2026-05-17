@@ -107,7 +107,13 @@ class AppRouter {
       GoRoute(
         path: otp,
         name: 'otp',
-        builder: (context, state) => const OtpScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return OtpScreen(
+            verificationId: extra?['verificationId'] ?? '',
+            phoneNumber: extra?['phoneNumber'] ?? '',
+          );
+        },
       ),
       GoRoute(
         path: deliveryAddress,

@@ -44,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<AuthBloc>(),
+      create: (_) => sl<AuthBloc>()..add(CheckAuthEvent()),
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthUnauthenticated) {
@@ -101,25 +101,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
 
                   // ── Avatar ──
+                  // ── Avatar ──
                   Column(
                     children: [
-                      const CircleAvatar(
-                        radius: 48,
-                        backgroundColor: AppColors.divider,
-                        child: Icon(
-                          Icons.person,
-                          size: 48,
-                          color: AppColors.textSecondary,
-                        ),
+                      BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, state) {
+                          final avatarUrl = state is AuthAuthenticated
+                              ? state.user.avatarUrl
+                              : null;
+                          return CircleAvatar(
+                            radius: 48,
+                            backgroundColor: AppColors.divider,
+                            backgroundImage: avatarUrl != null
+                                ? NetworkImage(avatarUrl)
+                                : null,
+                            child: avatarUrl == null
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 48,
+                                    color: AppColors.textSecondary,
+                                  )
+                                : null,
+                          );
+                        },
                       ),
                       const SizedBox(height: 12),
-                      Text('Pranav Raji', style: AppTextStyles.h3),
+                      BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, state) {
+                          final name = state is AuthAuthenticated
+                              ? state.user.name
+                              : 'User';
+                          return Text(name, style: AppTextStyles.h3);
+                        },
+                      ),
                       const SizedBox(height: 4),
-                      Text(
-                        'Explore the food',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                      BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, state) {
+                          final email = state is AuthAuthenticated
+                              ? state.user.email
+                              : 'Explore the food';
+                          return Text(
+                            email,
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

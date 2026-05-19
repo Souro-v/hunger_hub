@@ -4,17 +4,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hunger_hub/core/di/injection.dart';
 import 'package:hunger_hub/core/router/app_router.dart';
 import 'package:hunger_hub/core/theme/app_theme.dart';
+import 'config/app_config.dart';
 import 'features/cart/cart_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  // ── Environment ──
+  AppConfig.setEnvironment(AppEnvironment.dev);
   // ── Firebase Init ──
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   // ── Dependencies Init ──
   await configureDependencies();
 

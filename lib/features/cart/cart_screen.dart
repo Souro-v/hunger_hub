@@ -8,7 +8,6 @@ import '../../core/theme/app_text_styles.dart';
 import '../../data/models/cart_model.dart';
 import '../../shared/widgets/app_button.dart';
 import 'cart_cubit.dart';
-import '../../core/di/injection.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -28,198 +27,193 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create:(_)=> sl<CartCubit>(),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: BlocBuilder<CartCubit, CartModel>(
-            builder: (context, cart) {
-              return Column(
-                children: [
-                  // ── Header ──
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 16),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () => context.pop(),
-                          child: const Icon(Icons.close,
-                              color: AppColors.textPrimary),
-                        ),
-                        const SizedBox(width: 16),
-                        Text('Your order', style: AppTextStyles.h2),
-                      ],
-                    ),
-                  ),
-
-                  // ── Cart Items ──
-                  Expanded(
-                    child: cart.isEmpty
-                        ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.shopping_cart_outlined,
-                            size: 80,
-                            color: AppColors.border,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Your cart is empty',
-                            style: AppTextStyles.h3.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          TextButton(
-                            onPressed: () =>
-                                context.go(AppRouter.restaurant),
-                            child: Text(
-                              'Add items',
-                              style: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.error,
-                              ),
-                            ),
-                          ),
-                        ],
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: BlocBuilder<CartCubit, CartModel>(
+          builder: (context, cart) {
+            return Column(
+              children: [
+                // ── Header ──
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => context.pop(),
+                        child: const Icon(Icons.close,
+                            color: AppColors.textPrimary),
                       ),
-                    )
-                        : ListView.builder(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20),
-                      itemCount: cart.items.length,
-                      itemBuilder: (context, index) {
-                        final item = cart.items[index];
-                        return _CartItemTile(
-                          item: item,
-                          onAdd: () => context
-                              .read<CartCubit>()
-                              .addItem(item.foodItem),
-                          onRemove: () => context
-                              .read<CartCubit>()
-                              .removeItem(item.foodItem),
-                          onDelete: () => context
-                              .read<CartCubit>()
-                              .deleteItem(item.foodItem),
-                        );
-                      },
-                    ),
+                      const SizedBox(width: 16),
+                      Text('Your order', style: AppTextStyles.h2),
+                    ],
                   ),
+                ),
 
-                  // ── Bottom Section ──
-                  if (!cart.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: [
-                          // ── Promo Code ──
-                          Row(
+                // ── Cart Items ──
+                Expanded(
+                  child: cart.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Expanded(
-                                child: Container(
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.divider,
-                                    borderRadius: BorderRadius.circular(
-                                        AppConstants.radiusMD),
-                                  ),
-                                  child: TextField(
-                                    controller: _promoController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Add Promo code',
-                                      hintStyle:
-                                      AppTextStyles.bodyMedium.copyWith(
-                                        color: AppColors.textSecondary,
-                                      ),
-                                      border: InputBorder.none,
-                                      enabledBorder: InputBorder.none,
-                                      focusedBorder: InputBorder.none,
-                                      contentPadding:
-                                      const EdgeInsets.symmetric(
-                                          horizontal: 16),
-                                    ),
-                                  ),
+                              const Icon(
+                                Icons.shopping_cart_outlined,
+                                size: 80,
+                                color: AppColors.border,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Your cart is empty',
+                                style: AppTextStyles.h3.copyWith(
+                                  color: AppColors.textSecondary,
                                 ),
                               ),
-                              const SizedBox(width: 12),
-                              SizedBox(
-                                height: 50,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    context.read<CartCubit>().applyPromo(
-                                        _promoController.text);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.secondary,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          AppConstants.radiusMD),
-                                    ),
+                              const SizedBox(height: 8),
+                              TextButton(
+                                onPressed: () =>
+                                    context.go(AppRouter.restaurant),
+                                child: Text(
+                                  'Add items',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.error,
                                   ),
-                                  child: Text('Apply',
-                                      style: AppTextStyles.button),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          itemCount: cart.items.length,
+                          itemBuilder: (context, index) {
+                            final item = cart.items[index];
+                            return _CartItemTile(
+                              item: item,
+                              onAdd: () => context
+                                  .read<CartCubit>()
+                                  .addItem(item.foodItem),
+                              onRemove: () => context
+                                  .read<CartCubit>()
+                                  .removeItem(item.foodItem),
+                              onDelete: () => context
+                                  .read<CartCubit>()
+                                  .deleteItem(item.foodItem),
+                            );
+                          },
+                        ),
+                ),
 
-                          // ── Price Breakdown ──
-                          _PriceRow(
-                            label: 'Total',
-                            amount: cart.subtotal,
-                            isLight: true,
-                          ),
-                         const _PriceRow(
-                            label: 'Delivery fees',
-                            amount: 40,
-                            isLight: true,
-                          ),
-                          _PriceRow(
-                            label: 'Promo',
-                            amount: cart.discount,
-                            isLight: true,
-                            isDiscount: true,
-                          ),
-                          const Divider(),
-                          _PriceRow(
-                            label: 'Total',
-                            amount: cart.total + 40,
-                            isLight: false,
-                          ),
-                          const SizedBox(height: 12),
-
-                          // ── Add More Items ──
-                          GestureDetector(
-                            onTap: () => context.go(AppRouter.menuList),
-                            child: Text(
-                              'Add more items',
-                              style: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w600,
+                // ── Bottom Section ──
+                if (!cart.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        // ── Promo Code ──
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: AppColors.divider,
+                                  borderRadius: BorderRadius.circular(
+                                      AppConstants.radiusMD),
+                                ),
+                                child: TextField(
+                                  controller: _promoController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Add Promo code',
+                                    hintStyle:
+                                        AppTextStyles.bodyMedium.copyWith(
+                                      color: AppColors.textSecondary,
+                                    ),
+                                    border: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 12),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context
+                                      .read<CartCubit>()
+                                      .applyPromo(_promoController.text);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.secondary,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        AppConstants.radiusMD),
+                                  ),
+                                ),
+                                child:
+                                    Text('Apply', style: AppTextStyles.button),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
 
-                          // ── Continue to Payment ──
-                          AppButton(
-                            text: 'CONTINUE TO PAYMENT',
-                            color: AppColors.secondary,
-                            onPressed: () =>
-                                context.go(AppRouter.checkout),
+                        // ── Price Breakdown ──
+                        _PriceRow(
+                          label: 'Total',
+                          amount: cart.subtotal,
+                          isLight: true,
+                        ),
+                        const _PriceRow(
+                          label: 'Delivery fees',
+                          amount: 40,
+                          isLight: true,
+                        ),
+                        _PriceRow(
+                          label: 'Promo',
+                          amount: cart.discount,
+                          isLight: true,
+                          isDiscount: true,
+                        ),
+                        const Divider(),
+                        _PriceRow(
+                          label: 'Total',
+                          amount: cart.total + 40,
+                          isLight: false,
+                        ),
+                        const SizedBox(height: 12),
+
+                        // ── Add More Items ──
+                        GestureDetector(
+                          onTap: () => context.go(AppRouter.menuList),
+                          child: Text(
+                            'Add more items',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 12),
+
+                        // ── Continue to Payment ──
+                        AppButton(
+                          text: 'CONTINUE TO PAYMENT',
+                          color: AppColors.secondary,
+                          onPressed: () => context.go(AppRouter.checkout),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
                     ),
-                ],
-              );
-            },
-          ),
+                  ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -343,8 +337,8 @@ class _CartItemTile extends StatelessWidget {
                     width: 90,
                     height: 90,
                     color: AppColors.divider,
-                    child: const Icon(Icons.fastfood,
-                        color: AppColors.textHint),
+                    child:
+                        const Icon(Icons.fastfood, color: AppColors.textHint),
                   ),
                 ),
               ),
@@ -398,9 +392,7 @@ class _PriceRow extends StatelessWidget {
         children: [
           Text(
             label,
-            style: isLight
-                ? AppTextStyles.bodySmall
-                : AppTextStyles.label,
+            style: isLight ? AppTextStyles.bodySmall : AppTextStyles.label,
           ),
           Row(
             children: [
@@ -413,9 +405,7 @@ class _PriceRow extends StatelessWidget {
               const Text('₹ ', style: TextStyle(fontSize: 13)),
               Text(
                 amount.toStringAsFixed(0),
-                style: isLight
-                    ? AppTextStyles.bodySmall
-                    : AppTextStyles.label,
+                style: isLight ? AppTextStyles.bodySmall : AppTextStyles.label,
               ),
             ],
           ),

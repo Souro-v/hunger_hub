@@ -13,8 +13,10 @@ import '../../features/delivery/delivery_address_screen.dart';
 import '../../features/help/help_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
+import '../../features/orders/order_history_screen.dart';
 import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
+import '../../features/profile/address_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/rating/review_screen.dart';
@@ -43,7 +45,9 @@ class AppRouter {
   static const String paymentMethod = '/payment-method';
   static const String addCard = '/add-card';
   static const String orderStatus = '/order-status';
+  static const String orderHistory = '/order-history';
   static const String trackingMap = '/tracking-map';
+  static const String addresses = '/addresses';
   static const String profile = '/profile';
   static const String editProfile = '/edit-profile';
   static const String rating = '/rating';
@@ -145,9 +149,19 @@ class AppRouter {
         builder: (context, state) => const AddCardScreen(),
       ),
       GoRoute(
+        path: addresses,
+        name: 'addresses',
+        builder: (context, state) => const AddressScreen(),
+      ),
+      GoRoute(
         path: orderStatus,
         name: 'orderStatus',
         builder: (context, state) => const OrderStatusScreen(),
+      ),
+      GoRoute(
+        path: orderHistory,
+        name: 'orderHistory',
+        builder: (context, state) => const OrderHistoryScreen(),
       ),
       GoRoute(
         path: trackingMap,

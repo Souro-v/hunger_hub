@@ -29,6 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final List<Map<String, dynamic>> _menuGroup2 = [
     {'icon': Icons.shopping_cart_outlined, 'label': 'Cart'},
+    {'icon': Icons.history_outlined, 'label': 'Order History'},
     {'icon': Icons.favorite_outline, 'label': 'Favourite'},
     {'icon': Icons.notifications_outlined, 'label': 'Notification'},
     {'icon': Icons.payment_outlined, 'label': 'Payment Method'},
@@ -248,8 +249,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 'Order tracking':
         context.go(AppRouter.trackingMap);
         break;
+      case 'Order History':
+        context.go(AppRouter.orderHistory);
+        break;
       case 'Payment Method':
         context.go(AppRouter.checkout);
+        break;
+      case 'Addresses':
+        context.go(AppRouter.addresses);
         break;
       case 'Sign Out':
         context.read<AuthBloc>().add(SignOutEvent());

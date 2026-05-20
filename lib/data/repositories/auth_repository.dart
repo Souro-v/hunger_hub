@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../core/error/exceptions.dart';
-import '../../core/error/failures.dart';
 import '../../core/storage/local_storage.dart';
 import '../../firebase/auth/firebase_auth_service.dart';
 import '../../firebase/firestore/user_service.dart';
@@ -43,7 +42,7 @@ class AuthRepository {
         userData: userModel.toMap(),
       );
 
-      await _authService.sendEmailVerification();
+     // await _authService.sendEmailVerification();
       await _localStorage.saveUserId(user.uid);
       await _localStorage.setLoggedIn(true);
 

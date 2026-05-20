@@ -21,6 +21,7 @@ import '../../features/rating/review_screen.dart';
 import '../../features/refer/refer_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
+import '../../features/splash/splash_screen.dart';
 
 class AppRouter {
   AppRouter._();
@@ -53,31 +54,24 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: splash,
     redirect: (context, state) {
-      final isLoggedIn = LocalStorage.instance.isLoggedIn();
-      final isFirstTime = LocalStorage.instance.isFirstTime();
       final location = state.uri.toString();
-
+      final isLoggedIn = LocalStorage.instance.isLoggedIn();
       // ── Auth routes ──
       final isAuthRoute = location == signIn ||
           location == signUp ||
           location == verifyEmail ||
-          location == verifyPhone ||
-          location == otp ||
           location == onboarding ||
           location == splash;
 
-      if (isFirstTime) return onboarding;
       if (!isLoggedIn && !isAuthRoute) return signIn;
-      if (isLoggedIn && isAuthRoute) return home;
+      if (isLoggedIn && (location == signIn || location == signUp)) return home;
       return null;
     },
     routes: [
       GoRoute(
         path: splash,
         name: 'splash',
-        builder: (context, state) => const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: onboarding,

@@ -24,7 +24,6 @@ void main() async {
 
 class HungryHubApp extends StatelessWidget {
   const HungryHubApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

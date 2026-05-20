@@ -143,10 +143,32 @@ class _CartScreenState extends State<CartScreen> {
                             SizedBox(
                               height: 50,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  context
-                                      .read<CartCubit>()
-                                      .applyPromo(_promoController.text);
+                                onPressed: () async {
+                                  final code = _promoController.text.trim();
+                                  if (code.isEmpty) return;
+
+                                  final cubit = context.read<CartCubit>();
+                                  await cubit.applyPromo(code);
+
+                                  if (!mounted) return;
+
+                                  final cart = cubit.state;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        cart.promoCode != null
+                                            ? '🎉 Promo applied! ৳${cart.discount.toStringAsFixed(0)} off'
+                                            : '❌ Invalid or expired promo code',
+                                      ),
+                                      backgroundColor: cart.promoCode != null
+                                          ? AppColors.success
+                                          : AppColors.error,
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.secondary,

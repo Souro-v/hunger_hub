@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/cart_model.dart';
 import '../../data/models/food_item_model.dart';
+import '../../firebase/firestore/promo_service.dart';
 
 
 class CartCubit extends Cubit<CartModel> {
@@ -49,9 +50,29 @@ class CartCubit extends Cubit<CartModel> {
   }
 
   // ── Apply Promo ──
-  void applyPromo(String code) {
-    if (code == 'HUNGRY10') {
-      emit(state.copyWith(promoCode: code, discount: 100));
+  Future<void> applyPromo(String code) async {
+    try {
+      final promoService = PromoService();
+      final promo = await promoService.validatePromo(code);
+
+      if (promo != null) {
+        final discount = (promo['discountAmount'] ?? 0.0).toDouble();
+        emit(state.copyWith(
+          promoCode: code,
+          discount: discount,
+        ));
+      } else {
+        // Invalid promo
+        emit(state.copyWith(
+          promoCode: null,
+          discount: 0.0,
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        promoCode: null,
+        discount: 0.0,
+      ));
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../firebase/firestore/promo_service.dart';
 import '../storage/local_storage.dart';
 import '../../firebase/auth/firebase_auth_service.dart';
 import '../../firebase/firestore/restaurant_service.dart';
@@ -29,41 +30,41 @@ Future<void> configureDependencies() async {
 
   // ── Firebase Services ──
   sl.registerLazySingleton<FirebaseAuthService>(
-        () => FirebaseAuthService(),
+    () => FirebaseAuthService(),
   );
   sl.registerLazySingleton<RestaurantService>(
-        () => RestaurantService(),
+    () => RestaurantService(),
   );
   sl.registerLazySingleton<OrderService>(
-        () => OrderService(),
+    () => OrderService(),
   );
   sl.registerLazySingleton<UserService>(
-        () => UserService(),
+    () => UserService(),
   );
   sl.registerLazySingleton<StorageService>(
-        () => StorageService(),
+    () => StorageService(),
   );
 
   // ── Repositories ──
   sl.registerLazySingleton<AuthRepository>(
-        () => AuthRepository(
+    () => AuthRepository(
       authService: sl<FirebaseAuthService>(),
       userService: sl<UserService>(),
       localStorage: LocalStorage.instance,
     ),
   );
   sl.registerLazySingleton<RestaurantRepository>(
-        () => RestaurantRepository(
+    () => RestaurantRepository(
       restaurantService: sl<RestaurantService>(),
     ),
   );
   sl.registerLazySingleton<OrderRepository>(
-        () => OrderRepository(
+    () => OrderRepository(
       orderService: sl<OrderService>(),
     ),
   );
   sl.registerLazySingleton<UserRepository>(
-        () => UserRepository(
+    () => UserRepository(
       userService: sl<UserService>(),
       storageService: sl<StorageService>(),
     ),
@@ -71,34 +72,37 @@ Future<void> configureDependencies() async {
 
   // ── BLoCs / Cubits ──
   sl.registerFactory<AuthBloc>(
-        () => AuthBloc(
+    () => AuthBloc(
       authRepository: sl<AuthRepository>(),
     ),
   );
   sl.registerFactory<CartCubit>(
-        () => CartCubit(),
+    () => CartCubit(),
   );
   sl.registerFactory<HomeCubit>(
-        () => HomeCubit(
+    () => HomeCubit(
       restaurantRepository: sl<RestaurantRepository>(),
       userRepository: sl<UserRepository>(),
       localStorage: LocalStorage.instance,
     ),
   );
   sl.registerFactory<RestaurantBloc>(
-        () => RestaurantBloc(
+    () => RestaurantBloc(
       restaurantRepository: sl<RestaurantRepository>(),
     ),
   );
   sl.registerFactory<OrderBloc>(
-        () => OrderBloc(
+    () => OrderBloc(
       orderRepository: sl<OrderRepository>(),
     ),
   );
   sl.registerFactory<RatingCubit>(
-        () => RatingCubit(
+    () => RatingCubit(
       userRepository: sl<UserRepository>(),
       localStorage: LocalStorage.instance,
     ),
+  );
+  sl.registerLazySingleton<PromoService>(
+    () => PromoService(),
   );
 }

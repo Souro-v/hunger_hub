@@ -246,6 +246,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 'Cart':
         context.go(AppRouter.cart);
         break;
+      case 'Favourite':
+        context.go(AppRouter.favourites);
+        break;
       case 'Order tracking':
         context.go(AppRouter.trackingMap);
         break;

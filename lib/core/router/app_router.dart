@@ -17,6 +17,7 @@ import '../../features/orders/order_history_screen.dart';
 import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
 import '../../features/profile/address_screen.dart';
+import '../../features/profile/favourite_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/rating/review_screen.dart';
@@ -41,6 +42,7 @@ class AppRouter {
   static const String home = '/home';
   static const String restaurant = '/restaurant';
   static const String search = '/search';
+  static const String favourites = '/favourites';
   static const String menuList = '/menu-list';
   static const String cart = '/cart';
   static const String checkout = '/checkout';
@@ -134,6 +136,11 @@ class AppRouter {
         path: search,
         name: 'search',
         builder: (context, state) => const SearchScreen(),
+      ),
+      GoRoute(
+        path: favourites,
+        name: 'favourites',
+        builder: (context, state) => const FavouriteScreen(),
       ),
       GoRoute(
         path: menuList,

@@ -8,6 +8,7 @@ import '../../core/storage/local_storage.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
+import '../../shared/widgets/error_widget.dart';
 import '../../shared/widgets/loading_widget.dart';
 import 'order_bloc.dart';
 import 'order_event.dart';
@@ -73,67 +74,27 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                     }
 
                     if (state is OrderError) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.error_outline,
-                              size: 60,
-                              color: AppColors.border,
+                      return AppErrorWidget(
+                        message: state.message,
+                        onRetry: () => context.read<OrderBloc>().add(
+                              FetchOrdersEvent(
+                                userId: LocalStorage.instance.getUserId() ?? '',
+                              ),
                             ),
-                            const SizedBox(height: 16),
-                            Text(state.message,
-                                style: AppTextStyles.bodyMedium),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: () => context
-                                  .read<OrderBloc>()
-                                  .add(FetchOrdersEvent(
-                                    userId:
-                                        LocalStorage.instance.getUserId() ?? '',
-                                  )),
-                              child: const Text('Retry'),
-                            ),
-                          ],
-                        ),
                       );
                     }
 
                     if (state is OrderEmpty) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.receipt_long_outlined,
-                              size: 80,
-                              color: AppColors.border,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              'No orders yet',
-                              style: AppTextStyles.h3.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Your order history will appear here',
-                              style: AppTextStyles.bodySmall,
-                            ),
-                            const SizedBox(height: 24),
-                            ElevatedButton(
-                              onPressed: () => context.go(AppRouter.restaurant),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.error,
-                              ),
-                              child: Text(
-                                'Order Now',
-                                style: AppTextStyles.button,
-                              ),
-                            ),
-                          ],
+                      return EmptyWidget(
+                        message: 'No orders yet',
+                        subMessage: 'Your order history will appear here',
+                        icon: Icons.receipt_long_outlined,
+                        action: ElevatedButton(
+                          onPressed: () => context.go(AppRouter.restaurant),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.error,
+                          ),
+                          child: Text('Order Now', style: AppTextStyles.button),
                         ),
                       );
                     }

@@ -8,6 +8,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
+import '../../shared/widgets/error_widget.dart';
 import '../../shared/widgets/loading_widget.dart';
 import '../restaurant/restaurant_bloc.dart';
 import '../restaurant/restaurant_event.dart';
@@ -136,23 +137,12 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     if (state is RestaurantLoading) {
                       return const LoadingWidget();
                     }
-
                     if (state is RestaurantError) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(state.message,
-                                style: AppTextStyles.bodyMedium),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: () => context
-                                  .read<RestaurantBloc>()
-                                  .add(FetchRestaurantsEvent()),
-                              child: const Text('Retry'),
-                            ),
-                          ],
-                        ),
+                      return AppErrorWidget(
+                        message: state.message,
+                        onRetry: () => context
+                            .read<RestaurantBloc>()
+                            .add(FetchRestaurantsEvent()),
                       );
                     }
 

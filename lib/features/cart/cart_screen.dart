@@ -151,7 +151,6 @@ class _CartScreenState extends State<CartScreen> {
                                   await cubit.applyPromo(code);
 
                                   if (!mounted) return;
-
                                   final cart = cubit.state;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(

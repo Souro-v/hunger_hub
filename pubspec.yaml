@@ -52,6 +52,10 @@ dependencies:
   # ── Models ──
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
+  # ── Notifications ──
+  firebase_messaging: ^15.2.10
+  flutter_local_notifications: ^17.1.2
+
 
 dev_dependencies:
   flutter_test:

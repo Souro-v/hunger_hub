@@ -23,6 +23,7 @@ import '../../features/rating/review_screen.dart';
 import '../../features/refer/refer_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
+import '../../features/restaurant/search_screen.dart';
 import '../../features/splash/splash_screen.dart';
 
 class AppRouter {
@@ -39,6 +40,7 @@ class AppRouter {
   static const String deliveryAddress = '/delivery-address';
   static const String home = '/home';
   static const String restaurant = '/restaurant';
+  static const String search = '/search';
   static const String menuList = '/menu-list';
   static const String cart = '/cart';
   static const String checkout = '/checkout';
@@ -127,6 +129,11 @@ class AppRouter {
         path: restaurant,
         name: 'restaurant',
         builder: (context, state) => const RestaurantScreen(),
+      ),
+      GoRoute(
+        path: search,
+        name: 'search',
+        builder: (context, state) => const SearchScreen(),
       ),
       GoRoute(
         path: menuList,

@@ -6,6 +6,7 @@ import 'package:hunger_hub/core/router/app_router.dart';
 import 'package:hunger_hub/core/theme/app_theme.dart';
 import 'config/app_config.dart';
 import 'features/cart/cart_cubit.dart';
+import 'firebase/notification/notification_service.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -16,6 +17,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // ── Notifications Init ──
+  await NotificationService.instance.init();
   // ── Dependencies Init ──
   await configureDependencies();
 

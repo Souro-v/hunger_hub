@@ -14,4 +14,6 @@ class Env {
       'https://hungryhub.com/privacy-policy';
   static const String termsUrl =
       'https://hungryhub.com/terms';
+
+
 }

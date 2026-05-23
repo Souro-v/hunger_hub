@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hunger_hub/shared/animations/fade_animation.dart';
+import '../../config/app_config.dart';
+import '../../config/seed_data.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/di/injection.dart';
@@ -19,6 +21,7 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+
 class HomeLoading extends HomeState {
   final String message;
 
@@ -72,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   // ── Top Bar ──
                   _buildTopBar(state),
+
                   // ── Body ──
                   Expanded(
                     child: state is HomeError
@@ -180,6 +184,37 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const Spacer(),
+          // ── Seed Data Button (Dev only) ──
+          if (AppConfig.isDev)
+            GestureDetector(
+              onTap: () async {
+                await SeedData.seedAll();
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('✅ Data seeded!'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.success,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  'Seed Data',
+                  style: AppTextStyles.caption.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+
+          const SizedBox(width: 8),
           const CircleAvatar(
             radius: 20,
             backgroundColor: AppColors.divider,
@@ -664,4 +699,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

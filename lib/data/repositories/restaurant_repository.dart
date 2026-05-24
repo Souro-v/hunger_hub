@@ -1,13 +1,13 @@
 import '../../core/error/exceptions.dart';
-import '../../firebase/firestore/restaurant_service.dart';
+import '../../firebase/realtime/restaurant_rtdb_service.dart';
 import '../models/category_model.dart';
 import '../models/food_item_model.dart';
 import '../models/restaurant_model.dart';
 
 class RestaurantRepository {
-  final RestaurantService _restaurantService;
+  final RestaurantRtdbService _restaurantService;
 
-  RestaurantRepository({required RestaurantService restaurantService})
+  RestaurantRepository({required RestaurantRtdbService restaurantService})
       : _restaurantService = restaurantService;
 
   // ── Get All Restaurants ──
@@ -38,8 +38,8 @@ class RestaurantRepository {
   Future<List<RestaurantModel>> getRestaurantsByCategory(
       String category) async {
     try {
-      final data =
-      await _restaurantService.getRestaurantsByCategory(category);
+      final data = await _restaurantService
+          .getRestaurantsByCategory(category);
       return data.map((map) => RestaurantModel.fromMap(map)).toList();
     } on AppException {
       rethrow;
@@ -52,8 +52,8 @@ class RestaurantRepository {
   Future<List<FoodItemModel>> getFoodItemsByRestaurant(
       String restaurantId) async {
     try {
-      final data =
-      await _restaurantService.getFoodItemsByRestaurant(restaurantId);
+      final data = await _restaurantService
+          .getFoodItemsByRestaurant(restaurantId);
       return data.map((map) => FoodItemModel.fromMap(map)).toList();
     } on AppException {
       rethrow;
@@ -77,7 +77,8 @@ class RestaurantRepository {
   // ── Search Restaurants ──
   Future<List<RestaurantModel>> searchRestaurants(String query) async {
     try {
-      final data = await _restaurantService.searchRestaurants(query);
+      final data =
+      await _restaurantService.searchRestaurants(query);
       return data.map((map) => RestaurantModel.fromMap(map)).toList();
     } on AppException {
       rethrow;

@@ -1,12 +1,12 @@
 import '../../core/error/exceptions.dart';
-import '../../firebase/firestore/order_service.dart';
+import '../../firebase/realtime/order_rtdb_service.dart';
 import '../models/cart_model.dart';
 import '../models/order_model.dart';
 
 class OrderRepository {
-  final OrderService _orderService;
+  final OrderRtdbService _orderService;
 
-  OrderRepository({required OrderService orderService})
+  OrderRepository({required OrderRtdbService orderService})
       : _orderService = orderService;
 
   // ── Place Order ──
@@ -66,9 +66,9 @@ class OrderRepository {
 
   // ── Track Order (Realtime) ──
   Stream<OrderModel> trackOrder(String orderId) {
-    return _orderService.trackOrder(orderId).map(
-          (data) => OrderModel.fromMap(data),
-    );
+    return _orderService
+        .trackOrder(orderId)
+        .map((data) => OrderModel.fromMap(data));
   }
 
   // ── Update Order Status ──

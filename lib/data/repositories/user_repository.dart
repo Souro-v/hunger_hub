@@ -1,16 +1,16 @@
 import 'dart:io';
-import '../models/review_model.dart';
 import '../../core/error/exceptions.dart';
-import '../../firebase/firestore/user_service.dart';
+import '../../firebase/realtime/user_rtdb_service.dart';
 import '../../firebase/storage/storage_service.dart';
+import '../models/review_model.dart';
 import '../models/user_model.dart';
 
 class UserRepository {
-  final UserService _userService;
+  final UserRtdbService _userService;
   final StorageService _storageService;
 
   UserRepository({
-    required UserService userService,
+    required UserRtdbService userService,
     required StorageService storageService,
   })  : _userService = userService,
         _storageService = storageService;
@@ -83,15 +83,27 @@ class UserRepository {
     }
   }
 
+  // ── Get Addresses ──
+  Future<List<Map<String, dynamic>>> getAddresses(
+      String userId) async {
+    try {
+      return await _userService.getAddresses(userId);
+    } on AppException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
   // ── Remove Address ──
   Future<void> removeAddress({
     required String userId,
-    required Map<String, dynamic> address,
+    required String addressId,
   }) async {
     try {
       await _userService.removeAddress(
         userId: userId,
-        address: address,
+        addressId: addressId,
       );
     } on AppException {
       rethrow;

@@ -31,9 +31,9 @@ class _AddressScreenState extends State<AddressScreen> {
       final userId = LocalStorage.instance.getUserId();
       if (userId != null) {
         final userRepo = sl<UserRepository>();
-        final user = await userRepo.getUser(userId);
+        final addresses = await userRepo.getAddresses(userId);
         setState(() {
-          _addresses = List<Map<String, dynamic>>.from(user.addresses);
+          _addresses = addresses;
           _isLoading = false;
         });
       }
@@ -49,7 +49,7 @@ class _AddressScreenState extends State<AddressScreen> {
         final userRepo = sl<UserRepository>();
         await userRepo.removeAddress(
           userId: userId,
-          address: address,
+          addressId: address['id'] ?? '', // ← address এর id pass করো
         );
         await _loadAddresses();
       }

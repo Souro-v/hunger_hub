@@ -2,17 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../core/error/exceptions.dart';
 import '../../core/storage/local_storage.dart';
 import '../../firebase/auth/firebase_auth_service.dart';
-import '../../firebase/firestore/user_service.dart';
+import '../../firebase/realtime/user_rtdb_service.dart';
 import '../models/user_model.dart';
 
 class AuthRepository {
   final FirebaseAuthService _authService;
-  final UserService _userService;
+  final UserRtdbService _userService;
   final LocalStorage _localStorage;
 
   AuthRepository({
     required FirebaseAuthService authService,
-    required UserService userService,
+    required UserRtdbService userService,
     required LocalStorage localStorage,
   })  : _authService = authService,
         _userService = userService,
@@ -42,7 +42,6 @@ class AuthRepository {
         userData: userModel.toMap(),
       );
 
-     // await _authService.sendEmailVerification();
       await _localStorage.saveUserId(user.uid);
       await _localStorage.setLoggedIn(true);
 

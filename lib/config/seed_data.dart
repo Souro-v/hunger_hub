@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class SeedData {
   SeedData._();
 
-  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static final FirebaseDatabase _database = FirebaseDatabase.instance;
 
   static Future<void> seedAll() async {
     await seedCategories();
@@ -14,42 +14,36 @@ class SeedData {
 
   // ── Categories ──
   static Future<void> seedCategories() async {
-    final categories = [
-      {
-        'id': 'cat_nonveg',
+    final categories = {
+      'cat_nonveg': {
         'name': 'Non Veg',
         'iconUrl': 'assets/icons/cat_nonveg.png',
       },
-      {
-        'id': 'cat_veg',
+      'cat_veg': {
         'name': 'Veg',
         'iconUrl': 'assets/icons/cat_veg.png',
       },
-      {
-        'id': 'cat_spicy',
+      'cat_spicy': {
         'name': 'Spicy',
         'iconUrl': 'assets/icons/cat_spicy.png',
       },
-      {
-        'id': 'cat_pizza',
+      'cat_pizza': {
         'name': 'Pizza',
         'iconUrl': 'assets/icons/cat_pizza.png',
       },
-    ];
+    };
 
-    for (final cat in categories) {
-      await _firestore.collection('categories').doc(cat['id']).set(cat);
-    }
+    await _database.ref().child('categories').set(categories);
     print('✅ Categories seeded!');
   }
 
   // ── Restaurants ──
   static Future<void> seedRestaurants() async {
-    final restaurants = [
-      {
-        'id': 'rest_001',
+    final restaurants = {
+      'rest_001': {
         'name': 'Arabian Restaurant',
-        'description': 'Authentic Arabian cuisine with the finest ingredients',
+        'description':
+        'Authentic Arabian cuisine with the finest ingredients',
         'imageUrl': 'assets/images/rest1.png',
         'category': 'Chinese',
         'rating': 4.0,
@@ -61,8 +55,7 @@ class SeedData {
         'isOpen': true,
         'tags': ['Arabian', 'Chinese', 'Biryani'],
       },
-      {
-        'id': 'rest_002',
+      'rest_002': {
         'name': 'Golden Restaurant',
         'description': 'Best Indian food in town',
         'imageUrl': 'assets/images/rest2.png',
@@ -76,8 +69,7 @@ class SeedData {
         'isOpen': true,
         'tags': ['Indian', 'Curry', 'Rice'],
       },
-      {
-        'id': 'rest_003',
+      'rest_003': {
         'name': 'Italian Restaurants',
         'description': 'Authentic Italian pasta and noodles',
         'imageUrl': 'assets/images/rest3.png',
@@ -91,8 +83,7 @@ class SeedData {
         'isOpen': true,
         'tags': ['Italian', 'Chinese', 'Noodles'],
       },
-      {
-        'id': 'rest_004',
+      'rest_004': {
         'name': 'Huking Hub',
         'description': 'Best BBQ and grilled food',
         'imageUrl': 'assets/images/rest4.png',
@@ -106,8 +97,7 @@ class SeedData {
         'isOpen': true,
         'tags': ['BBQ', 'Chinese', 'Italian'],
       },
-      {
-        'id': 'rest_005',
+      'rest_005': {
         'name': 'Star Grills',
         'description': 'Premium grilled chicken and seafood',
         'imageUrl': 'assets/images/rest5.png',
@@ -121,8 +111,7 @@ class SeedData {
         'isOpen': true,
         'tags': ['Grills', 'Chicken', 'Seafood'],
       },
-      {
-        'id': 'rest_006',
+      'rest_006': {
         'name': 'House of BBQ',
         'description': 'The best BBQ experience in town',
         'imageUrl': 'assets/images/rest8.png',
@@ -136,149 +125,147 @@ class SeedData {
         'isOpen': true,
         'tags': ['BBQ', 'African', 'Deshi'],
       },
-    ];
+    };
 
-    for (final rest in restaurants) {
-      final id = rest['id'] as String;
-      await _firestore.collection('restaurants').doc(id).set(rest);
+    await _database.ref().child('restaurants').set(restaurants);
 
-      // ── Seed Food Items for each restaurant ──
-      await _seedFoodItems(id);
-    }
+    // ── Seed Food Items ──
+    await _seedFoodItems();
     print('✅ Restaurants seeded!');
   }
 
   // ── Food Items ──
-  static Future<void> _seedFoodItems(String restaurantId) async {
-    final foodItems = [
-      {
-        'id': '${restaurantId}_food_001',
-        'restaurantId': restaurantId,
-        'name': 'Gunpowder chicken wings',
-        'description':
-            'Chicken wings, green, spring onions, fresh mint, garlic',
-        'imageUrl': 'assets/images/menu1.png',
-        'price': 225.0,
-        'rating': 4.5,
-        'category': 'Non Veg',
-        'isAvailable': true,
-        'isPopular': true,
-        'ingredients': ['chicken', 'spring onions', 'mint', 'garlic'],
-      },
-      {
-        'id': '${restaurantId}_food_002',
-        'restaurantId': restaurantId,
-        'name': 'Lamb and halloumi kebabs',
-        'description': 'Halloumi, lamb mince, lemon, rosemary, red onion',
-        'imageUrl': 'assets/images/menu2.png',
-        'price': 324.0,
-        'rating': 4.5,
-        'category': 'Non Veg',
-        'isAvailable': true,
-        'isPopular': true,
-        'ingredients': ['halloumi', 'lamb', 'lemon', 'rosemary'],
-      },
-      {
-        'id': '${restaurantId}_food_003',
-        'restaurantId': restaurantId,
-        'name': 'Pepper houmous and turkey burgers',
-        'description':
-            'Turkey breast mince, new potatoes, rolls, lemon, peppers',
-        'imageUrl': 'assets/images/menu3.png',
-        'price': 199.0,
-        'rating': 4.5,
-        'category': 'Non Veg',
-        'isAvailable': true,
-        'isPopular': false,
-        'ingredients': ['turkey', 'potatoes', 'peppers', 'lemon'],
-      },
-      {
-        'id': '${restaurantId}_food_004',
-        'restaurantId': restaurantId,
-        'name': 'Smash burgers',
-        'description': 'Ground beef chuck, roll, black pepper',
-        'imageUrl': 'assets/images/menu4.png',
-        'price': 99.0,
-        'rating': 4.5,
-        'category': 'Non Veg',
-        'isAvailable': true,
-        'isPopular': true,
-        'ingredients': ['beef', 'roll', 'black pepper'],
-      },
-      {
-        'id': '${restaurantId}_food_005',
-        'restaurantId': restaurantId,
-        'name': 'Teriyaki wings',
-        'description': 'Chicken wings, soy sauce, toasted sesame seeds, garlic',
-        'imageUrl': 'assets/images/menu5.png',
-        'price': 179.0,
-        'rating': 4.5,
-        'category': 'Non Veg',
-        'isAvailable': true,
-        'isPopular': false,
-        'ingredients': ['chicken', 'soy sauce', 'sesame', 'garlic'],
-      },
-      {
-        'id': '${restaurantId}_food_006',
-        'restaurantId': restaurantId,
-        'name': 'Salmon skewers',
-        'description':
-            'Frozen boneless salmon fillets, skin removed, cut into 3cm chunks',
-        'imageUrl': 'assets/images/menu6.png',
-        'price': 299.0,
-        'rating': 4.5,
-        'category': 'Non Veg',
-        'isAvailable': true,
-        'isPopular': false,
-        'ingredients': ['salmon', 'lemon', 'herbs'],
-      },
+  static Future<void> _seedFoodItems() async {
+    final restaurantIds = [
+      'rest_001',
+      'rest_002',
+      'rest_003',
+      'rest_004',
+      'rest_005',
+      'rest_006',
     ];
 
-    for (final food in foodItems) {
-      await _firestore
-          .collection('restaurants')
-          .doc(restaurantId)
-          .collection('foodItems')
-          .doc(food['id'] as String)
-          .set(food);
+    for (final restaurantId in restaurantIds) {
+      final foodItems = {
+        '${restaurantId}_food_001': {
+          'restaurantId': restaurantId,
+          'name': 'Gunpowder chicken wings',
+          'description':
+          'Chicken wings, green, spring onions, fresh mint, garlic',
+          'imageUrl': 'assets/images/menu1.png',
+          'price': 225.0,
+          'rating': 4.5,
+          'category': 'Non Veg',
+          'isAvailable': true,
+          'isPopular': true,
+          'ingredients': ['chicken', 'spring onions', 'mint', 'garlic'],
+        },
+        '${restaurantId}_food_002': {
+          'restaurantId': restaurantId,
+          'name': 'Lamb and halloumi kebabs',
+          'description':
+          'Halloumi, lamb mince, lemon, rosemary, red onion',
+          'imageUrl': 'assets/images/menu2.png',
+          'price': 324.0,
+          'rating': 4.5,
+          'category': 'Non Veg',
+          'isAvailable': true,
+          'isPopular': true,
+          'ingredients': ['halloumi', 'lamb', 'lemon', 'rosemary'],
+        },
+        '${restaurantId}_food_003': {
+          'restaurantId': restaurantId,
+          'name': 'Pepper houmous and turkey burgers',
+          'description':
+          'Turkey breast mince, new potatoes, rolls, lemon, peppers',
+          'imageUrl': 'assets/images/menu3.png',
+          'price': 199.0,
+          'rating': 4.5,
+          'category': 'Non Veg',
+          'isAvailable': true,
+          'isPopular': false,
+          'ingredients': ['turkey', 'potatoes', 'peppers', 'lemon'],
+        },
+        '${restaurantId}_food_004': {
+          'restaurantId': restaurantId,
+          'name': 'Smash burgers',
+          'description': 'Ground beef chuck, roll, black pepper',
+          'imageUrl': 'assets/images/menu4.png',
+          'price': 99.0,
+          'rating': 4.5,
+          'category': 'Non Veg',
+          'isAvailable': true,
+          'isPopular': true,
+          'ingredients': ['beef', 'roll', 'black pepper'],
+        },
+        '${restaurantId}_food_005': {
+          'restaurantId': restaurantId,
+          'name': 'Teriyaki wings',
+          'description':
+          'Chicken wings, soy sauce, toasted sesame seeds, garlic',
+          'imageUrl': 'assets/images/menu5.png',
+          'price': 179.0,
+          'rating': 4.5,
+          'category': 'Non Veg',
+          'isAvailable': true,
+          'isPopular': false,
+          'ingredients': ['chicken', 'soy sauce', 'sesame', 'garlic'],
+        },
+        '${restaurantId}_food_006': {
+          'restaurantId': restaurantId,
+          'name': 'Salmon skewers',
+          'description':
+          'Frozen boneless salmon fillets, skin removed, cut into 3cm chunks',
+          'imageUrl': 'assets/images/menu6.png',
+          'price': 299.0,
+          'rating': 4.5,
+          'category': 'Non Veg',
+          'isAvailable': true,
+          'isPopular': false,
+          'ingredients': ['salmon', 'lemon', 'herbs'],
+        },
+      };
+
+      await _database
+          .ref()
+          .child('foodItems/$restaurantId')
+          .set(foodItems);
     }
   }
 
   // ── Promo Codes ──
   static Future<void> seedPromoCodes() async {
-    final promoCodes = [
-      {
+    final promoCodes = {
+      'promo_001': {
         'code': 'HUNGRY10',
         'discountAmount': 100.0,
         'isActive': true,
-        'expiryDate': Timestamp.fromDate(
-          DateTime.now().add(const Duration(days: 30)),
-        ),
+        'expiryDate': DateTime.now()
+            .add(const Duration(days: 30))
+            .millisecondsSinceEpoch,
         'description': 'Get ৳100 off on your order',
       },
-      {
+      'promo_002': {
         'code': 'WELCOME20',
         'discountAmount': 200.0,
         'isActive': true,
-        'expiryDate': Timestamp.fromDate(
-          DateTime.now().add(const Duration(days: 60)),
-        ),
+        'expiryDate': DateTime.now()
+            .add(const Duration(days: 60))
+            .millisecondsSinceEpoch,
         'description': 'Welcome offer - ৳200 off',
       },
-      {
+      'promo_003': {
         'code': 'SAVE50',
         'discountAmount': 50.0,
         'isActive': true,
-        'eaxpiryDate': Timestamp.fromDate(
-          DateTime.now().add(const Duration(days: 15)),
-        ),
+        'expiryDate': DateTime.now()
+            .add(const Duration(days: 15))
+            .millisecondsSinceEpoch,
         'description': 'Save ৳50 on your order',
       },
-    ];
+    };
 
-    for (final promo in promoCodes) {
-      await _firestore.collection('promoCodes').add(promo);
-    }
+    await _database.ref().child('promoCodes').set(promoCodes);
     print('✅ Promo codes seeded!');
   }
 }

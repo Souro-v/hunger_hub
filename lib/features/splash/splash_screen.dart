@@ -38,22 +38,32 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // ── Navigate after 3 seconds ──
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) _navigate();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      print('addPostFrameCallback called!');
+      await Future.delayed(const Duration(seconds: 3));
+      print('delay done!');
+      if (mounted) {
+        print('navigating...');
+        _navigate();
+      }
     });
   }
 
   void _navigate() {
-    final isFirstTime = LocalStorage.instance.isFirstTime();
-    final isLoggedIn = LocalStorage.instance.isLoggedIn();
+    try {
+      final isFirstTime = LocalStorage.instance.isFirstTime();
+      final isLoggedIn = LocalStorage.instance.isLoggedIn();
 
-    if (isFirstTime) {
+      if (isFirstTime) {
+        context.go(AppRouter.onboarding);
+      } else if (isLoggedIn) {
+        context.go(AppRouter.home);
+      } else {
+        context.go(AppRouter.signIn);
+      }
+    } catch (e) {
+      print('Navigation error: $e');
       context.go(AppRouter.onboarding);
-    } else if (isLoggedIn) {
-      context.go(AppRouter.home);
-    } else {
-      context.go(AppRouter.signIn);
     }
   }
 

@@ -1,16 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/cart_model.dart';
 import '../../data/models/food_item_model.dart';
-import '../../firebase/firestore/promo_service.dart';
-
+import '../../firebase/realtime/promo_rtdb_service.dart';
 
 class CartCubit extends Cubit<CartModel> {
   CartCubit()
-      :  super(const CartModel(
-    restaurantId: '',
-    restaurantName: '',
-    items: [],
-  ));
+      : super(const CartModel(
+          restaurantId: '',
+          restaurantName: '',
+          items: [],
+        ));
 
   // ── Add Item ──
   void addItem(FoodItemModel foodItem) {
@@ -52,7 +51,7 @@ class CartCubit extends Cubit<CartModel> {
   // ── Apply Promo ──
   Future<void> applyPromo(String code) async {
     try {
-      final promoService = PromoService();
+      final promoService = PromoRtdbService();
       final promo = await promoService.validatePromo(code);
 
       if (promo != null) {
@@ -62,7 +61,6 @@ class CartCubit extends Cubit<CartModel> {
           discount: discount,
         ));
       } else {
-        // Invalid promo
         emit(state.copyWith(
           promoCode: null,
           discount: 0.0,
@@ -77,7 +75,7 @@ class CartCubit extends Cubit<CartModel> {
   }
 
   // ── Clear Cart ──
-  void  clearCart() {
+  void clearCart() {
     emit(const CartModel(
       restaurantId: '',
       restaurantName: '',

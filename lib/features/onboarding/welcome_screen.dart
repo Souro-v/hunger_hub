@@ -29,21 +29,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       imagePath: AppAssets.onboarding1,
       title: 'All your favorites',
       description:
-      'Get all your loved foods in one once place, you just place the order we do the rest',
+          'Get all your loved foods in one once place, you just place the order we do the rest',
       isLogo: false,
     ),
     _OnboardingData(
       imagePath: AppAssets.onboarding2,
       title: 'Order from chosen chef',
       description:
-      'Get all your loved foods in one once place, you just place the order we do the rest',
+          'Get all your loved foods in one once place, you just place the order we do the rest',
       isLogo: false,
     ),
     _OnboardingData(
       imagePath: AppAssets.onboarding3,
       title: 'Free delivery offers',
       description:
-      'Get all your loved foods in one once place, you just place the order we do the rest',
+          'Get all your loved foods in one once place, you just place the order we do the rest',
       isLogo: false,
     ),
   ];
@@ -116,9 +116,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   if (currentPage == 3) {
                                     _goToSignIn(context);
                                   } else {
-                                    context
-                                        .read<OnboardingCubit>()
-                                        .nextPage();
+                                    context.read<OnboardingCubit>().nextPage();
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -166,6 +164,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 // ── Onboarding Page ──
 class _OnboardingPage extends StatelessWidget {
   final _OnboardingData data;
+
   const _OnboardingPage({required this.data});
 
   @override
@@ -175,7 +174,6 @@ class _OnboardingPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Logo — local asset
             Image.asset(
               AppAssets.logo,
               width: 200,
@@ -185,37 +183,41 @@ class _OnboardingPage extends StatelessWidget {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // ── Illustration ──
-          Image.network(
-            data.imagePath!,
-            height: 280,
-            fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => const SizedBox(height: 280),
-          ),
-          const SizedBox(height: 32),
-
-          // ── Title ──
-          Text(
-            data.title,
-            style: AppTextStyles.h1,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-
-          // ── Description ──
-          Text(
-            data.description,
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.textSecondary,
+    return SingleChildScrollView(
+      // ← wrap করো
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 40),
+            // ── Illustration ──
+            Image.asset(
+              data.imagePath!,
+              height: 240,
+              fit: BoxFit.contain,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: 24),
+
+            // ── Title ──
+            Text(
+              data.title,
+              style: AppTextStyles.h1,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+
+            // ── Description ──
+            Text(
+              data.description,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 40),
+          ],
+        ),
       ),
     );
   }
@@ -225,6 +227,7 @@ class _OnboardingPage extends StatelessWidget {
 class _DotsIndicator extends StatelessWidget {
   final int count;
   final int current;
+
   const _DotsIndicator({required this.count, required this.current});
 
   @override
@@ -238,9 +241,7 @@ class _DotsIndicator extends StatelessWidget {
           width: index == current ? 20 : 8,
           height: 8,
           decoration: BoxDecoration(
-            color: index == current
-                ? AppColors.primary
-                : AppColors.border,
+            color: index == current ? AppColors.primary : AppColors.border,
             borderRadius: BorderRadius.circular(4),
           ),
         );

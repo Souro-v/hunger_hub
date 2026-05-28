@@ -10,10 +10,6 @@ class Env {
 
   // ── Support ──
   static const String supportEmail = 'support@hungryhub.com';
-  static const String privacyPolicyUrl =
-      'https://hungryhub.com/privacy-policy';
-  static const String termsUrl =
-      'https://hungryhub.com/terms';
-
-
+  static const String privacyPolicyUrl = 'https://hungryhub.com/privacy-policy';
+  static const String termsUrl = 'https://hungryhub.com/terms';
 }

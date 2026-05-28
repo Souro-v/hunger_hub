@@ -42,8 +42,7 @@ class SeedData {
     final restaurants = {
       'rest_001': {
         'name': 'Arabian Restaurant',
-        'description':
-        'Authentic Arabian cuisine with the finest ingredients',
+        'description': 'Authentic Arabian cuisine with the finest ingredients',
         'imageUrl': 'assets/images/rest1.png',
         'category': 'Chinese',
         'rating': 4.0,
@@ -151,7 +150,7 @@ class SeedData {
           'restaurantId': restaurantId,
           'name': 'Gunpowder chicken wings',
           'description':
-          'Chicken wings, green, spring onions, fresh mint, garlic',
+              'Chicken wings, green, spring onions, fresh mint, garlic',
           'imageUrl': 'assets/images/menu1.png',
           'price': 225.0,
           'rating': 4.5,
@@ -163,8 +162,7 @@ class SeedData {
         '${restaurantId}_food_002': {
           'restaurantId': restaurantId,
           'name': 'Lamb and halloumi kebabs',
-          'description':
-          'Halloumi, lamb mince, lemon, rosemary, red onion',
+          'description': 'Halloumi, lamb mince, lemon, rosemary, red onion',
           'imageUrl': 'assets/images/menu2.png',
           'price': 324.0,
           'rating': 4.5,
@@ -177,7 +175,7 @@ class SeedData {
           'restaurantId': restaurantId,
           'name': 'Pepper houmous and turkey burgers',
           'description':
-          'Turkey breast mince, new potatoes, rolls, lemon, peppers',
+              'Turkey breast mince, new potatoes, rolls, lemon, peppers',
           'imageUrl': 'assets/images/menu3.png',
           'price': 199.0,
           'rating': 4.5,
@@ -202,7 +200,7 @@ class SeedData {
           'restaurantId': restaurantId,
           'name': 'Teriyaki wings',
           'description':
-          'Chicken wings, soy sauce, toasted sesame seeds, garlic',
+              'Chicken wings, soy sauce, toasted sesame seeds, garlic',
           'imageUrl': 'assets/images/menu5.png',
           'price': 179.0,
           'rating': 4.5,
@@ -215,7 +213,7 @@ class SeedData {
           'restaurantId': restaurantId,
           'name': 'Salmon skewers',
           'description':
-          'Frozen boneless salmon fillets, skin removed, cut into 3cm chunks',
+              'Frozen boneless salmon fillets, skin removed, cut into 3cm chunks',
           'imageUrl': 'assets/images/menu6.png',
           'price': 299.0,
           'rating': 4.5,
@@ -226,10 +224,7 @@ class SeedData {
         },
       };
 
-      await _database
-          .ref()
-          .child('foodItems/$restaurantId')
-          .set(foodItems);
+      await _database.ref().child('foodItems/$restaurantId').set(foodItems);
     }
   }
 
@@ -240,27 +235,24 @@ class SeedData {
         'code': 'HUNGRY10',
         'discountAmount': 100.0,
         'isActive': true,
-        'expiryDate': DateTime.now()
-            .add(const Duration(days: 30))
-            .millisecondsSinceEpoch,
+        'expiryDate':
+            DateTime.now().add(const Duration(days: 30)).millisecondsSinceEpoch,
         'description': 'Get ৳100 off on your order',
       },
       'promo_002': {
         'code': 'WELCOME20',
         'discountAmount': 200.0,
         'isActive': true,
-        'expiryDate': DateTime.now()
-            .add(const Duration(days: 60))
-            .millisecondsSinceEpoch,
+        'expiryDate':
+            DateTime.now().add(const Duration(days: 60)).millisecondsSinceEpoch,
         'description': 'Welcome offer - ৳200 off',
       },
       'promo_003': {
         'code': 'SAVE50',
         'discountAmount': 50.0,
         'isActive': true,
-        'expiryDate': DateTime.now()
-            .add(const Duration(days: 15))
-            .millisecondsSinceEpoch,
+        'expiryDate':
+            DateTime.now().add(const Duration(days: 15)).millisecondsSinceEpoch,
         'description': 'Save ৳50 on your order',
       },
     };

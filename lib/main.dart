@@ -8,7 +8,6 @@ import 'config/app_config.dart';
 import 'features/cart/cart_cubit.dart';
 import 'firebase/notification/notification_service.dart';
 import 'firebase_options.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // ── Environment ──

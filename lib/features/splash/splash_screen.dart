@@ -36,16 +36,9 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
     );
 
-    _controller.forward();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      print('addPostFrameCallback called!');
-      await Future.delayed(const Duration(seconds: 3));
-      print('delay done!');
-      if (mounted) {
-        print('navigating...');
-        _navigate();
-      }
+    _controller.forward().then((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+      if (mounted) _navigate();
     });
   }
 

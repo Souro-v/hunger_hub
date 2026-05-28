@@ -3,6 +3,7 @@ import '../constants/app_constants.dart';
 
 class LocalStorage {
   LocalStorage._();
+
   static LocalStorage instance = LocalStorage._();
 
   late SharedPreferences _prefs;

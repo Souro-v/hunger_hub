@@ -38,15 +38,19 @@ class OrderModel {
 
   // ── Status Helpers ──
   bool get isPending => status == AppConstants.orderPending;
+
   bool get isConfirmed => status == AppConstants.orderConfirmed;
+
   bool get isPreparing => status == AppConstants.orderPreparing;
+
   bool get isOnTheWay => status == AppConstants.orderOnTheWay;
+
   bool get isDelivered => status == AppConstants.orderDelivered;
+
   bool get isCancelled => status == AppConstants.orderCancelled;
 
   // ── Total Items ──
-  int get totalItems =>
-      items.fold(0, (sum, item) => sum + item.quantity);
+  int get totalItems => items.fold(0, (sum, item) => sum + item.quantity);
 
   // ── From Firestore ──
   factory OrderModel.fromMap(Map<String, dynamic> map) {
@@ -56,16 +60,15 @@ class OrderModel {
       restaurantId: map['restaurantId'] ?? '',
       restaurantName: map['restaurantName'] ?? '',
       items: (map['items'] as List<dynamic>?)
-          ?.map((item) => CartItemModel.fromMap(item))
-          .toList() ??
+              ?.map((item) => CartItemModel.fromMap(item))
+              .toList() ??
           [],
       subtotal: (map['subtotal'] ?? 0.0).toDouble(),
       deliveryFee: (map['deliveryFee'] ?? 0.0).toDouble(),
       discount: (map['discount'] ?? 0.0).toDouble(),
       total: (map['total'] ?? 0.0).toDouble(),
       status: map['status'] ?? AppConstants.orderPending,
-      deliveryAddress:
-      Map<String, dynamic>.from(map['deliveryAddress'] ?? {}),
+      deliveryAddress: Map<String, dynamic>.from(map['deliveryAddress'] ?? {}),
       paymentMethod: map['paymentMethod'] ?? '',
       promoCode: map['promoCode'],
       createdAt: map['createdAt']?.toDate(),

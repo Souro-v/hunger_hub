@@ -56,15 +56,13 @@ class CartModel {
   });
 
   // ── Subtotal ──
-  double get subtotal =>
-      items.fold(0.0, (sum, item) => sum + item.totalPrice);
+  double get subtotal => items.fold(0.0, (sum, item) => sum + item.totalPrice);
 
   // ── Total ──
   double get total => subtotal - discount;
 
   // ── Total Items ──
-  int get totalItems =>
-      items.fold(0, (sum, item) => sum + item.quantity);
+  int get totalItems => items.fold(0, (sum, item) => sum + item.quantity);
 
   // ── Is Empty ──
   bool get isEmpty => items.isEmpty;
@@ -75,8 +73,8 @@ class CartModel {
       restaurantId: map['restaurantId'] ?? '',
       restaurantName: map['restaurantName'] ?? '',
       items: (map['items'] as List<dynamic>?)
-          ?.map((item) => CartItemModel.fromMap(item))
-          .toList() ??
+              ?.map((item) => CartItemModel.fromMap(item))
+              .toList() ??
           [],
       promoCode: map['promoCode'],
       discount: (map['discount'] ?? 0.0).toDouble(),

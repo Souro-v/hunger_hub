@@ -19,9 +19,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   // ── Check Auth ──
   Future<void> _onCheckAuth(
-      CheckAuthEvent event,
-      Emitter<AuthState> emit,
-      ) async {
+    CheckAuthEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthLoading());
     try {
       final user = await _authRepository.getCurrentUser();
@@ -37,9 +37,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   // ── Sign In ──
   Future<void> _onSignIn(
-      SignInEvent event,
-      Emitter<AuthState> emit,
-      ) async {
+    SignInEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthLoading());
     try {
       final user = await _authRepository.signIn(
@@ -60,9 +60,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   // ── Sign Up ──
   Future<void> _onSignUp(
-      SignUpEvent event,
-      Emitter<AuthState> emit,
-      ) async {
+    SignUpEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthLoading());
     try {
       final user = await _authRepository.signUp(
@@ -84,9 +84,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   // ── Sign Out ──
   Future<void> _onSignOut(
-      SignOutEvent event,
-      Emitter<AuthState> emit,
-      ) async {
+    SignOutEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthLoading());
     try {
       await _authRepository.signOut();
@@ -98,9 +98,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   // ── Reset Password ──
   Future<void> _onResetPassword(
-      ResetPasswordEvent event,
-      Emitter<AuthState> emit,
-      ) async {
+    ResetPasswordEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthLoading());
     try {
       await _authRepository.resetPassword(event.email);

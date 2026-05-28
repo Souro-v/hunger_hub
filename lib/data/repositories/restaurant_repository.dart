@@ -38,8 +38,7 @@ class RestaurantRepository {
   Future<List<RestaurantModel>> getRestaurantsByCategory(
       String category) async {
     try {
-      final data = await _restaurantService
-          .getRestaurantsByCategory(category);
+      final data = await _restaurantService.getRestaurantsByCategory(category);
       return data.map((map) => RestaurantModel.fromMap(map)).toList();
     } on AppException {
       rethrow;
@@ -52,8 +51,8 @@ class RestaurantRepository {
   Future<List<FoodItemModel>> getFoodItemsByRestaurant(
       String restaurantId) async {
     try {
-      final data = await _restaurantService
-          .getFoodItemsByRestaurant(restaurantId);
+      final data =
+          await _restaurantService.getFoodItemsByRestaurant(restaurantId);
       return data.map((map) => FoodItemModel.fromMap(map)).toList();
     } on AppException {
       rethrow;
@@ -77,8 +76,7 @@ class RestaurantRepository {
   // ── Search Restaurants ──
   Future<List<RestaurantModel>> searchRestaurants(String query) async {
     try {
-      final data =
-      await _restaurantService.searchRestaurants(query);
+      final data = await _restaurantService.searchRestaurants(query);
       return data.map((map) => RestaurantModel.fromMap(map)).toList();
     } on AppException {
       rethrow;

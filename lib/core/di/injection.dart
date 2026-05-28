@@ -30,44 +30,44 @@ Future<void> configureDependencies() async {
 
   // ── Firebase Services ──
   sl.registerLazySingleton<FirebaseAuthService>(
-        () => FirebaseAuthService(),
+    () => FirebaseAuthService(),
   );
   sl.registerLazySingleton<RestaurantRtdbService>(
-        () => RestaurantRtdbService(),
+    () => RestaurantRtdbService(),
   );
   sl.registerLazySingleton<OrderRtdbService>(
-        () => OrderRtdbService(),
+    () => OrderRtdbService(),
   );
   sl.registerLazySingleton<UserRtdbService>(
-        () => UserRtdbService(),
+    () => UserRtdbService(),
   );
   sl.registerLazySingleton<PromoRtdbService>(
-        () => PromoRtdbService(),
+    () => PromoRtdbService(),
   );
   sl.registerLazySingleton<StorageService>(
-        () => StorageService(),
+    () => StorageService(),
   );
 
   // ── Repositories ──
   sl.registerLazySingleton<AuthRepository>(
-        () => AuthRepository(
+    () => AuthRepository(
       authService: sl<FirebaseAuthService>(),
       userService: sl<UserRtdbService>(),
       localStorage: LocalStorage.instance,
     ),
   );
   sl.registerLazySingleton<RestaurantRepository>(
-        () => RestaurantRepository(
+    () => RestaurantRepository(
       restaurantService: sl<RestaurantRtdbService>(),
     ),
   );
   sl.registerLazySingleton<OrderRepository>(
-        () => OrderRepository(
+    () => OrderRepository(
       orderService: sl<OrderRtdbService>(),
     ),
   );
   sl.registerLazySingleton<UserRepository>(
-        () => UserRepository(
+    () => UserRepository(
       userService: sl<UserRtdbService>(),
       storageService: sl<StorageService>(),
     ),
@@ -75,32 +75,32 @@ Future<void> configureDependencies() async {
 
   // ── BLoCs / Cubits ──
   sl.registerFactory<AuthBloc>(
-        () => AuthBloc(
+    () => AuthBloc(
       authRepository: sl<AuthRepository>(),
     ),
   );
   sl.registerFactory<CartCubit>(
-        () => CartCubit(),
+    () => CartCubit(),
   );
   sl.registerFactory<HomeCubit>(
-        () => HomeCubit(
+    () => HomeCubit(
       restaurantRepository: sl<RestaurantRepository>(),
       userRepository: sl<UserRepository>(),
       localStorage: LocalStorage.instance,
     ),
   );
   sl.registerFactory<RestaurantBloc>(
-        () => RestaurantBloc(
+    () => RestaurantBloc(
       restaurantRepository: sl<RestaurantRepository>(),
     ),
   );
   sl.registerFactory<OrderBloc>(
-        () => OrderBloc(
+    () => OrderBloc(
       orderRepository: sl<OrderRepository>(),
     ),
   );
   sl.registerFactory<RatingCubit>(
-        () => RatingCubit(
+    () => RatingCubit(
       userRepository: sl<UserRepository>(),
       localStorage: LocalStorage.instance,
     ),

@@ -84,8 +84,7 @@ class UserRepository {
   }
 
   // ── Get Addresses ──
-  Future<List<Map<String, dynamic>>> getAddresses(
-      String userId) async {
+  Future<List<Map<String, dynamic>>> getAddresses(String userId) async {
     try {
       return await _userService.getAddresses(userId);
     } on AppException {

@@ -13,9 +13,11 @@ class AppAssets {
   static const String iconOrders = 'assets/icons/orders.png';
   static const String iconChat = 'assets/icons/chat.png';
   static const String iconProfile = 'assets/icons/profile.png';
+
   // ── Icons ──
   static const String facebook = 'assets/icons/facebook.png';
   static const String google = 'assets/icons/google.png';
+
   // ── Banners ──
   static const String banner1 = 'assets/images/banner1.png';
   static const String banner2 = 'assets/images/banner2.png';
@@ -45,6 +47,7 @@ class AppAssets {
   static const String locationPin = 'assets/icons/location.png';
   static const String clock = 'assets/icons/clock.png';
   static const String delivery = 'assets/icons/delivery.png';
+
 // ── Categories ──
   static const String catNonVeg = 'assets/icons/cat_nonveg.png';
   static const String catVeg = 'assets/icons/cat_veg.png';
@@ -64,6 +67,7 @@ class AppAssets {
   static const String menu4 = 'assets/images/menu4.png';
   static const String menu5 = 'assets/images/menu5.png';
   static const String menu6 = 'assets/images/menu6.png';
+
   // ── Payment Icons ──
   static const String paypal = 'assets/icons/paypal.png';
   static const String mastercard = 'assets/icons/mastercard.png';
@@ -80,5 +84,4 @@ class AppAssets {
   static const String courierAvatar = 'assets/images/courier_avatar.png';
   static const String messenger = 'assets/icons/messenger.png';
   static const String referCard = 'assets/images/refer_card.png';
-
 }

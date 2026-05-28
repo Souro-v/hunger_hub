@@ -8,9 +8,8 @@ class RestaurantService {
   // ── Get All Restaurants ──
   Future<List<Map<String, dynamic>>> getAllRestaurants() async {
     try {
-      final snapshot = await _firestore
-          .collection(AppConstants.restaurantsCollection)
-          .get();
+      final snapshot =
+          await _firestore.collection(AppConstants.restaurantsCollection).get();
       return snapshot.docs.map((doc) {
         return {'id': doc.id, ...doc.data()};
       }).toList();
@@ -69,9 +68,8 @@ class RestaurantService {
   // ── Get Categories ──
   Future<List<Map<String, dynamic>>> getCategories() async {
     try {
-      final snapshot = await _firestore
-          .collection(AppConstants.categoriesCollection)
-          .get();
+      final snapshot =
+          await _firestore.collection(AppConstants.categoriesCollection).get();
       return snapshot.docs.map((doc) {
         return {'id': doc.id, ...doc.data()};
       }).toList();

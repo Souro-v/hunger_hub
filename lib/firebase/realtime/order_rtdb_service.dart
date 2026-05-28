@@ -23,13 +23,11 @@ class OrderRtdbService {
   // ── Get Order By Id ──
   Future<Map<String, dynamic>> getOrderById(String orderId) async {
     try {
-      final snapshot =
-      await _database.ref().child('orders/$orderId').once();
+      final snapshot = await _database.ref().child('orders/$orderId').once();
       if (snapshot.snapshot.value == null) {
         throw const DataNotFoundException();
       }
-      final order =
-      Map<String, dynamic>.from(snapshot.snapshot.value as Map);
+      final order = Map<String, dynamic>.from(snapshot.snapshot.value as Map);
       order['id'] = orderId;
       return order;
     } catch (e) {
@@ -38,8 +36,7 @@ class OrderRtdbService {
   }
 
   // ── Get Orders By User ──
-  Future<List<Map<String, dynamic>>> getOrdersByUser(
-      String userId) async {
+  Future<List<Map<String, dynamic>>> getOrdersByUser(String userId) async {
     try {
       final snapshot = await _database
           .ref()
@@ -49,8 +46,7 @@ class OrderRtdbService {
           .once();
       if (snapshot.snapshot.value == null) return [];
 
-      final data =
-      Map<String, dynamic>.from(snapshot.snapshot.value as Map);
+      final data = Map<String, dynamic>.from(snapshot.snapshot.value as Map);
       final orders = data.entries.map((e) {
         final order = Map<String, dynamic>.from(e.value as Map);
         order['id'] = e.key;
@@ -72,16 +68,11 @@ class OrderRtdbService {
 
   // ── Track Order (Realtime) ──
   Stream<Map<String, dynamic>> trackOrder(String orderId) {
-    return _database
-        .ref()
-        .child('orders/$orderId')
-        .onValue
-        .map((event) {
+    return _database.ref().child('orders/$orderId').onValue.map((event) {
       if (event.snapshot.value == null) {
         throw const DataNotFoundException();
       }
-      final order =
-      Map<String, dynamic>.from(event.snapshot.value as Map);
+      final order = Map<String, dynamic>.from(event.snapshot.value as Map);
       order['id'] = orderId;
       return order;
     });

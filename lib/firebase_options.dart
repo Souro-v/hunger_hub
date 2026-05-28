@@ -1,4 +1,3 @@
-
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
@@ -37,6 +36,7 @@ class DefaultFirebaseOptions {
         );
     }
   }
+
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyDLo0qd-X7wTmGZ5MmDY-xv5N58aTQtIBg',
     appId: '1:411217346388:web:dab40ba2245be3cd2952c1',

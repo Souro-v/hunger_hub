@@ -20,24 +20,28 @@ class PlaceOrderEvent extends OrderEvent {
 // ── Fetch Orders ──
 class FetchOrdersEvent extends OrderEvent {
   final String userId;
+
   FetchOrdersEvent({required this.userId});
 }
 
 // ── Fetch Order By Id ──
 class FetchOrderByIdEvent extends OrderEvent {
   final String orderId;
+
   FetchOrderByIdEvent({required this.orderId});
 }
 
 // ── Track Order ──
 class TrackOrderEvent extends OrderEvent {
   final String orderId;
+
   TrackOrderEvent({required this.orderId});
 }
 
 // ── Cancel Order ──
 class CancelOrderEvent extends OrderEvent {
   final String orderId;
+
   CancelOrderEvent({required this.orderId});
 }
 

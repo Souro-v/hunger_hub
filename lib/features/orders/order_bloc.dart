@@ -21,9 +21,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   // ── Place Order ──
   Future<void> _onPlaceOrder(
-      PlaceOrderEvent event,
-      Emitter<OrderState> emit,
-      ) async {
+    PlaceOrderEvent event,
+    Emitter<OrderState> emit,
+  ) async {
     emit(OrderLoading());
     try {
       final cart = CartModel(
@@ -51,13 +51,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   // ── Fetch Orders ──
   Future<void> _onFetchOrders(
-      FetchOrdersEvent event,
-      Emitter<OrderState> emit,
-      ) async {
+    FetchOrdersEvent event,
+    Emitter<OrderState> emit,
+  ) async {
     emit(OrderLoading());
     try {
-      final orders =
-      await _orderRepository.getOrdersByUser(event.userId);
+      final orders = await _orderRepository.getOrdersByUser(event.userId);
       if (orders.isEmpty) {
         emit(OrderEmpty());
       } else {
@@ -72,13 +71,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   // ── Fetch Order By Id ──
   Future<void> _onFetchOrderById(
-      FetchOrderByIdEvent event,
-      Emitter<OrderState> emit,
-      ) async {
+    FetchOrderByIdEvent event,
+    Emitter<OrderState> emit,
+  ) async {
     emit(OrderLoading());
     try {
-      final order =
-      await _orderRepository.getOrderById(event.orderId);
+      final order = await _orderRepository.getOrderById(event.orderId);
       emit(OrderDetailLoaded(order: order));
     } on DataNotFoundException {
       emit(OrderError(message: 'Order not found'));
@@ -91,16 +89,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   // ── Track Order ──
   Future<void> _onTrackOrder(
-      TrackOrderEvent event,
-      Emitter<OrderState> emit,
-      ) async {
+    TrackOrderEvent event,
+    Emitter<OrderState> emit,
+  ) async {
     emit(OrderLoading());
     try {
       await emit.forEach(
         _orderRepository.trackOrder(event.orderId),
         onData: (order) => OrderTracking(order: order),
-        onError: (error, _) =>
-            OrderError(message: 'Tracking failed'),
+        onError: (error, _) => OrderError(message: 'Tracking failed'),
       );
     } catch (e) {
       emit(OrderError(message: 'Something went wrong'));
@@ -109,9 +106,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   // ── Cancel Order ──
   Future<void> _onCancelOrder(
-      CancelOrderEvent event,
-      Emitter<OrderState> emit,
-      ) async {
+    CancelOrderEvent event,
+    Emitter<OrderState> emit,
+  ) async {
     emit(OrderLoading());
     try {
       await _orderRepository.cancelOrder(event.orderId);
@@ -125,9 +122,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   // ── Update Order Status ──
   Future<void> _onUpdateOrderStatus(
-      UpdateOrderStatusEvent event,
-      Emitter<OrderState> emit,
-      ) async {
+    UpdateOrderStatusEvent event,
+    Emitter<OrderState> emit,
+  ) async {
     emit(OrderLoading());
     try {
       await _orderRepository.updateOrderStatus(

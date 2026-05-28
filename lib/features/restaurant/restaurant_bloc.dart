@@ -20,13 +20,12 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
 
   // ── Fetch All Restaurants ──
   Future<void> _onFetchRestaurants(
-      FetchRestaurantsEvent event,
-      Emitter<RestaurantState> emit,
-      ) async {
+    FetchRestaurantsEvent event,
+    Emitter<RestaurantState> emit,
+  ) async {
     emit(RestaurantLoading());
     try {
-      final restaurants =
-      await _restaurantRepository.getAllRestaurants();
+      final restaurants = await _restaurantRepository.getAllRestaurants();
       if (restaurants.isEmpty) {
         emit(RestaurantEmpty());
       } else {
@@ -41,13 +40,13 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
 
   // ── Fetch Restaurant By Id ──
   Future<void> _onFetchRestaurantById(
-      FetchRestaurantByIdEvent event,
-      Emitter<RestaurantState> emit,
-      ) async {
+    FetchRestaurantByIdEvent event,
+    Emitter<RestaurantState> emit,
+  ) async {
     emit(RestaurantLoading());
     try {
       final restaurant =
-      await _restaurantRepository.getRestaurantById(event.id);
+          await _restaurantRepository.getRestaurantById(event.id);
       emit(RestaurantDetailLoaded(restaurant: restaurant));
     } on DataNotFoundException {
       emit(RestaurantError(message: 'Restaurant not found'));
@@ -60,13 +59,13 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
 
   // ── Fetch By Category ──
   Future<void> _onFetchByCategory(
-      FetchRestaurantsByCategoryEvent event,
-      Emitter<RestaurantState> emit,
-      ) async {
+    FetchRestaurantsByCategoryEvent event,
+    Emitter<RestaurantState> emit,
+  ) async {
     emit(RestaurantLoading());
     try {
-      final restaurants = await _restaurantRepository
-          .getRestaurantsByCategory(event.category);
+      final restaurants =
+          await _restaurantRepository.getRestaurantsByCategory(event.category);
       if (restaurants.isEmpty) {
         emit(RestaurantEmpty());
       } else {
@@ -81,13 +80,13 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
 
   // ── Search ──
   Future<void> _onSearchRestaurants(
-      SearchRestaurantsEvent event,
-      Emitter<RestaurantState> emit,
-      ) async {
+    SearchRestaurantsEvent event,
+    Emitter<RestaurantState> emit,
+  ) async {
     emit(RestaurantLoading());
     try {
       final results =
-      await _restaurantRepository.searchRestaurants(event.query);
+          await _restaurantRepository.searchRestaurants(event.query);
       if (results.isEmpty) {
         emit(RestaurantEmpty());
       } else {
@@ -102,9 +101,9 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
 
   // ── Fetch Categories ──
   Future<void> _onFetchCategories(
-      FetchCategoriesEvent event,
-      Emitter<RestaurantState> emit,
-      ) async {
+    FetchCategoriesEvent event,
+    Emitter<RestaurantState> emit,
+  ) async {
     emit(RestaurantLoading());
     try {
       final categories = await _restaurantRepository.getCategories();
@@ -122,9 +121,9 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
 
   // ── Fetch Food Items ──
   Future<void> _onFetchFoodItems(
-      FetchFoodItemsEvent event,
-      Emitter<RestaurantState> emit,
-      ) async {
+    FetchFoodItemsEvent event,
+    Emitter<RestaurantState> emit,
+  ) async {
     emit(RestaurantLoading());
     try {
       final foodItems = await _restaurantRepository

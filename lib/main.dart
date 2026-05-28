@@ -8,6 +8,7 @@ import 'config/app_config.dart';
 import 'features/cart/cart_cubit.dart';
 import 'firebase/notification/notification_service.dart';
 import 'firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // ── Environment ──
@@ -26,6 +27,7 @@ void main() async {
 
 class HungryHubApp extends StatelessWidget {
   const HungryHubApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

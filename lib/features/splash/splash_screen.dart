@@ -99,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen>
                     const SizedBox(height: 48),
 
                     // ── Loading indicator ──
-                   const SizedBox(
+                    const SizedBox(
                       width: 24,
                       height: 24,
                       child: CircularProgressIndicator(

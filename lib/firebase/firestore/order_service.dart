@@ -8,9 +8,8 @@ class OrderService {
   // ── Place Order ──
   Future<String> placeOrder(Map<String, dynamic> orderData) async {
     try {
-      final docRef = await _firestore
-          .collection(AppConstants.ordersCollection)
-          .add({
+      final docRef =
+          await _firestore.collection(AppConstants.ordersCollection).add({
         ...orderData,
         'createdAt': FieldValue.serverTimestamp(),
         'status': AppConstants.orderPending,

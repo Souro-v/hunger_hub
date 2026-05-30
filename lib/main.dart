@@ -5,6 +5,7 @@ import 'package:hunger_hub/core/di/injection.dart';
 import 'package:hunger_hub/core/router/app_router.dart';
 import 'package:hunger_hub/core/theme/app_theme.dart';
 import 'config/app_config.dart';
+import 'core/theme/theme_cubit.dart';
 import 'features/cart/cart_cubit.dart';
 import 'firebase/notification/notification_service.dart';
 import 'firebase_options.dart';
@@ -30,15 +31,22 @@ class HungryHubApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<CartCubit>(),
-      child: MaterialApp.router(
-        title: 'HungryHub',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.light,
-        routerConfig: AppRouter.router,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => sl<CartCubit>()),
+        BlocProvider(create: (_) => sl<ThemeCubit>()),
+      ],
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
+          return MaterialApp.router(
+            title: 'HungryHub',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeMode,
+            routerConfig: AppRouter.router,
+          );
+        },
       ),
     );
   }

@@ -4,6 +4,7 @@ import '../../core/constants/app_constants.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/theme_cubit.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/di/injection.dart';
@@ -37,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ];
 
   final List<Map<String, dynamic>> _menuGroup3 = [
+    {'icon': Icons.dark_mode_outlined, 'label': 'Dark Mode'},
     {'icon': Icons.lock_outline, 'label': 'Privacy policy'},
     {'icon': Icons.info_outline, 'label': 'About'},
     {'icon': Icons.logout, 'label': 'Sign Out'},
@@ -101,7 +103,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
 
-                  // ── Avatar ──
                   // ── Avatar ──
                   Column(
                     children: [
@@ -224,11 +225,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: AppTextStyles.bodyMedium,
                         ),
                       ),
-                      const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 14,
-                        color: AppColors.textSecondary,
-                      ),
+                      // Dark Mode item special handling
+                      if (item['label'] == 'Dark Mode')
+                        BlocBuilder<ThemeCubit, ThemeMode>(
+                          builder: (context, themeMode) {
+                            return Switch(
+                              value: themeMode == ThemeMode.dark,
+                              activeThumbColor: AppColors.error,
+                              onChanged: (_) =>
+                                  context.read<ThemeCubit>().toggleTheme(),
+                            );
+                          },
+                        )
+                      else
+                        const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 14,
+                          color: AppColors.textSecondary,
+                        ),
                     ],
                   ),
                 ),
@@ -243,6 +257,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _onMenuTap(String label, BuildContext context) {
     switch (label) {
+      case 'Dark Mode':
+        context.read<ThemeCubit>().toggleTheme();
+        break;
       case 'Cart':
         context.go(AppRouter.cart);
         break;

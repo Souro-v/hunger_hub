@@ -17,6 +17,7 @@ import '../../features/home/home_cubit.dart';
 import '../../features/orders/order_bloc.dart';
 import '../../features/rating/rating_cubit.dart';
 import '../../features/restaurant/restaurant_bloc.dart';
+import '../theme/theme_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -28,6 +29,9 @@ Future<void> configureDependencies() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerSingleton<SharedPreferences>(sharedPreferences);
 
+  sl.registerLazySingleton<ThemeCubit>(
+        () => ThemeCubit(),
+  );
   // ── Firebase Services ──
   sl.registerLazySingleton<FirebaseAuthService>(
     () => FirebaseAuthService(),

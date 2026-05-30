@@ -18,6 +18,7 @@ import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
 import '../../features/profile/address_screen.dart';
 import '../../features/profile/favourite_screen.dart';
+import '../../features/profile/personal_info_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/rating/review_screen.dart';
@@ -54,6 +55,7 @@ class AppRouter {
   static const String addresses = '/addresses';
   static const String profile = '/profile';
   static const String editProfile = '/edit-profile';
+  static const String personalInfo = '/personal-info';
   static const String rating = '/rating';
   static const String review = '/review';
   static const String refer = '/refer';
@@ -186,6 +188,11 @@ class AppRouter {
         path: profile,
         name: 'profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: personalInfo,
+        name: 'personalInfo',
+        builder: (context, state) => const PersonalInfoScreen(),
       ),
       GoRoute(
         path: rating,

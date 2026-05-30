@@ -7,6 +7,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/models/food_item_model.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
+import '../../shared/widgets/food_item_detail_sheet.dart';
 import '../cart/cart_cubit.dart';
 
 class MenuListScreen extends StatefulWidget {
@@ -33,6 +34,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
       'desc': 'Chicken wings, green, spring onions, fresh mint, garlic',
       'rating': 4.5,
       'price': 225.0,
+      'ingredients': ['chicken', 'spring onions', 'mint', 'garlic'],
     },
     {
       'image': AppAssets.menu2,
@@ -40,6 +42,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
       'desc': 'Halloumi, lamb mince, lemon, rosemary, red onion',
       'rating': 4.5,
       'price': 324.0,
+      'ingredients': ['halloumi', 'lamb', 'lemon', 'rosemary'],
     },
     {
       'image': AppAssets.menu3,
@@ -47,6 +50,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
       'desc': 'Turkey breast mince, new potatoes, rolls, lemon, peppers',
       'rating': 4.5,
       'price': 199.0,
+      'ingredients': ['turkey', 'potatoes', 'peppers', 'lemon'],
     },
     {
       'image': AppAssets.menu4,
@@ -54,24 +58,66 @@ class _MenuListScreenState extends State<MenuListScreen> {
       'desc': 'Ground beef chuck, roll, black pepper',
       'rating': 4.5,
       'price': 99.0,
+      'ingredients': ['beef', 'roll', 'black pepper'],
     },
     {
       'image': AppAssets.menu5,
       'name': 'Teriyaki wings',
       'desc':
-          'Chicken wings, soy sauce, toasted sesame seeds, garlic, baking powder',
+      'Chicken wings, soy sauce, toasted sesame seeds, garlic, baking powder',
       'rating': 4.5,
       'price': 179.0,
+      'ingredients': ['chicken', 'soy sauce', 'sesame', 'garlic'],
     },
     {
       'image': AppAssets.menu6,
       'name': 'Salmon skewers',
       'desc':
-          '2 x 500g packs frozen boneless salmon fillets, defrosted, skin removed, cut into 3cm chunks',
+      '2 x 500g packs frozen boneless salmon fillets, defrosted, skin removed, cut into 3cm chunks',
       'rating': 4.5,
       'price': 299.0,
+      'ingredients': ['salmon', 'lemon', 'herbs'],
     },
   ];
+
+  void _showFoodDetail(
+      BuildContext context, Map<String, dynamic> item) {
+    final foodItem = FoodItemModel(
+      id: item['name'],
+      restaurantId: 'house_of_bbq',
+      name: item['name'],
+      description: item['desc'],
+      imageUrl: item['image'],
+      price: item['price'],
+      rating: item['rating'],
+      category: 'BBQ',
+      isAvailable: true,
+      ingredients: List<String>.from(item['ingredients'] ?? []),
+    );
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => FoodItemDetailSheet(
+        foodItem: foodItem,
+        onAddToCart: () {
+          context.read<CartCubit>().addItem(foodItem);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${foodItem.name} added to cart!'),
+              backgroundColor: AppColors.success,
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +143,6 @@ class _MenuListScreenState extends State<MenuListScreen> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  // ── Breadcrumb ──
                   Positioned(
                     top: 12,
                     left: 16,
@@ -159,11 +204,11 @@ class _MenuListScreenState extends State<MenuListScreen> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Text('127+ ratings', style: AppTextStyles.bodySmall),
+                        Text('127+ ratings',
+                            style: AppTextStyles.bodySmall),
                       ],
                     ),
                     const SizedBox(height: 10),
-
                     const Divider(),
                     const SizedBox(height: 6),
 
@@ -179,7 +224,8 @@ class _MenuListScreenState extends State<MenuListScreen> {
                         Container(
                             width: 1, height: 16, color: AppColors.border),
                         const SizedBox(width: 8),
-                        Text('Peelamedu', style: AppTextStyles.bodySmall),
+                        Text('Peelamedu',
+                            style: AppTextStyles.bodySmall),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -258,46 +304,54 @@ class _MenuListScreenState extends State<MenuListScreen> {
                           children: [
                             // ── Info ──
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(item['name'],
-                                      style: AppTextStyles.label),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    item['desc'],
-                                    style: AppTextStyles.caption,
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
+                              child: GestureDetector(
+                                onTap: () =>
+                                    _showFoodDetail(context, item),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Text(item['name'],
+                                        style: AppTextStyles.label),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      item['desc'],
+                                      style: AppTextStyles.caption,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.star,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(Icons.star,
-                                            size: 10,
-                                            color: AppColors.textWhite),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          item['rating'].toString(),
-                                          style: AppTextStyles.caption.copyWith(
-                                            color: AppColors.textWhite,
-                                            fontWeight: FontWeight.w700,
+                                    const SizedBox(height: 8),
+                                    Container(
+                                      padding:
+                                      const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.star,
+                                        borderRadius:
+                                        BorderRadius.circular(6),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(Icons.star,
+                                              size: 10,
+                                              color: AppColors.textWhite),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            item['rating'].toString(),
+                                            style: AppTextStyles.caption
+                                                .copyWith(
+                                              color: AppColors.textWhite,
+                                              fontWeight: FontWeight.w700,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -305,13 +359,18 @@ class _MenuListScreenState extends State<MenuListScreen> {
                             // ── Image + ADD ──
                             Stack(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.asset(
-                                    item['image'],
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
+                                GestureDetector(
+                                  onTap: () =>
+                                      _showFoodDetail(context, item),
+                                  child: ClipRRect(
+                                    borderRadius:
+                                    BorderRadius.circular(12),
+                                    child: Image.asset(
+                                      item['image'],
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                                 Positioned(
@@ -339,12 +398,16 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                           content: Text(
                                             '${foodItem.name} added to cart!',
                                           ),
-                                          backgroundColor: AppColors.success,
-                                          behavior: SnackBarBehavior.floating,
-                                          duration: const Duration(seconds: 1),
+                                          backgroundColor:
+                                          AppColors.success,
+                                          behavior:
+                                          SnackBarBehavior.floating,
+                                          duration: const Duration(
+                                              seconds: 1),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(10),
+                                            BorderRadius.circular(
+                                                10),
                                           ),
                                         ),
                                       );
@@ -356,7 +419,8 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                       ),
                                       decoration: BoxDecoration(
                                         color: AppColors.surface,
-                                        borderRadius: BorderRadius.circular(6),
+                                        borderRadius:
+                                        BorderRadius.circular(6),
                                         boxShadow: const [
                                           BoxShadow(
                                             color: AppColors.shadow,
@@ -366,7 +430,8 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                       ),
                                       child: Text(
                                         'ADD',
-                                        style: AppTextStyles.caption.copyWith(
+                                        style: AppTextStyles.caption
+                                            .copyWith(
                                           fontWeight: FontWeight.w700,
                                           color: AppColors.textPrimary,
                                         ),

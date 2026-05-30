@@ -258,6 +258,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 'Payment Method':
         context.go(AppRouter.checkout);
         break;
+      case 'Personal Info':
+        context.go(AppRouter.personalInfo);
+        break;
       case 'Addresses':
         context.go(AppRouter.addresses);
         break;

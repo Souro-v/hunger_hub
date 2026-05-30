@@ -10,6 +10,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
 import '../../shared/widgets/error_widget.dart';
 import '../../shared/widgets/loading_widget.dart';
+import '../../shared/widgets/restaurant_filter_sheet.dart';
 import '../restaurant/restaurant_bloc.dart';
 import '../restaurant/restaurant_event.dart';
 import '../restaurant/restaurant_state.dart';
@@ -29,6 +30,14 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  // ── State variables ──
+  RestaurantFilter _currentFilter = const RestaurantFilter();
+
+  // ── Apply Filter ──
+  void _applyFilter(RestaurantFilter filter) {
+    context.read<RestaurantBloc>().add(FetchRestaurantsEvent());
   }
 
   @override
@@ -118,11 +127,44 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Popular hotels', style: AppTextStyles.h3),
-                    Text(
-                      'See all',
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.error,
-                        fontWeight: FontWeight.w600,
+                    // ── Filter Button ──
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) => RestaurantFilterSheet(
+                            currentFilter: _currentFilter,
+                            onApply: (filter) {
+                              setState(() => _currentFilter = filter);
+                              _applyFilter(filter);
+                            },
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.error.withValues(alpha: 0.1),
+                          borderRadius:
+                              BorderRadius.circular(AppConstants.radiusCircle),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.tune_rounded,
+                                size: 16, color: AppColors.error),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Filter',
+                              style: AppTextStyles.caption.copyWith(
+                                color: AppColors.error,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

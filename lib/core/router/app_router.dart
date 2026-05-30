@@ -13,6 +13,7 @@ import '../../features/delivery/delivery_address_screen.dart';
 import '../../features/help/help_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
+import '../../features/orders/order_cancellation_screen.dart';
 import '../../features/orders/order_history_screen.dart';
 import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
@@ -49,6 +50,7 @@ class AppRouter {
   static const String checkout = '/checkout';
   static const String paymentMethod = '/payment-method';
   static const String addCard = '/add-card';
+  static const String orderCancellation = '/order-cancellation';
   static const String orderStatus = '/order-status';
   static const String orderHistory = '/order-history';
   static const String trackingMap = '/tracking-map';
@@ -163,6 +165,16 @@ class AppRouter {
         path: addCard,
         name: 'addCard',
         builder: (context, state) => const AddCardScreen(),
+      ),
+      GoRoute(
+        path: orderCancellation,
+        name: 'orderCancellation',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return OrderCancellationScreen(
+            orderId: extra?['orderId'] ?? '',
+          );
+        },
       ),
       GoRoute(
         path: addresses,

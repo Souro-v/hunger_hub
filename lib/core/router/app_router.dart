@@ -17,9 +17,11 @@ import '../../features/orders/order_cancellation_screen.dart';
 import '../../features/orders/order_history_screen.dart';
 import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
+import '../../features/profile/about_screen.dart';
 import '../../features/profile/address_screen.dart';
 import '../../features/profile/favourite_screen.dart';
 import '../../features/profile/personal_info_screen.dart';
+import '../../features/profile/privacy_policy_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/rating/review_screen.dart';
@@ -56,6 +58,8 @@ class AppRouter {
   static const String trackingMap = '/tracking-map';
   static const String addresses = '/addresses';
   static const String profile = '/profile';
+  static const String privacyPolicy = '/privacy-policy';
+  static const String about = '/about';
   static const String editProfile = '/edit-profile';
   static const String personalInfo = '/personal-info';
   static const String rating = '/rating';
@@ -200,6 +204,16 @@ class AppRouter {
         path: profile,
         name: 'profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: privacyPolicy,
+        name: 'privacyPolicy',
+        builder: (context, state) => const PrivacyPolicyScreen(),
+      ),
+      GoRoute(
+        path: about,
+        name: 'about',
+        builder: (context, state) => const AboutScreen(),
       ),
       GoRoute(
         path: personalInfo,

@@ -278,6 +278,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 'Personal Info':
         context.go(AppRouter.personalInfo);
         break;
+      case 'Privacy policy':
+        context.go(AppRouter.privacyPolicy);
+        break;
+      case 'About':
+        context.go(AppRouter.about);
+        break;
       case 'Addresses':
         context.go(AppRouter.addresses);
         break;

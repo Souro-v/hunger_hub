@@ -349,7 +349,14 @@ class _CartItemTile extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.network(
+                child:item.foodItem.imageUrl.startsWith('assets')
+                    ? Image.asset(
+                  item.foodItem.imageUrl,
+                  width: 90,
+                  height: 90,
+                  fit: BoxFit.cover,
+                )
+                    : Image.network(
                   item.foodItem.imageUrl,
                   width: 90,
                   height: 90,
@@ -358,8 +365,8 @@ class _CartItemTile extends StatelessWidget {
                     width: 90,
                     height: 90,
                     color: AppColors.divider,
-                    child:
-                        const Icon(Icons.fastfood, color: AppColors.textHint),
+                    child: const Icon(Icons.fastfood,
+                        color: AppColors.textHint),
                   ),
                 ),
               ),

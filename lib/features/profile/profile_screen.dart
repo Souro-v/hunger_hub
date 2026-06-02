@@ -1,10 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/router/app_router.dart';
+import '../../core/storage/local_storage.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/theme_cubit.dart';
+import '../../data/repositories/user_repository.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/di/injection.dart';
@@ -21,6 +25,53 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   int _currentNavIndex = 3;
+  bool _isUploadingAvatar = false;
+
+  Future<void> _pickAndUploadAvatar() async {
+    try {
+      final picker = ImagePicker();
+      final image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 80,
+      );
+      if (image == null) return;
+
+      setState(() => _isUploadingAvatar = true);
+
+      final userId = LocalStorage.instance.getUserId();
+      if (userId != null) {
+        final userRepo = sl<UserRepository>();
+        await userRepo.updateAvatar(
+          userId: userId,
+          imageFile: File(image.path),
+        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Avatar updated!'),
+              backgroundColor: AppColors.success,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+          // ── Refresh auth ──
+          context.read<AuthBloc>().add(CheckAuthEvent());
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to update avatar'),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+    setState(() => _isUploadingAvatar = false);
+  }
 
   final List<Map<String, dynamic>> _menuGroup1 = [
     {'icon': Icons.person_outline, 'label': 'Personal Info'},
@@ -104,53 +155,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
 
                   // ── Avatar ──
-                  Column(
-                    children: [
-                      BlocBuilder<AuthBloc, AuthState>(
-                        builder: (context, state) {
-                          final avatarUrl = state is AuthAuthenticated
-                              ? state.user.avatarUrl
-                              : null;
-                          return CircleAvatar(
-                            radius: 48,
-                            backgroundColor: AppColors.divider,
-                            backgroundImage: avatarUrl != null
-                                ? NetworkImage(avatarUrl)
-                                : null,
-                            child: avatarUrl == null
-                                ? const Icon(
-                                    Icons.person,
-                                    size: 48,
-                                    color: AppColors.textSecondary,
-                                  )
-                                : null,
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      BlocBuilder<AuthBloc, AuthState>(
-                        builder: (context, state) {
-                          final name = state is AuthAuthenticated
-                              ? state.user.name
-                              : 'User';
-                          return Text(name, style: AppTextStyles.h3);
-                        },
-                      ),
-                      const SizedBox(height: 4),
-                      BlocBuilder<AuthBloc, AuthState>(
-                        builder: (context, state) {
-                          final email = state is AuthAuthenticated
-                              ? state.user.email
-                              : 'Explore the food';
-                          return Text(
-                            email,
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.textSecondary,
+                  GestureDetector(
+                    onTap: _pickAndUploadAvatar,
+                    child: Stack(
+                      children: [
+                        BlocBuilder<AuthBloc, AuthState>(
+                          builder: (context, state) {
+                            final avatarUrl = state is AuthAuthenticated
+                                ? state.user.avatarUrl
+                                : null;
+                            return CircleAvatar(
+                              radius: 48,
+                              backgroundColor: AppColors.divider,
+                              backgroundImage: avatarUrl != null
+                                  ? NetworkImage(avatarUrl)
+                                  : null,
+                              child: _isUploadingAvatar
+                                  ? const CircularProgressIndicator(
+                                      color: AppColors.error,
+                                    )
+                                  : avatarUrl == null
+                                      ? const Icon(
+                                          Icons.person,
+                                          size: 48,
+                                          color: AppColors.textSecondary,
+                                        )
+                                      : null,
+                            );
+                          },
+                        ),
+                        // ── Camera Icon ──
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            width: 28,
+                            height: 28,
+                            decoration: const BoxDecoration(
+                              color: AppColors.error,
+                              shape: BoxShape.circle,
                             ),
-                          );
-                        },
-                      ),
-                    ],
+                            child: const Icon(
+                              Icons.camera_alt_outlined,
+                              size: 14,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      final name =
+                          state is AuthAuthenticated ? state.user.name : 'User';
+                      return Text(name, style: AppTextStyles.h3);
+                    },
+                  ),
+                  const SizedBox(height: 4),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      final email = state is AuthAuthenticated
+                          ? state.user.email
+                          : 'Explore the food';
+                      return Text(
+                        email,
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 24),
 

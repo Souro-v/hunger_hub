@@ -19,6 +19,7 @@ import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
 import '../../features/profile/about_screen.dart';
 import '../../features/profile/address_screen.dart';
+import '../../features/profile/coupon_screen.dart';
 import '../../features/profile/favourite_screen.dart';
 import '../../features/profile/personal_info_screen.dart';
 import '../../features/profile/privacy_policy_screen.dart';
@@ -64,6 +65,7 @@ class AppRouter {
   static const String personalInfo = '/personal-info';
   static const String rating = '/rating';
   static const String review = '/review';
+  static const String coupons = '/coupons';
   static const String refer = '/refer';
   static const String help = '/help';
 
@@ -234,6 +236,11 @@ class AppRouter {
         path: refer,
         name: 'refer',
         builder: (context, state) => const ReferScreen(),
+      ),
+      GoRoute(
+        path: coupons,
+        name: 'coupons',
+        builder: (context, state) => const CouponScreen(),
       ),
       GoRoute(
         path: help,

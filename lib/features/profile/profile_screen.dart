@@ -87,6 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     {'icon': Icons.payment_outlined, 'label': 'Payment Method'},
     {'icon': Icons.person_add_outlined, 'label': 'Refer a Friend'},
     {'icon': Icons.local_offer_outlined, 'label': 'Coupons & Offers'},
+    {'icon': Icons.history_edu_outlined, 'label': 'Payment History'},
   ];
 
   final List<Map<String, dynamic>> _menuGroup3 = [
@@ -368,6 +369,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         break;
       case 'Refer a Friend':
         context.go(AppRouter.refer);
+        break;
+      case 'Payment History':
+        context.go(AppRouter.paymentHistory);
         break;
       case 'Coupons & Offers':
         context.go(AppRouter.coupons);

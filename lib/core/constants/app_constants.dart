@@ -57,4 +57,6 @@ class AppConstants {
   static const String orderOnTheWay = 'on_the_way';
   static const String orderDelivered = 'delivered';
   static const String orderCancelled = 'cancelled';
+
+  static const String buildNumber = '1';
 }

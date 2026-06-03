@@ -19,6 +19,7 @@ import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
 import '../../features/profile/about_screen.dart';
 import '../../features/profile/address_screen.dart';
+import '../../features/profile/app_settings_screen.dart';
 import '../../features/profile/coupon_screen.dart';
 import '../../features/profile/favourite_screen.dart';
 import '../../features/profile/payment_history_screen.dart';
@@ -69,6 +70,7 @@ class AppRouter {
   static const String coupons = '/coupons';
   static const String refer = '/refer';
   static const String paymentHistory = '/payment-history';
+  static const String appSettings = '/app-settings';
   static const String help = '/help';
 
   static final GoRouter router = GoRouter(
@@ -243,6 +245,11 @@ class AppRouter {
         path: coupons,
         name: 'coupons',
         builder: (context, state) => const CouponScreen(),
+      ),
+      GoRoute(
+        path: appSettings,
+        name: 'appSettings',
+        builder: (context, state) => const AppSettingsScreen(),
       ),
       GoRoute(
         path: paymentHistory,

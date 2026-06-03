@@ -95,6 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     {'icon': Icons.lock_outline, 'label': 'Privacy policy'},
     {'icon': Icons.info_outline, 'label': 'About'},
     {'icon': Icons.logout, 'label': 'Sign Out'},
+    {'icon': Icons.settings_outlined, 'label': 'Settings'},
   ];
 
   @override
@@ -375,6 +376,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         break;
       case 'Coupons & Offers':
         context.go(AppRouter.coupons);
+        break;
+      case 'Settings':
+        context.go(AppRouter.appSettings);
         break;
     }
   }

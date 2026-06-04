@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_constants.dart';
@@ -6,9 +7,13 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
+import 'order_bloc.dart';
+import 'order_event.dart';
 
 class TrackingMapScreen extends StatefulWidget {
-  const TrackingMapScreen({super.key});
+  const TrackingMapScreen({super.key, this.orderId = ''});
+
+  final String orderId;
 
   @override
   State<TrackingMapScreen> createState() => _TrackingMapScreenState();
@@ -16,6 +21,16 @@ class TrackingMapScreen extends StatefulWidget {
 
 class _TrackingMapScreenState extends State<TrackingMapScreen> {
   int _currentNavIndex = 2;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.orderId.isNotEmpty) {
+      context.read<OrderBloc>().add(
+        TrackOrderEvent(orderId: widget.orderId),
+      );
+    }
+  }
 
   final List<Map<String, dynamic>> _orderSteps = [
     {'label': 'Your order has been received', 'done': true},
@@ -50,7 +65,7 @@ class _TrackingMapScreenState extends State<TrackingMapScreen> {
               flex: 3,
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 child: Column(
                   children: [
                     // ── Delivery Time ──
@@ -92,7 +107,7 @@ class _TrackingMapScreenState extends State<TrackingMapScreen> {
                       decoration: BoxDecoration(
                         color: AppColors.divider,
                         borderRadius:
-                            BorderRadius.circular(AppConstants.radiusLG),
+                        BorderRadius.circular(AppConstants.radiusLG),
                       ),
                       child: Row(
                         children: [
@@ -100,7 +115,7 @@ class _TrackingMapScreenState extends State<TrackingMapScreen> {
                           const CircleAvatar(
                             radius: 24,
                             backgroundImage:
-                                AssetImage(AppAssets.courierAvatar),
+                            AssetImage(AppAssets.courierAvatar),
                           ),
                           const SizedBox(width: 12),
 

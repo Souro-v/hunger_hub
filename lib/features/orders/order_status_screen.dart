@@ -11,6 +11,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../shared/widgets/app_bottom_nav.dart';
 import 'order_event.dart';
+import 'order_state.dart';
 
 class OrderStatusScreen extends StatefulWidget {
   const OrderStatusScreen({super.key});
@@ -22,26 +23,39 @@ class OrderStatusScreen extends StatefulWidget {
 class _OrderStatusScreenState extends State<OrderStatusScreen> {
   int _currentNavIndex = 2;
   bool _showCoupon = false;
+  String _currentOrderId = '';
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => sl<OrderBloc>(),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: _showCoupon
-              ? _buildCouponScreen(context)
-              : _buildSuccessScreen(context),
-        ),
-        bottomNavigationBar: AppBottomNav(
-          currentIndex: _currentNavIndex,
-          onTap: (index) {
-            setState(() => _currentNavIndex = index);
-            if (index == 0) context.go(AppRouter.home);
-            if (index == 1) context.go(AppRouter.restaurant);
-            if (index == 3) context.go(AppRouter.profile);
-          },
+      child: BlocListener<OrderBloc, OrderState>(
+        listener: (context, state) {
+          if (state is OrderPlaced) {
+            setState(() {
+              _currentOrderId = state.orderId;
+              _showCoupon = false;
+            });
+
+            setState(() => _showCoupon = true);
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: _showCoupon
+                ? _buildCouponScreen(context)
+                : _buildSuccessScreen(context),
+          ),
+          bottomNavigationBar: AppBottomNav(
+            currentIndex: _currentNavIndex,
+            onTap: (index) {
+              setState(() => _currentNavIndex = index);
+              if (index == 0) context.go(AppRouter.home);
+              if (index == 1) context.go(AppRouter.restaurant);
+              if (index == 3) context.go(AppRouter.profile);
+            },
+          ),
         ),
       ),
     );
@@ -174,7 +188,13 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> {
             width: double.infinity,
             height: 54,
             child: ElevatedButton(
-              onPressed: () => context.go(AppRouter.trackingMap),
+              onPressed: () {
+                // orderId pass
+                context.go(
+                  AppRouter.trackingMap,
+                  extra: {'orderId': _currentOrderId},
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.error.withValues(alpha: 0.6),
                 shape: RoundedRectangleBorder(

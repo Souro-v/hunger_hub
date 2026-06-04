@@ -204,7 +204,12 @@ class AppRouter {
       GoRoute(
         path: trackingMap,
         name: 'trackingMap',
-        builder: (context, state) => const TrackingMapScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return TrackingMapScreen(
+            orderId: extra?['orderId'] ?? '',
+          );
+        },
       ),
       GoRoute(
         path: profile,

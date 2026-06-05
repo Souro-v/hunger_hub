@@ -16,7 +16,16 @@ import '../restaurant/restaurant_event.dart';
 import '../restaurant/restaurant_state.dart';
 
 class RestaurantScreen extends StatefulWidget {
-  const RestaurantScreen({super.key});
+  final String restaurantId;
+  final String restaurantName;
+  final String restaurantImage;
+
+  const RestaurantScreen({
+    super.key,
+    this.restaurantId = 'house_of_bbq',
+    this.restaurantName = 'House of BBQ',
+    this.restaurantImage = '',
+  });
 
   @override
   State<RestaurantScreen> createState() => _RestaurantScreenState();
@@ -25,19 +34,12 @@ class RestaurantScreen extends StatefulWidget {
 class _RestaurantScreenState extends State<RestaurantScreen> {
   int _currentNavIndex = 1;
   final _searchController = TextEditingController();
+  RestaurantFilter _currentFilter = const RestaurantFilter();
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
-  }
-
-  // ── State variables ──
-  RestaurantFilter _currentFilter = const RestaurantFilter();
-
-  // ── Apply Filter ──
-  void _applyFilter(RestaurantFilter filter) {
-    context.read<RestaurantBloc>().add(FetchRestaurantsEvent());
   }
 
   @override
@@ -46,292 +48,325 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
       create: (_) => sl<RestaurantBloc>()..add(FetchRestaurantsEvent()),
       child: Scaffold(
         backgroundColor: AppColors.background,
+        // Using a Builder widget to expose a context containing the RestaurantBloc
         body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-
-              // ── Title ──
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: RichText(
-                  text: TextSpan(
-                    style: AppTextStyles.h2,
-                    children: [
-                      TextSpan(
-                        text: 'Famous Restaurant ',
-                        style: AppTextStyles.h2.copyWith(
-                          color: AppColors.error,
-                        ),
+          child: Builder(
+            builder: (innerContext) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ── Restaurant Banner ──
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(16),
+                      bottomRight: Radius.circular(16),
+                    ),
+                    child: widget.restaurantImage.isNotEmpty
+                        ? Image.network(
+                      widget.restaurantImage,
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Image.asset(
+                        AppAssets.rest8,
+                        width: double.infinity,
+                        height: 200,
+                        fit: BoxFit.cover,
                       ),
-                      const TextSpan(text: 'For You'),
-                    ],
+                    )
+                        : Image.asset(
+                      AppAssets.rest8,
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 16),
 
-              // ── Search Bar ──
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE8F4F8),
-                    borderRadius: BorderRadius.circular(AppConstants.radiusMD),
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      const Icon(Icons.search, color: AppColors.textSecondary),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: TextField(
-                          controller: _searchController,
-                          onChanged: (query) {
-                            if (query.isEmpty) {
-                              context
-                                  .read<RestaurantBloc>()
-                                  .add(FetchRestaurantsEvent());
-                            } else {
-                              context.read<RestaurantBloc>().add(
-                                    SearchRestaurantsEvent(query: query),
-                                  );
-                            }
-                          },
-                          decoration: InputDecoration(
-                            hintText: 'Search restaurants...',
-                            hintStyle: AppTextStyles.bodyMedium.copyWith(
-                              color: AppColors.textHint,
-                            ),
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      const Icon(Icons.mic_outlined,
-                          color: AppColors.textSecondary),
-                      const SizedBox(width: 16),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-              // ── Popular Hotels Header ──
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Popular hotels', style: AppTextStyles.h3),
-                    // ── Filter Button ──
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (_) => RestaurantFilterSheet(
-                            currentFilter: _currentFilter,
-                            onApply: (filter) {
-                              setState(() => _currentFilter = filter);
-                              _applyFilter(filter);
-                            },
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: AppColors.error.withValues(alpha: 0.1),
-                          borderRadius:
-                              BorderRadius.circular(AppConstants.radiusCircle),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.tune_rounded,
-                                size: 16, color: AppColors.error),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Filter',
-                              style: AppTextStyles.caption.copyWith(
-                                color: AppColors.error,
-                                fontWeight: FontWeight.w600,
-                              ),
+                  // ── Title ──
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: RichText(
+                      text: TextSpan(
+                        style: AppTextStyles.h2,
+                        children: [
+                          TextSpan(
+                            text: 'All restaurants',
+                            style: AppTextStyles.h2.copyWith(
+                              color: AppColors.error,
                             ),
-                          ],
-                        ),
+                          ),
+                          const TextSpan(text: 'For You'),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
+                  ),
+                  const SizedBox(height: 16),
 
-              // ── Restaurant List ──
-              Expanded(
-                child: BlocBuilder<RestaurantBloc, RestaurantState>(
-                  builder: (context, state) {
-                    if (state is RestaurantLoading) {
-                      return const LoadingWidget();
-                    }
-                    if (state is RestaurantError) {
-                      return AppErrorWidget(
-                        message: state.message,
-                        onRetry: () => context
-                            .read<RestaurantBloc>()
-                            .add(FetchRestaurantsEvent()),
-                      );
-                    }
+                  // ── Search Bar ──
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE8F4F8),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusMD),
+                      ),
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 16),
+                          const Icon(Icons.search, color: AppColors.textSecondary),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TextField(
+                              controller: _searchController,
+                              onChanged: (query) {
+                                if (query.isEmpty) {
+                                  innerContext
+                                      .read<RestaurantBloc>()
+                                      .add(FetchRestaurantsEvent());
+                                } else {
+                                  innerContext.read<RestaurantBloc>().add(
+                                    SearchRestaurantsEvent(query: query),
+                                  );
+                                }
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Search restaurants...',
+                                hintStyle: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.textHint,
+                                ),
+                                border: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                          const Icon(Icons.mic_outlined,
+                              color: AppColors.textSecondary),
+                          const SizedBox(width: 16),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
 
-                    if (state is RestaurantEmpty) {
-                      return Center(
-                        child: Text(
-                          'No restaurants found',
-                          style: AppTextStyles.bodyMedium,
+                  // ── Popular Hotels Header ──
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Popular hotels', style: AppTextStyles.h3),
+                        // ── Filter Button ──
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: innerContext,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (_) => RestaurantFilterSheet(
+                                currentFilter: _currentFilter,
+                                onApply: (filter) {
+                                  setState(() => _currentFilter = filter);
+                                  // Uses safely closed closure context
+                                  innerContext
+                                      .read<RestaurantBloc>()
+                                      .add(FetchRestaurantsEvent());
+                                },
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: AppColors.error.withValues(alpha: 0.1),
+                              borderRadius:
+                              BorderRadius.circular(AppConstants.radiusCircle),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.tune_rounded,
+                                    size: 16, color: AppColors.error),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Filter',
+                                  style: AppTextStyles.caption.copyWith(
+                                    color: AppColors.error,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      );
-                    }
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
 
-                    // ── Static fallback ──
-                    final restaurants = state is RestaurantsLoaded
-                        ? state.restaurants
-                        : state is RestaurantSearchResults
+                  // ── Restaurant List ──
+                  Expanded(
+                    child: BlocBuilder<RestaurantBloc, RestaurantState>(
+                      builder: (blocContext, state) {
+                        if (state is RestaurantLoading) {
+                          return const LoadingWidget();
+                        }
+                        if (state is RestaurantError) {
+                          return AppErrorWidget(
+                            message: state.message,
+                            onRetry: () => blocContext
+                                .read<RestaurantBloc>()
+                                .add(FetchRestaurantsEvent()),
+                          );
+                        }
+
+                        if (state is RestaurantEmpty) {
+                          return Center(
+                            child: Text(
+                              'No restaurants found',
+                              style: AppTextStyles.bodyMedium,
+                            ),
+                          );
+                        }
+
+                        final restaurants = state is RestaurantsLoaded
+                            ? state.restaurants
+                            : state is RestaurantSearchResults
                             ? state.results
                             : null;
 
-                    if (restaurants != null && restaurants.isNotEmpty) {
-                      return ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        itemCount: restaurants.length,
-                        itemBuilder: (context, index) {
-                          final rest = restaurants[index];
-                          return GestureDetector(
-                            onTap: () => context.go(AppRouter.menuList),
-                            child: Container(
-                              margin: const EdgeInsets.only(bottom: 16),
-                              decoration: BoxDecoration(
-                                color: AppColors.surface,
-                                borderRadius: BorderRadius.circular(
-                                    AppConstants.radiusLG),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: AppColors.shadow,
-                                    blurRadius: 8,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(16),
-                                      topRight: Radius.circular(16),
-                                    ),
-                                    child: Image.network(
-                                      rest.imageUrl,
-                                      width: double.infinity,
-                                      height: 160,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (_, __, ___) => Image.asset(
-                                        AppAssets.rest1,
-                                        width: double.infinity,
-                                        height: 160,
-                                        fit: BoxFit.cover,
+                        if (restaurants != null && restaurants.isNotEmpty) {
+                          return ListView.builder(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            itemCount: restaurants.length,
+                            itemBuilder: (context, index) {
+                              final rest = restaurants[index];
+                              return GestureDetector(
+                                onTap: () => context.go(AppRouter.menuList),
+                                child: Container(
+                                  margin: const EdgeInsets.only(bottom: 16),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.surface,
+                                    borderRadius: BorderRadius.circular(
+                                        AppConstants.radiusLG),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: AppColors.shadow,
+                                        blurRadius: 8,
+                                        offset: Offset(0, 2),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Column(
-                                      crossAxisAlignment:
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(16),
+                                          topRight: Radius.circular(16),
+                                        ),
+                                        child: Image.network(
+                                          rest.imageUrl,
+                                          width: double.infinity,
+                                          height: 160,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) => Image.asset(
+                                            AppAssets.rest1,
+                                            width: double.infinity,
+                                            height: 160,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: Column(
+                                          crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: [
-                                        Text(rest.name,
-                                            style: AppTextStyles.h3
-                                                .copyWith(fontSize: 15)),
-                                        const SizedBox(height: 4),
-                                        Text(rest.category,
-                                            style: AppTextStyles.bodySmall),
-                                        const SizedBox(height: 8),
-                                        Row(
                                           children: [
-                                            Container(
-                                              padding:
+                                            Text(rest.name,
+                                                style: AppTextStyles.h3
+                                                    .copyWith(fontSize: 15)),
+                                            const SizedBox(height: 4),
+                                            Text(rest.category,
+                                                style: AppTextStyles.bodySmall),
+                                            const SizedBox(height: 8),
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  padding:
                                                   const EdgeInsets.symmetric(
-                                                horizontal: 6,
-                                                vertical: 2,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: AppColors.star,
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  const Icon(Icons.star,
-                                                      size: 10,
-                                                      color:
-                                                          AppColors.textWhite),
-                                                  const SizedBox(width: 2),
-                                                  Text(
-                                                    rest.rating
-                                                        .toStringAsFixed(1),
-                                                    style: AppTextStyles.caption
-                                                        .copyWith(
-                                                      color:
-                                                          AppColors.textWhite,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
+                                                    horizontal: 6,
+                                                    vertical: 2,
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            const Icon(
-                                                Icons.access_time_rounded,
-                                                size: 14,
-                                                color: AppColors.textSecondary),
-                                            const SizedBox(width: 4),
-                                            Text('${rest.deliveryTime} min',
-                                                style: AppTextStyles.caption),
-                                            const SizedBox(width: 8),
-                                            const Icon(Icons.delivery_dining,
-                                                size: 14,
-                                                color: AppColors.textSecondary),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              rest.deliveryFee == 0
-                                                  ? 'Free delivery'
-                                                  : '৳${rest.deliveryFee.toStringAsFixed(0)}',
-                                              style: AppTextStyles.caption,
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.star,
+                                                    borderRadius:
+                                                    BorderRadius.circular(4),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(Icons.star,
+                                                          size: 10,
+                                                          color:
+                                                          AppColors.textWhite),
+                                                      const SizedBox(width: 2),
+                                                      Text(
+                                                        rest.rating
+                                                            .toStringAsFixed(1),
+                                                        style: AppTextStyles.caption
+                                                            .copyWith(
+                                                          color:
+                                                          AppColors.textWhite,
+                                                          fontWeight:
+                                                          FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 8),
+                                                const Icon(
+                                                    Icons.access_time_rounded,
+                                                    size: 14,
+                                                    color: AppColors.textSecondary),
+                                                const SizedBox(width: 4),
+                                                Text('${rest.deliveryTime} min',
+                                                    style: AppTextStyles.caption),
+                                                const SizedBox(width: 8),
+                                                const Icon(Icons.delivery_dining,
+                                                    size: 14,
+                                                    color: AppColors.textSecondary),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  rest.deliveryFee == 0
+                                                      ? 'Free delivery'
+                                                      : '৳${rest.deliveryFee.toStringAsFixed(0)}',
+                                                  style: AppTextStyles.caption,
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           );
-                        },
-                      );
-                    }
+                        }
 
-                    // ── Static fallback ──
-                    return _buildStaticList(context);
-                  },
-                ),
-              ),
-            ],
+                        return _buildStaticList(blocContext);
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
         bottomNavigationBar: AppBottomNav(
@@ -348,57 +383,14 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     );
   }
 
-  // ── Static Fallback List ──
   Widget _buildStaticList(BuildContext context) {
     final staticRestaurants = [
-      {
-        'image': AppAssets.rest1,
-        'name': 'Arabian Restaurant',
-        'category': 'Chinese',
-        'rating': 4.0,
-        'time': '45 min',
-        'delivery': 'Free delivery',
-      },
-      {
-        'image': AppAssets.rest2,
-        'name': 'Golden Restaurant',
-        'category': 'Indian',
-        'rating': 3.5,
-        'time': '25 min',
-        'delivery': 'Free delivery',
-      },
-      {
-        'image': AppAssets.rest3,
-        'name': 'Italian Restaurants',
-        'category': 'Chinese  Italian',
-        'rating': 4.2,
-        'time': '32 min',
-        'delivery': 'Free delivery',
-      },
-      {
-        'image': AppAssets.rest4,
-        'name': 'Huking Hub',
-        'category': 'Chinese  Italian  Indian',
-        'rating': 4.2,
-        'time': '32 min',
-        'delivery': 'Free delivery',
-      },
-      {
-        'image': AppAssets.rest5,
-        'name': 'Star Grills',
-        'category': 'Chinese  Italyan  Indian',
-        'rating': 4.6,
-        'time': '54 min',
-        'delivery': 'Free delivery',
-      },
-      {
-        'image': AppAssets.rest6,
-        'name': 'House of BBQ',
-        'category': 'Chinese  Africian Deshi food',
-        'rating': 4.6,
-        'time': '54 min',
-        'delivery': 'Free delivery',
-      },
+      {'image': AppAssets.rest1, 'name': 'Arabian Restaurant', 'category': 'Chinese', 'rating': 4.0, 'time': '45 min', 'delivery': 'Free delivery'},
+      {'image': AppAssets.rest2, 'name': 'Golden Restaurant', 'category': 'Indian', 'rating': 3.5, 'time': '25 min', 'delivery': 'Free delivery'},
+      {'image': AppAssets.rest3, 'name': 'Italian Restaurants', 'category': 'Chinese Italian', 'rating': 4.2, 'time': '32 min', 'delivery': 'Free delivery'},
+      {'image': AppAssets.rest4, 'name': 'Huking Hub', 'category': 'Chinese Italian Indian', 'rating': 4.2, 'time': '32 min', 'delivery': 'Free delivery'},
+      {'image': AppAssets.rest5, 'name': 'Star Grills', 'category': 'Chinese Italyan Indian', 'rating': 4.6, 'time': '54 min', 'delivery': 'Free delivery'},
+      {'image': AppAssets.rest6, 'name': 'House of BBQ', 'category': 'Chinese Africian Deshi food', 'rating': 4.6, 'time': '54 min', 'delivery': 'Free delivery'},
     ];
 
     return ListView.builder(
@@ -441,27 +433,21 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(rest['name'] as String,
-                          style: AppTextStyles.h3.copyWith(fontSize: 15)),
+                      Text(rest['name'] as String, style: AppTextStyles.h3.copyWith(fontSize: 15)),
                       const SizedBox(height: 4),
-                      Text(rest['category'] as String,
-                          style: AppTextStyles.bodySmall),
+                      Text(rest['category'] as String, style: AppTextStyles.bodySmall),
                       const SizedBox(height: 8),
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
                               color: AppColors.star,
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.star,
-                                    size: 10, color: AppColors.textWhite),
+                                const Icon(Icons.star, size: 10, color: AppColors.textWhite),
                                 const SizedBox(width: 2),
                                 Text(
                                   rest['rating'].toString(),
@@ -474,17 +460,13 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Icon(Icons.access_time_rounded,
-                              size: 14, color: AppColors.textSecondary),
+                          const Icon(Icons.access_time_rounded, size: 14, color: AppColors.textSecondary),
                           const SizedBox(width: 4),
-                          Text(rest['time'] as String,
-                              style: AppTextStyles.caption),
+                          Text(rest['time'] as String, style: AppTextStyles.caption),
                           const SizedBox(width: 8),
-                          const Icon(Icons.delivery_dining,
-                              size: 14, color: AppColors.textSecondary),
+                          const Icon(Icons.delivery_dining, size: 14, color: AppColors.textSecondary),
                           const SizedBox(width: 4),
-                          Text(rest['delivery'] as String,
-                              style: AppTextStyles.caption),
+                          Text(rest['delivery'] as String, style: AppTextStyles.caption),
                         ],
                       ),
                     ],

@@ -27,7 +27,6 @@ import '../../features/profile/personal_info_screen.dart';
 import '../../features/profile/privacy_policy_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/rating/rating_screen.dart';
-import '../../features/rating/review_screen.dart';
 import '../../features/refer/refer_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
@@ -234,12 +233,14 @@ class AppRouter {
       GoRoute(
         path: rating,
         name: 'rating',
-        builder: (context, state) => const RatingScreen(),
-      ),
-      GoRoute(
-        path: review,
-        name: 'review',
-        builder: (context, state) => const ReviewScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return RatingScreen(
+            restaurantId: extra?['restaurantId'] ?? 'house_of_bbq',
+            restaurantName: extra?['restaurantName'] ?? 'House of BBQ',
+            restaurantImage: extra?['restaurantImage'] ?? '',
+          );
+        },
       ),
       GoRoute(
         path: refer,

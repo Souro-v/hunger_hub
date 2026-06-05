@@ -111,7 +111,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                             decoration: BoxDecoration(
                               color: AppColors.surface,
                               borderRadius:
-                              BorderRadius.circular(AppConstants.radiusLG),
+                                  BorderRadius.circular(AppConstants.radiusLG),
                               boxShadow: const [
                                 BoxShadow(
                                   color: AppColors.shadow,
@@ -126,7 +126,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                 // ── Restaurant Name & Status ──
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Text(
@@ -169,9 +169,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                 // ── Date ──
                                 Text(
                                   order.createdAt != null
-                                      ? '${order.createdAt!.day}/${order
-                                      .createdAt!.month}/${order.createdAt!
-                                      .year}'
+                                      ? '${order.createdAt!.day}/${order.createdAt!.month}/${order.createdAt!.year}'
                                       : '',
                                   style: AppTextStyles.caption,
                                 ),
@@ -180,11 +178,11 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                 // ── Total & Track ──
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text('Total',
                                             style: AppTextStyles.caption),
@@ -204,13 +202,13 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                         ),
                                         child: Text(
                                           'Cancel',
-                                          style: AppTextStyles.bodySmall.copyWith(
+                                          style:
+                                              AppTextStyles.bodySmall.copyWith(
                                             color: AppColors.error,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                       ),
-
                                     if (order.isOnTheWay)
                                       ElevatedButton(
                                         onPressed: () =>
@@ -227,8 +225,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                       ),
                                     if (order.isDelivered)
                                       OutlinedButton(
-                                        onPressed: () =>
-                                            context.go(AppRouter.rating),
+                                        onPressed: () => context.go(
+                                          AppRouter.rating,
+                                          extra: {
+                                            'restaurantId': order.restaurantId,
+                                            'restaurantName':
+                                                order.restaurantName,
+                                            'restaurantImage': '',
+                                          },
+                                        ),
                                         style: OutlinedButton.styleFrom(
                                           side: const BorderSide(
                                               color: AppColors.error),

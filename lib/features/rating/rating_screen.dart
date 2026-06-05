@@ -13,7 +13,7 @@ import '../../shared/widgets/app_bottom_nav.dart';
 import '../../shared/widgets/app_button.dart';
 
 class RatingScreen extends StatefulWidget {
-  const RatingScreen({super.key});
+  const RatingScreen({super.key, required restaurantId, required restaurantName, required restaurantImage});
 
   @override
   State<RatingScreen> createState() => _RatingScreenState();

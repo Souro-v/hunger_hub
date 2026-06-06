@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hunger_hub/shared/animations/fade_animation.dart';
-import '../../config/app_config.dart';
-import '../../config/seed_data.dart';
+
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/di/injection.dart';
@@ -75,7 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   // ── Top Bar ──
                   _buildTopBar(state),
-
                   // ── Body ──
                   Expanded(
                     child: state is HomeError
@@ -184,36 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const Spacer(),
-          // ── Seed Data Button (Dev only) ──
-          if (AppConfig.isDev)
-            GestureDetector(
-              onTap: () async {
-                await SeedData.seedAll();
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('✅ Data seeded!'),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                }
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.success,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  'Seed Data',
-                  style: AppTextStyles.caption.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-
+          //seed data removed from here
           const SizedBox(width: 8),
           const CircleAvatar(
             radius: 20,
@@ -445,7 +414,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) {
                     final rest = restaurants[index];
                     return GestureDetector(
-                      onTap: () => context.go(AppRouter.menuList),
+                      onTap: () => context.go(
+                        AppRouter.menuList,
+                        extra: {
+                          'restaurantId': rest.id,
+                          'restaurantName': rest.name,
+                          'restaurantImage': rest.imageUrl,
+                          'restaurantCategory': rest.category,
+                          'restaurantRating': rest.rating,
+                          'restaurantDeliveryTime': rest.deliveryTime,
+                          'restaurantAddress': rest.address,
+                        },
+                      ),
                       child: Container(
                         width: 200,
                         margin: const EdgeInsets.only(right: 16),
@@ -554,7 +534,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       'Peelamedu, coimbatore'
                     ];
                     return GestureDetector(
-                      onTap: () => context.go(AppRouter.menuList),
+                      onTap: () => context.go(
+                        AppRouter.menuList,
+                        extra: {
+                          'restaurantId': 'rest_00${index + 1}',
+                          'restaurantName': names[index],
+                          'restaurantImage': '',
+                          'restaurantCategory': 'Food',
+                          'restaurantRating': 4.2,
+                          'restaurantDeliveryTime': 32,
+                          'restaurantAddress': addresses[index],
+                        },
+                      ),
                       child: Container(
                         width: 200,
                         margin: const EdgeInsets.only(right: 16),

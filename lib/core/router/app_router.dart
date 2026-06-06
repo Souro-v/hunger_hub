@@ -158,7 +158,19 @@ class AppRouter {
       GoRoute(
         path: menuList,
         name: 'menuList',
-        builder: (context, state) => const MenuListScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return MenuListScreen(
+            restaurantId: extra?['restaurantId'] ?? 'rest_006',
+            restaurantName: extra?['restaurantName'] ?? 'House of BBQ',
+            restaurantImage: extra?['restaurantImage'] ?? '',
+            restaurantCategory:
+                extra?['restaurantCategory'] ?? 'Chinese  Africian Deshi food',
+            restaurantRating: (extra?['restaurantRating'] ?? 4.5).toDouble(),
+            restaurantDeliveryTime: extra?['restaurantDeliveryTime'] ?? 54,
+            restaurantAddress: extra?['restaurantAddress'] ?? 'Peelamedu',
+          );
+        },
       ),
       GoRoute(
         path: cart,

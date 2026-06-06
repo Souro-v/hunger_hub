@@ -13,7 +13,16 @@ import '../../shared/widgets/app_bottom_nav.dart';
 import '../../shared/widgets/app_button.dart';
 
 class RatingScreen extends StatefulWidget {
-  const RatingScreen({super.key, required restaurantId, required restaurantName, required restaurantImage});
+  final String restaurantId; // ← add
+  final String restaurantName; // ← add
+  final String restaurantImage;
+
+  const RatingScreen({
+    super.key,
+    this.restaurantId = 'house_of_bbq', // ← add
+    this.restaurantName = 'House of BBQ', // ← add
+    this.restaurantImage = '',
+  });
 
   @override
   State<RatingScreen> createState() => _RatingScreenState();
@@ -118,7 +127,7 @@ class _RatingScreenState extends State<RatingScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // ── Restaurant Name ──
-                        Text('House of BBQ', style: AppTextStyles.h2),
+                        Text(widget.restaurantName, style: AppTextStyles.h2),
                         const SizedBox(height: 4),
                         Text(
                           'Chinese  Africian Deshi food',
@@ -200,7 +209,7 @@ class _RatingScreenState extends State<RatingScreen> {
                               isLoading: state is RatingLoading,
                               onPressed: () {
                                 context.read<RatingCubit>().submitReview(
-                                      restaurantId: 'house_of_bbq',
+                                      restaurantId: widget.restaurantId,
                                       rating: _rating,
                                       comment: _reviewController.text,
                                       userName: 'User',
@@ -305,7 +314,7 @@ class _RatingScreenState extends State<RatingScreen> {
             onTap: (index) {
               setState(() => _currentNavIndex = index);
               if (index == 0) context.go(AppRouter.home);
-              if (index == 1) context.go(AppRouter.restaurant);
+              if (index == 1) context.go(AppRouter.search);
               if (index == 2) context.go(AppRouter.orderStatus);
               if (index == 3) context.go(AppRouter.profile);
             },

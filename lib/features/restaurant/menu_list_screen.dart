@@ -11,7 +11,24 @@ import '../../shared/widgets/food_item_detail_sheet.dart';
 import '../cart/cart_cubit.dart';
 
 class MenuListScreen extends StatefulWidget {
-  const MenuListScreen({super.key});
+  final String restaurantId;
+  final String restaurantName;
+  final String restaurantImage;
+  final String restaurantCategory;
+  final double restaurantRating;
+  final int restaurantDeliveryTime;
+  final String restaurantAddress;
+
+  const MenuListScreen({
+    super.key,
+    this.restaurantId = 'rest_006',
+    this.restaurantName = 'House of BBQ',
+    this.restaurantImage = '',
+    this.restaurantCategory = 'Chinese  Africian Deshi food',
+    this.restaurantRating = 4.5,
+    this.restaurantDeliveryTime = 54,
+    this.restaurantAddress = 'Peelamedu',
+  });
 
   @override
   State<MenuListScreen> createState() => _MenuListScreenState();
@@ -64,7 +81,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
       'image': AppAssets.menu5,
       'name': 'Teriyaki wings',
       'desc':
-      'Chicken wings, soy sauce, toasted sesame seeds, garlic, baking powder',
+          'Chicken wings, soy sauce, toasted sesame seeds, garlic, baking powder',
       'rating': 4.5,
       'price': 179.0,
       'ingredients': ['chicken', 'soy sauce', 'sesame', 'garlic'],
@@ -73,15 +90,14 @@ class _MenuListScreenState extends State<MenuListScreen> {
       'image': AppAssets.menu6,
       'name': 'Salmon skewers',
       'desc':
-      '2 x 500g packs frozen boneless salmon fillets, defrosted, skin removed, cut into 3cm chunks',
+          '2 x 500g packs frozen boneless salmon fillets, defrosted, skin removed, cut into 3cm chunks',
       'rating': 4.5,
       'price': 299.0,
       'ingredients': ['salmon', 'lemon', 'herbs'],
     },
   ];
 
-  void _showFoodDetail(
-      BuildContext context, Map<String, dynamic> item) {
+  void _showFoodDetail(BuildContext context, Map<String, dynamic> item) {
     final foodItem = FoodItemModel(
       id: item['name'],
       restaurantId: 'house_of_bbq',
@@ -136,12 +152,25 @@ class _MenuListScreenState extends State<MenuListScreen> {
                       bottomLeft: Radius.circular(16),
                       bottomRight: Radius.circular(16),
                     ),
-                    child: Image.asset(
-                      AppAssets.rest8,
-                      width: double.infinity,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
+                    child: widget.restaurantImage.isNotEmpty
+                        ? Image.network(
+                            widget.restaurantImage,
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Image.asset(
+                              AppAssets.rest8,
+                              width: double.infinity,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Image.asset(
+                            AppAssets.rest8,
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   Positioned(
                     top: 12,
@@ -168,12 +197,10 @@ class _MenuListScreenState extends State<MenuListScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('House of BBQ', style: AppTextStyles.h2),
+                    Text(widget.restaurantName, style: AppTextStyles.h2),
                     const SizedBox(height: 4),
-                    Text(
-                      'Chinese  Africian Deshi food',
-                      style: AppTextStyles.bodySmall,
-                    ),
+                    Text(widget.restaurantCategory,
+                        style: AppTextStyles.bodySmall),
                     const SizedBox(height: 10),
 
                     // ── Rating ──
@@ -194,7 +221,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                   size: 12, color: AppColors.textWhite),
                               const SizedBox(width: 4),
                               Text(
-                                '4.5',
+                                widget.restaurantRating.toString(),
                                 style: AppTextStyles.caption.copyWith(
                                   color: AppColors.textWhite,
                                   fontWeight: FontWeight.w700,
@@ -204,8 +231,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Text('127+ ratings',
-                            style: AppTextStyles.bodySmall),
+                        Text('127+ ratings', style: AppTextStyles.bodySmall),
                       ],
                     ),
                     const SizedBox(height: 10),
@@ -218,13 +244,13 @@ class _MenuListScreenState extends State<MenuListScreen> {
                         const Icon(Icons.access_time_rounded,
                             size: 16, color: AppColors.textSecondary),
                         const SizedBox(width: 6),
-                        Text('20-25 min . 3 km',
+                        Text('${widget.restaurantDeliveryTime}min . 3 km',
                             style: AppTextStyles.bodySmall),
                         const SizedBox(width: 8),
                         Container(
                             width: 1, height: 16, color: AppColors.border),
                         const SizedBox(width: 8),
-                        Text('Peelamedu',
+                        Text(widget.restaurantAddress,
                             style: AppTextStyles.bodySmall),
                       ],
                     ),
@@ -305,11 +331,9 @@ class _MenuListScreenState extends State<MenuListScreen> {
                             // ── Info ──
                             Expanded(
                               child: GestureDetector(
-                                onTap: () =>
-                                    _showFoodDetail(context, item),
+                                onTap: () => _showFoodDetail(context, item),
                                 child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(item['name'],
                                         style: AppTextStyles.label),
@@ -322,15 +346,13 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                     ),
                                     const SizedBox(height: 8),
                                     Container(
-                                      padding:
-                                      const EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                         horizontal: 8,
                                         vertical: 4,
                                       ),
                                       decoration: BoxDecoration(
                                         color: AppColors.star,
-                                        borderRadius:
-                                        BorderRadius.circular(6),
+                                        borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
@@ -341,8 +363,8 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                           const SizedBox(width: 4),
                                           Text(
                                             item['rating'].toString(),
-                                            style: AppTextStyles.caption
-                                                .copyWith(
+                                            style:
+                                                AppTextStyles.caption.copyWith(
                                               color: AppColors.textWhite,
                                               fontWeight: FontWeight.w700,
                                             ),
@@ -360,11 +382,9 @@ class _MenuListScreenState extends State<MenuListScreen> {
                             Stack(
                               children: [
                                 GestureDetector(
-                                  onTap: () =>
-                                      _showFoodDetail(context, item),
+                                  onTap: () => _showFoodDetail(context, item),
                                   child: ClipRRect(
-                                    borderRadius:
-                                    BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(12),
                                     child: Image.asset(
                                       item['image'],
                                       width: 100,
@@ -380,7 +400,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                     onTap: () {
                                       final foodItem = FoodItemModel(
                                         id: item['name'],
-                                        restaurantId: 'house_of_bbq',
+                                        restaurantId: widget.restaurantId,
                                         name: item['name'],
                                         description: item['desc'],
                                         imageUrl: item['image'],
@@ -398,16 +418,12 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                           content: Text(
                                             '${foodItem.name} added to cart!',
                                           ),
-                                          backgroundColor:
-                                          AppColors.success,
-                                          behavior:
-                                          SnackBarBehavior.floating,
-                                          duration: const Duration(
-                                              seconds: 1),
+                                          backgroundColor: AppColors.success,
+                                          behavior: SnackBarBehavior.floating,
+                                          duration: const Duration(seconds: 1),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(
-                                                10),
+                                                BorderRadius.circular(10),
                                           ),
                                         ),
                                       );
@@ -419,8 +435,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                       ),
                                       decoration: BoxDecoration(
                                         color: AppColors.surface,
-                                        borderRadius:
-                                        BorderRadius.circular(6),
+                                        borderRadius: BorderRadius.circular(6),
                                         boxShadow: const [
                                           BoxShadow(
                                             color: AppColors.shadow,
@@ -430,8 +445,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                       ),
                                       child: Text(
                                         'ADD',
-                                        style: AppTextStyles.caption
-                                            .copyWith(
+                                        style: AppTextStyles.caption.copyWith(
                                           fontWeight: FontWeight.w700,
                                           color: AppColors.textPrimary,
                                         ),
@@ -458,7 +472,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
         onTap: (index) {
           setState(() => _currentNavIndex = index);
           if (index == 0) context.go(AppRouter.home);
-          if (index == 1) context.go(AppRouter.restaurant);
+          if (index == 1) context.go(AppRouter.search);
           if (index == 2) context.go(AppRouter.orderStatus);
           if (index == 3) context.go(AppRouter.profile);
         },

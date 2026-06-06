@@ -182,7 +182,7 @@ class _TrackingMapScreenState extends State<TrackingMapScreen> {
         onTap: (index) {
           setState(() => _currentNavIndex = index);
           if (index == 0) context.go(AppRouter.home);
-          if (index == 1) context.go(AppRouter.restaurant);
+          if (index == 1) context.go(AppRouter.search);
           if (index == 3) context.go(AppRouter.profile);
         },
       ),

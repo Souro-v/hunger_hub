@@ -63,23 +63,23 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     ),
                     child: widget.restaurantImage.isNotEmpty
                         ? Image.network(
-                      widget.restaurantImage,
-                      width: double.infinity,
-                      height: 200,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Image.asset(
-                        AppAssets.rest8,
-                        width: double.infinity,
-                        height: 200,
-                        fit: BoxFit.cover,
-                      ),
-                    )
+                            widget.restaurantImage,
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Image.asset(
+                              AppAssets.rest8,
+                              width: double.infinity,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            ),
+                          )
                         : Image.asset(
-                      AppAssets.rest8,
-                      width: double.infinity,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
+                            AppAssets.rest8,
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
                   ),
 
                   const SizedBox(height: 16),
@@ -111,12 +111,14 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                       height: 50,
                       decoration: BoxDecoration(
                         color: const Color(0xFFE8F4F8),
-                        borderRadius: BorderRadius.circular(AppConstants.radiusMD),
+                        borderRadius:
+                            BorderRadius.circular(AppConstants.radiusMD),
                       ),
                       child: Row(
                         children: [
                           const SizedBox(width: 16),
-                          const Icon(Icons.search, color: AppColors.textSecondary),
+                          const Icon(Icons.search,
+                              color: AppColors.textSecondary),
                           const SizedBox(width: 12),
                           Expanded(
                             child: TextField(
@@ -128,8 +130,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                       .add(FetchRestaurantsEvent());
                                 } else {
                                   innerContext.read<RestaurantBloc>().add(
-                                    SearchRestaurantsEvent(query: query),
-                                  );
+                                        SearchRestaurantsEvent(query: query),
+                                      );
                                 }
                               },
                               decoration: InputDecoration(
@@ -183,8 +185,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                 horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
                               color: AppColors.error.withValues(alpha: 0.1),
-                              borderRadius:
-                              BorderRadius.circular(AppConstants.radiusCircle),
+                              borderRadius: BorderRadius.circular(
+                                  AppConstants.radiusCircle),
                             ),
                             child: Row(
                               children: [
@@ -235,8 +237,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                         final restaurants = state is RestaurantsLoaded
                             ? state.restaurants
                             : state is RestaurantSearchResults
-                            ? state.results
-                            : null;
+                                ? state.results
+                                : null;
 
                         if (restaurants != null && restaurants.isNotEmpty) {
                           return ListView.builder(
@@ -245,7 +247,18 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             itemBuilder: (context, index) {
                               final rest = restaurants[index];
                               return GestureDetector(
-                                onTap: () => context.go(AppRouter.menuList),
+                                onTap: () => context.go(
+                                  AppRouter.menuList,
+                                  extra: {
+                                    'restaurantId': rest.id,
+                                    'restaurantName': rest.name,
+                                    'restaurantImage': rest.imageUrl,
+                                    'restaurantCategory': rest.category,
+                                    'restaurantRating': rest.rating,
+                                    'restaurantDeliveryTime': rest.deliveryTime,
+                                    'restaurantAddress': rest.address,
+                                  },
+                                ),
                                 child: Container(
                                   margin: const EdgeInsets.only(bottom: 16),
                                   decoration: BoxDecoration(
@@ -261,7 +274,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       ClipRRect(
                                         borderRadius: const BorderRadius.only(
@@ -273,7 +287,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                           width: double.infinity,
                                           height: 160,
                                           fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) => Image.asset(
+                                          errorBuilder: (_, __, ___) =>
+                                              Image.asset(
                                             AppAssets.rest1,
                                             width: double.infinity,
                                             height: 160,
@@ -285,7 +300,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                         padding: const EdgeInsets.all(12),
                                         child: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(rest.name,
                                                 style: AppTextStyles.h3
@@ -297,32 +312,34 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                             Row(
                                               children: [
                                                 Container(
-                                                  padding:
-                                                  const EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
                                                     horizontal: 6,
                                                     vertical: 2,
                                                   ),
                                                   decoration: BoxDecoration(
                                                     color: AppColors.star,
                                                     borderRadius:
-                                                    BorderRadius.circular(4),
+                                                        BorderRadius.circular(
+                                                            4),
                                                   ),
                                                   child: Row(
                                                     children: [
                                                       const Icon(Icons.star,
                                                           size: 10,
-                                                          color:
-                                                          AppColors.textWhite),
+                                                          color: AppColors
+                                                              .textWhite),
                                                       const SizedBox(width: 2),
                                                       Text(
                                                         rest.rating
                                                             .toStringAsFixed(1),
-                                                        style: AppTextStyles.caption
+                                                        style: AppTextStyles
+                                                            .caption
                                                             .copyWith(
-                                                          color:
-                                                          AppColors.textWhite,
+                                                          color: AppColors
+                                                              .textWhite,
                                                           fontWeight:
-                                                          FontWeight.w600,
+                                                              FontWeight.w600,
                                                         ),
                                                       ),
                                                     ],
@@ -332,14 +349,18 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                 const Icon(
                                                     Icons.access_time_rounded,
                                                     size: 14,
-                                                    color: AppColors.textSecondary),
+                                                    color: AppColors
+                                                        .textSecondary),
                                                 const SizedBox(width: 4),
                                                 Text('${rest.deliveryTime} min',
-                                                    style: AppTextStyles.caption),
+                                                    style:
+                                                        AppTextStyles.caption),
                                                 const SizedBox(width: 8),
-                                                const Icon(Icons.delivery_dining,
+                                                const Icon(
+                                                    Icons.delivery_dining,
                                                     size: 14,
-                                                    color: AppColors.textSecondary),
+                                                    color: AppColors
+                                                        .textSecondary),
                                                 const SizedBox(width: 4),
                                                 Text(
                                                   rest.deliveryFee == 0
@@ -385,12 +406,54 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
 
   Widget _buildStaticList(BuildContext context) {
     final staticRestaurants = [
-      {'image': AppAssets.rest1, 'name': 'Arabian Restaurant', 'category': 'Chinese', 'rating': 4.0, 'time': '45 min', 'delivery': 'Free delivery'},
-      {'image': AppAssets.rest2, 'name': 'Golden Restaurant', 'category': 'Indian', 'rating': 3.5, 'time': '25 min', 'delivery': 'Free delivery'},
-      {'image': AppAssets.rest3, 'name': 'Italian Restaurants', 'category': 'Chinese Italian', 'rating': 4.2, 'time': '32 min', 'delivery': 'Free delivery'},
-      {'image': AppAssets.rest4, 'name': 'Huking Hub', 'category': 'Chinese Italian Indian', 'rating': 4.2, 'time': '32 min', 'delivery': 'Free delivery'},
-      {'image': AppAssets.rest5, 'name': 'Star Grills', 'category': 'Chinese Italyan Indian', 'rating': 4.6, 'time': '54 min', 'delivery': 'Free delivery'},
-      {'image': AppAssets.rest6, 'name': 'House of BBQ', 'category': 'Chinese Africian Deshi food', 'rating': 4.6, 'time': '54 min', 'delivery': 'Free delivery'},
+      {
+        'image': AppAssets.rest1,
+        'name': 'Arabian Restaurant',
+        'category': 'Chinese',
+        'rating': 4.0,
+        'time': '45 min',
+        'delivery': 'Free delivery'
+      },
+      {
+        'image': AppAssets.rest2,
+        'name': 'Golden Restaurant',
+        'category': 'Indian',
+        'rating': 3.5,
+        'time': '25 min',
+        'delivery': 'Free delivery'
+      },
+      {
+        'image': AppAssets.rest3,
+        'name': 'Italian Restaurants',
+        'category': 'Chinese Italian',
+        'rating': 4.2,
+        'time': '32 min',
+        'delivery': 'Free delivery'
+      },
+      {
+        'image': AppAssets.rest4,
+        'name': 'Huking Hub',
+        'category': 'Chinese Italian Indian',
+        'rating': 4.2,
+        'time': '32 min',
+        'delivery': 'Free delivery'
+      },
+      {
+        'image': AppAssets.rest5,
+        'name': 'Star Grills',
+        'category': 'Chinese Italyan Indian',
+        'rating': 4.6,
+        'time': '54 min',
+        'delivery': 'Free delivery'
+      },
+      {
+        'image': AppAssets.rest6,
+        'name': 'House of BBQ',
+        'category': 'Chinese Africian Deshi food',
+        'rating': 4.6,
+        'time': '54 min',
+        'delivery': 'Free delivery'
+      },
     ];
 
     return ListView.builder(
@@ -433,21 +496,25 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(rest['name'] as String, style: AppTextStyles.h3.copyWith(fontSize: 15)),
+                      Text(rest['name'] as String,
+                          style: AppTextStyles.h3.copyWith(fontSize: 15)),
                       const SizedBox(height: 4),
-                      Text(rest['category'] as String, style: AppTextStyles.bodySmall),
+                      Text(rest['category'] as String,
+                          style: AppTextStyles.bodySmall),
                       const SizedBox(height: 8),
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
                               color: AppColors.star,
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.star, size: 10, color: AppColors.textWhite),
+                                const Icon(Icons.star,
+                                    size: 10, color: AppColors.textWhite),
                                 const SizedBox(width: 2),
                                 Text(
                                   rest['rating'].toString(),
@@ -460,13 +527,17 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Icon(Icons.access_time_rounded, size: 14, color: AppColors.textSecondary),
+                          const Icon(Icons.access_time_rounded,
+                              size: 14, color: AppColors.textSecondary),
                           const SizedBox(width: 4),
-                          Text(rest['time'] as String, style: AppTextStyles.caption),
+                          Text(rest['time'] as String,
+                              style: AppTextStyles.caption),
                           const SizedBox(width: 8),
-                          const Icon(Icons.delivery_dining, size: 14, color: AppColors.textSecondary),
+                          const Icon(Icons.delivery_dining,
+                              size: 14, color: AppColors.textSecondary),
                           const SizedBox(width: 4),
-                          Text(rest['delivery'] as String, style: AppTextStyles.caption),
+                          Text(rest['delivery'] as String,
+                              style: AppTextStyles.caption),
                         ],
                       ),
                     ],

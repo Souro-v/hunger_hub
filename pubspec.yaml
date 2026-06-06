@@ -56,7 +56,6 @@ dependencies:
   json_annotation: ^4.8.1
   # ── Notifications ──
   flutter_local_notifications: ^17.1.2
-  flutter_launcher_icons: ^0.13.1
   # ── Image ──
   image_picker: ^1.0.7
 
@@ -68,6 +67,7 @@ dev_dependencies:
   build_runner: ^2.4.8
   json_serializable: ^6.7.1
   flutter_native_splash: ^2.3.10
+  flutter_launcher_icons: ^0.13.1
 
 
 flutter:

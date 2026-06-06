@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../../core/router/app_router.dart';
 import '../../core/storage/local_storage.dart';
 import '../firestore/user_service.dart';
 
@@ -7,6 +8,13 @@ import '../firestore/user_service.dart';
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await NotificationService.instance.showLocalNotification(message);
+}
+// ── Notification Tap ──
+void _onNotificationTap(NotificationResponse response) {
+  final route = response.payload;
+  if (route != null && route.isNotEmpty) {
+    AppRouter.router.go(route);
+  }
 }
 
 class NotificationService {

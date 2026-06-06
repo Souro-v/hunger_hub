@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import '../../core/error/exceptions.dart';
 
 class FirebaseAuthService {
@@ -38,6 +39,16 @@ class FirebaseAuthService {
       return result.user;
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);
+    }
+  }
+  // ── Get Token (Web safe) ──
+  Future<String?> getToken() async {
+    try {
+      if (kIsWeb) return null; // Web e FCM token na
+      var _messaging;
+      return await _messaging.getToken();
+    } catch (e) {
+      return null;
     }
   }
 

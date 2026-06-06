@@ -101,10 +101,29 @@ class _RatingScreenState extends State<RatingScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
+                      Positioned(
+                        top: 12,
+                        left: 12,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white.withValues(alpha: 0.9),
+                          radius: 20,
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back_ios,
+                                color: AppColors.textPrimary, size: 20),
+                            onPressed: () {
+                              if (context.canPop()) {
+                                context.pop();
+                              } else {
+                                context.go(AppRouter.home);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
                       // ── Breadcrumb ──
                       Positioned(
                         top: 12,
-                        left: 16,
+                        left: 60,
                         child: Row(
                           children: [
                             _breadcrumb('Home'),

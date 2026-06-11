@@ -231,31 +231,44 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                           ),
                                         ),
                                       if (order.isDelivered)
-                                        OutlinedButton(
+                                        TextButton(
                                           onPressed: () => context.go(
-                                            AppRouter.rating,
-                                            extra: {
-                                              'restaurantId':
-                                                  order.restaurantId,
-                                              'restaurantName':
-                                                  order.restaurantName,
-                                              'restaurantImage': '',
-                                            },
-                                          ),
-                                          style: OutlinedButton.styleFrom(
-                                            side: const BorderSide(
-                                                color: AppColors.error),
-                                            minimumSize: const Size(100, 36),
+                                            AppRouter.reorder,
+                                            extra: {'order': order},
                                           ),
                                           child: Text(
-                                            'Rate',
-                                            style:
-                                                AppTextStyles.button.copyWith(
-                                              fontSize: 13,
-                                              color: AppColors.error,
+                                            'Reorder',
+                                            style: AppTextStyles.bodySmall
+                                                .copyWith(
+                                              color: AppColors.primary,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           ),
                                         ),
+                                      const SizedBox(width: 8),
+                                      OutlinedButton(
+                                        onPressed: () => context.go(
+                                          AppRouter.rating,
+                                          extra: {
+                                            'restaurantId': order.restaurantId,
+                                            'restaurantName':
+                                                order.restaurantName,
+                                            'restaurantImage': '',
+                                          },
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                          side: const BorderSide(
+                                              color: AppColors.error),
+                                          minimumSize: const Size(100, 36),
+                                        ),
+                                        child: Text(
+                                          'Rate',
+                                          style: AppTextStyles.button.copyWith(
+                                            fontSize: 13,
+                                            color: AppColors.error,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],

@@ -32,6 +32,7 @@ import '../../features/profile/profile_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/refer/refer_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
+import '../../features/restaurant/restaurant_reviews_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
 import '../../features/restaurant/search_screen.dart';
 import '../../features/splash/splash_screen.dart';
@@ -49,6 +50,7 @@ class AppRouter {
   static const String otp = '/otp';
   static const String deliveryAddress = '/delivery-address';
   static const String home = '/home';
+  static const String restaurantReviews = '/restaurant-reviews';
   static const String restaurant = '/restaurant';
   static const String search = '/search';
   static const String favourites = '/favourites';
@@ -283,6 +285,17 @@ class AppRouter {
             restaurantId: extra?['restaurantId'] ?? 'house_of_bbq',
             restaurantName: extra?['restaurantName'] ?? 'House of BBQ',
             restaurantImage: extra?['restaurantImage'] ?? '',
+          );
+        },
+      ),
+      GoRoute(
+        path: restaurantReviews,
+        name: 'restaurantReviews',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return RestaurantReviewsScreen(
+            restaurantId: extra?['restaurantId'] ?? '',
+            restaurantName: extra?['restaurantName'] ?? '',
           );
         },
       ),

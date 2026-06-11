@@ -204,40 +204,49 @@ class _MenuListScreenState extends State<MenuListScreen> {
                     const SizedBox(height: 10),
 
                     // ── Rating ──
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.star,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.star,
-                                  size: 12, color: AppColors.textWhite),
-                              const SizedBox(width: 4),
-                              Text(
-                                widget.restaurantRating.toString(),
-                                style: AppTextStyles.caption.copyWith(
-                                  color: AppColors.textWhite,
-                                  fontWeight: FontWeight.w700,
+                    GestureDetector(
+                      onTap: () => context.go(
+                        AppRouter.restaurantReviews,
+                        extra: {
+                          'restaurantId': widget.restaurantId,
+                          'restaurantName': widget.restaurantName,
+                        },
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.star,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.star,
+                                    size: 12, color: AppColors.textWhite),
+                                const SizedBox(width: 4),
+                                Text(
+                                  widget.restaurantRating.toString(),
+                                  style: AppTextStyles.caption.copyWith(
+                                    color: AppColors.textWhite,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text('127+ ratings', style: AppTextStyles.bodySmall),
-                      ],
+                          const SizedBox(width: 8),
+                          Text('127+ ratings', style: AppTextStyles.bodySmall),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 10),
                     const Divider(),
                     const SizedBox(height: 6),
-
                     // ── Time & Location ──
                     Row(
                       children: [

@@ -24,6 +24,7 @@ import '../../features/profile/app_settings_screen.dart';
 import '../../features/profile/change_password_screen.dart';
 import '../../features/profile/coupon_screen.dart';
 import '../../features/profile/edit_address_screen.dart';
+import '../../features/profile/faq_screen.dart';
 import '../../features/profile/favourite_screen.dart';
 import '../../features/profile/payment_history_screen.dart';
 import '../../features/profile/personal_info_screen.dart';
@@ -70,6 +71,7 @@ class AppRouter {
   static const String trackingMap = '/tracking-map';
   static const String addresses = '/addresses';
   static const String profile = '/profile';
+  static const String faq = '/faq';
   static const String editAddress = '/edit-address';
   static const String privacyPolicy = '/privacy-policy';
   static const String about = '/about';
@@ -322,6 +324,11 @@ class AppRouter {
         path: refer,
         name: 'refer',
         builder: (context, state) => const ReferScreen(),
+      ),
+      GoRoute(
+        path: faq,
+        name: 'faq',
+        builder: (context, state) => const FaqScreen(),
       ),
       GoRoute(
         path: coupons,

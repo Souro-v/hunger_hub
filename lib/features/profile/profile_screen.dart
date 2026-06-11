@@ -96,8 +96,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     {'icon': Icons.lock_outline, 'label': 'Privacy policy'},
     {'icon': Icons.info_outline, 'label': 'About'},
     {'icon': Icons.password_outlined, 'label': 'Change Password'},
-    {'icon': Icons.logout, 'label': 'Sign Out'},
+    {'icon': Icons.help_outline, 'label': 'FAQ'},
     {'icon': Icons.settings_outlined, 'label': 'Settings'},
+    {'icon': Icons.logout, 'label': 'Sign Out'},
   ];
 
   @override
@@ -370,9 +371,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 'Addresses':
         context.go(AppRouter.addresses);
         break;
-      case 'Sign Out':
-        context.read<AuthBloc>().add(SignOutEvent());
-        break;
       case 'Refer a Friend':
         context.go(AppRouter.refer);
         break;
@@ -385,8 +383,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 'Coupons & Offers':
         context.go(AppRouter.coupons);
         break;
+      case 'FAQ':
+        context.go(AppRouter.faq);
+        break;
       case 'Settings':
         context.go(AppRouter.appSettings);
+        break;
+      case 'Sign Out':
+        context.read<AuthBloc>().add(SignOutEvent());
         break;
     }
   }

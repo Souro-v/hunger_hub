@@ -94,6 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     {'icon': Icons.dark_mode_outlined, 'label': 'Dark Mode'},
     {'icon': Icons.lock_outline, 'label': 'Privacy policy'},
     {'icon': Icons.info_outline, 'label': 'About'},
+    {'icon': Icons.password_outlined, 'label': 'Change Password'},
     {'icon': Icons.logout, 'label': 'Sign Out'},
     {'icon': Icons.settings_outlined, 'label': 'Settings'},
   ];
@@ -355,6 +356,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         break;
       case 'Personal Info':
         context.go(AppRouter.personalInfo);
+        break;
+      case 'Change Password':
+        context.go(AppRouter.changePassword);
         break;
       case 'Privacy policy':
         context.go(AppRouter.privacyPolicy);

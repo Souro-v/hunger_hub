@@ -21,6 +21,7 @@ import '../../features/orders/tracking_map_screen.dart';
 import '../../features/profile/about_screen.dart';
 import '../../features/profile/address_screen.dart';
 import '../../features/profile/app_settings_screen.dart';
+import '../../features/profile/change_password_screen.dart';
 import '../../features/profile/coupon_screen.dart';
 import '../../features/profile/edit_address_screen.dart';
 import '../../features/profile/favourite_screen.dart';
@@ -59,6 +60,7 @@ class AppRouter {
   static const String orderDetail = '/order-detail';
   static const String orderCancellation = '/order-cancellation';
   static const String orderStatus = '/order-status';
+  static const String changePassword = '/change-password';
   static const String orderHistory = '/order-history';
   static const String trackingMap = '/tracking-map';
   static const String addresses = '/addresses';
@@ -251,6 +253,11 @@ class AppRouter {
         path: profile,
         name: 'profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: changePassword,
+        name: 'changePassword',
+        builder: (context, state) => const ChangePasswordScreen(),
       ),
       GoRoute(
         path: privacyPolicy,

@@ -29,6 +29,7 @@ import '../../features/profile/payment_history_screen.dart';
 import '../../features/profile/personal_info_screen.dart';
 import '../../features/profile/privacy_policy_screen.dart';
 import '../../features/profile/profile_screen.dart';
+import '../../features/profile/special_offers_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/refer/refer_screen.dart';
 import '../../features/restaurant/food_category_screen.dart';
@@ -73,6 +74,7 @@ class AppRouter {
   static const String privacyPolicy = '/privacy-policy';
   static const String about = '/about';
   static const String editProfile = '/edit-profile';
+  static const String specialOffers = '/special-offers';
   static const String personalInfo = '/personal-info';
   static const String rating = '/rating';
   static const String review = '/review';
@@ -164,6 +166,11 @@ class AppRouter {
             category: extra?['category'] ?? '',
           );
         },
+      ),
+      GoRoute(
+        path: specialOffers,
+        name: 'specialOffers',
+        builder: (context, state) => const SpecialOffersScreen(),
       ),
       GoRoute(
         path: search,

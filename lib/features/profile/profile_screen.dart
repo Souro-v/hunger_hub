@@ -86,6 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     {'icon': Icons.notifications_outlined, 'label': 'Notification'},
     {'icon': Icons.payment_outlined, 'label': 'Payment Method'},
     {'icon': Icons.person_add_outlined, 'label': 'Refer a Friend'},
+    {'icon': Icons.local_offer_outlined, 'label': 'Special Offers'},
     {'icon': Icons.local_offer_outlined, 'label': 'Coupons & Offers'},
     {'icon': Icons.history_edu_outlined, 'label': 'Payment History'},
   ];
@@ -377,6 +378,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         break;
       case 'Payment History':
         context.go(AppRouter.paymentHistory);
+        break;
+      case 'Special Offers':
+        context.go(AppRouter.specialOffers);
         break;
       case 'Coupons & Offers':
         context.go(AppRouter.coupons);

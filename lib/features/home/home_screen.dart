@@ -366,13 +366,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildFeaturedBanner() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppConstants.radiusLG),
-        child: Image.asset(
-          AppAssets.featuredBanner,
-          width: double.infinity,
-          height: 180,
-          fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: () => context.go(AppRouter.specialOffers),
+        child: ClipRRect(
+          child: Image.asset(
+            AppAssets.featuredBanner,
+            width: double.infinity,
+            height: 180,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

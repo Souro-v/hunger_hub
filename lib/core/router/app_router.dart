@@ -14,6 +14,7 @@ import '../../features/help/help_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../../features/orders/order_cancellation_screen.dart';
+import '../../features/orders/order_detail_screen.dart';
 import '../../features/orders/order_history_screen.dart';
 import '../../features/orders/order_status_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
@@ -54,6 +55,7 @@ class AppRouter {
   static const String checkout = '/checkout';
   static const String paymentMethod = '/payment-method';
   static const String addCard = '/add-card';
+  static const String orderDetail = '/order-detail';
   static const String orderCancellation = '/order-cancellation';
   static const String orderStatus = '/order-status';
   static const String orderHistory = '/order-history';
@@ -193,6 +195,16 @@ class AppRouter {
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
           return OrderCancellationScreen(
+            orderId: extra?['orderId'] ?? '',
+          );
+        },
+      ),
+      GoRoute(
+        path: orderDetail,
+        name: 'orderDetail',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return OrderDetailScreen(
             orderId: extra?['orderId'] ?? '',
           );
         },

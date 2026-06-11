@@ -105,151 +105,161 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                         itemCount: state.orders.length,
                         itemBuilder: (context, index) {
                           final order = state.orders[index];
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 16),
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: AppColors.surface,
-                              borderRadius:
-                                  BorderRadius.circular(AppConstants.radiusLG),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: AppColors.shadow,
-                                  blurRadius: 8,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
+                          return GestureDetector(
+                            onTap: () => context.go(
+                              AppRouter.orderDetail,
+                              extra: {'orderId': order.id},
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // ── Restaurant Name & Status ──
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        order.restaurantName,
-                                        style: AppTextStyles.h3
-                                            .copyWith(fontSize: 15),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: _getStatusColor(order.status)
-                                            .withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Text(
-                                        _getStatusLabel(order.status),
-                                        style: AppTextStyles.caption.copyWith(
-                                          color: _getStatusColor(order.status),
-                                          fontWeight: FontWeight.w600,
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 16),
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: AppColors.surface,
+                                borderRadius: BorderRadius.circular(
+                                    AppConstants.radiusLG),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: AppColors.shadow,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // ── Restaurant Name & Status ──
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          order.restaurantName,
+                                          style: AppTextStyles.h3
+                                              .copyWith(fontSize: 15),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-
-                                // ── Items ──
-                                Text(
-                                  '${order.totalItems} items',
-                                  style: AppTextStyles.bodySmall,
-                                ),
-                                const SizedBox(height: 4),
-
-                                // ── Date ──
-                                Text(
-                                  order.createdAt != null
-                                      ? '${order.createdAt!.day}/${order.createdAt!.month}/${order.createdAt!.year}'
-                                      : '',
-                                  style: AppTextStyles.caption,
-                                ),
-                                const Divider(height: 16),
-
-                                // ── Total & Track ──
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Total',
-                                            style: AppTextStyles.caption),
-                                        Text(
-                                          '₹${order.total.toStringAsFixed(0)}',
-                                          style: AppTextStyles.label.copyWith(
-                                            color: AppColors.error,
-                                          ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 4,
                                         ),
-                                      ],
-                                    ),
-                                    if (order.isPending)
-                                      TextButton(
-                                        onPressed: () => context.go(
-                                          AppRouter.orderCancellation,
-                                          extra: {'orderId': order.id},
+                                        decoration: BoxDecoration(
+                                          color: _getStatusColor(order.status)
+                                              .withValues(alpha: 0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
                                         child: Text(
-                                          'Cancel',
-                                          style:
-                                              AppTextStyles.bodySmall.copyWith(
-                                            color: AppColors.error,
+                                          _getStatusLabel(order.status),
+                                          style: AppTextStyles.caption.copyWith(
+                                            color:
+                                                _getStatusColor(order.status),
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                       ),
-                                    if (order.isOnTheWay)
-                                      ElevatedButton(
-                                        onPressed: () =>
-                                            context.go(AppRouter.trackingMap),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: AppColors.error,
-                                          minimumSize: const Size(100, 36),
-                                        ),
-                                        child: Text(
-                                          'Track',
-                                          style: AppTextStyles.button
-                                              .copyWith(fontSize: 13),
-                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+
+                                  // ── Items ──
+                                  Text(
+                                    '${order.totalItems} items',
+                                    style: AppTextStyles.bodySmall,
+                                  ),
+                                  const SizedBox(height: 4),
+
+                                  // ── Date ──
+                                  Text(
+                                    order.createdAt != null
+                                        ? '${order.createdAt!.day}/${order.createdAt!.month}/${order.createdAt!.year}'
+                                        : '',
+                                    style: AppTextStyles.caption,
+                                  ),
+                                  const Divider(height: 16),
+
+                                  // ── Total & Track ──
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Total',
+                                              style: AppTextStyles.caption),
+                                          Text(
+                                            '₹${order.total.toStringAsFixed(0)}',
+                                            style: AppTextStyles.label.copyWith(
+                                              color: AppColors.error,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    if (order.isDelivered)
-                                      OutlinedButton(
-                                        onPressed: () => context.go(
-                                          AppRouter.rating,
-                                          extra: {
-                                            'restaurantId': order.restaurantId,
-                                            'restaurantName':
-                                                order.restaurantName,
-                                            'restaurantImage': '',
-                                          },
-                                        ),
-                                        style: OutlinedButton.styleFrom(
-                                          side: const BorderSide(
-                                              color: AppColors.error),
-                                          minimumSize: const Size(100, 36),
-                                        ),
-                                        child: Text(
-                                          'Rate',
-                                          style: AppTextStyles.button.copyWith(
-                                            fontSize: 13,
-                                            color: AppColors.error,
+                                      if (order.isPending)
+                                        TextButton(
+                                          onPressed: () => context.go(
+                                            AppRouter.orderCancellation,
+                                            extra: {'orderId': order.id},
+                                          ),
+                                          child: Text(
+                                            'Cancel',
+                                            style: AppTextStyles.bodySmall
+                                                .copyWith(
+                                              color: AppColors.error,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                  ],
-                                ),
-                              ],
+                                      if (order.isOnTheWay)
+                                        ElevatedButton(
+                                          onPressed: () =>
+                                              context.go(AppRouter.trackingMap),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.error,
+                                            minimumSize: const Size(100, 36),
+                                          ),
+                                          child: Text(
+                                            'Track',
+                                            style: AppTextStyles.button
+                                                .copyWith(fontSize: 13),
+                                          ),
+                                        ),
+                                      if (order.isDelivered)
+                                        OutlinedButton(
+                                          onPressed: () => context.go(
+                                            AppRouter.rating,
+                                            extra: {
+                                              'restaurantId':
+                                                  order.restaurantId,
+                                              'restaurantName':
+                                                  order.restaurantName,
+                                              'restaurantImage': '',
+                                            },
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                            side: const BorderSide(
+                                                color: AppColors.error),
+                                            minimumSize: const Size(100, 36),
+                                          ),
+                                          child: Text(
+                                            'Rate',
+                                            style:
+                                                AppTextStyles.button.copyWith(
+                                              fontSize: 13,
+                                              color: AppColors.error,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },

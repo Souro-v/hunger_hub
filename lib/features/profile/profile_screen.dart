@@ -89,6 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     {'icon': Icons.local_offer_outlined, 'label': 'Special Offers'},
     {'icon': Icons.local_offer_outlined, 'label': 'Coupons & Offers'},
     {'icon': Icons.history_edu_outlined, 'label': 'Payment History'},
+    {'icon': Icons.stars_outlined, 'label': 'Loyalty Points'},
   ];
 
   final List<Map<String, dynamic>> _menuGroup3 = [
@@ -97,8 +98,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     {'icon': Icons.info_outline, 'label': 'About'},
     {'icon': Icons.password_outlined, 'label': 'Change Password'},
     {'icon': Icons.help_outline, 'label': 'FAQ'},
+    {'icon': Icons.share_outlined, 'label': 'Share App'},
     {'icon': Icons.settings_outlined, 'label': 'Settings'},
+    {'icon': Icons.star_outline, 'label': 'Rate App'},
+    {'icon': Icons.bug_report_outlined, 'label': 'Report Issue'},
     {'icon': Icons.logout, 'label': 'Sign Out'},
+    {'icon': Icons.delete_outline, 'label': 'Delete Account'},
   ];
 
   @override
@@ -365,14 +370,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 'Privacy policy':
         context.go(AppRouter.privacyPolicy);
         break;
+      case 'Loyalty Points':
+        context.go(AppRouter.loyaltyPoints);
+        break;
       case 'About':
         context.go(AppRouter.about);
         break;
       case 'Addresses':
         context.go(AppRouter.addresses);
         break;
+      case 'Rate App':
+        context.go(AppRouter.rateApp);
+        break;
       case 'Refer a Friend':
         context.go(AppRouter.refer);
+        break;
+      case 'Share App':
+        context.go(AppRouter.shareApp);
         break;
       case 'Payment History':
         context.go(AppRouter.paymentHistory);
@@ -389,8 +403,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 'Settings':
         context.go(AppRouter.appSettings);
         break;
+      case 'Report Issue':
+        context.go(AppRouter.reportIssue);
+        break;
       case 'Sign Out':
         context.read<AuthBloc>().add(SignOutEvent());
+        break;
+      case 'Delete Account':
+        context.go(AppRouter.deleteAccount);
         break;
     }
   }

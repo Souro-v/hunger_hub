@@ -78,57 +78,58 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: state is HomeError
                         ? AppErrorWidget(
-                      message: state.message,
-                      onRetry: () =>
-                          context.read<HomeCubit>().loadHomeData(),
-                    )
+                            message: state.message,
+                            onRetry: () =>
+                                context.read<HomeCubit>().loadHomeData(),
+                          )
                         : state is HomeLoading
-                        ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            state.message,
-                            style: AppTextStyles.bodyMedium,
-                          ),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () => context
-                                .read<HomeCubit>()
-                                .loadHomeData(),
-                            child: const Text('Retry'),
-                          ),
-                        ],
-                      ),
-                    )
-                        : SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 16),
-                          _buildGreeting(state),
-                          const SizedBox(height: 16),
-                          _buildSearchBar(),
-                          const SizedBox(height: 20),
-                          _buildCategories(state),
-                          const SizedBox(height: 20),
-                          _buildBanners(),
-                          const SizedBox(height: 20),
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      state.message,
+                                      style: AppTextStyles.bodyMedium,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    ElevatedButton(
+                                      onPressed: () => context
+                                          .read<HomeCubit>()
+                                          .loadHomeData(),
+                                      child: const Text('Retry'),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 16),
+                                    _buildGreeting(state),
+                                    const SizedBox(height: 16),
+                                    _buildSearchBar(),
+                                    const SizedBox(height: 20),
+                                    _buildCategories(state),
+                                    const SizedBox(height: 20),
+                                    _buildBanners(),
+                                    const SizedBox(height: 20),
 
-                          // আপনার নির্দেশনামতো এখানে GestureDetector দিয়ে উইজেটটি কল করা হয়েছে
-                          GestureDetector(
-                            onTap: () => context.go(AppRouter.specialOffers),
-                            child: _buildFeaturedBanner(),
-                          ),
+                                    // আপনার নির্দেশনামতো এখানে GestureDetector দিয়ে উইজেটটি কল করা হয়েছে
+                                    GestureDetector(
+                                      onTap: () =>
+                                          context.go(AppRouter.specialOffers),
+                                      child: _buildFeaturedBanner(),
+                                    ),
 
-                          const SizedBox(height: 20),
-                          _buildFeaturedHotels(state),
-                          const SizedBox(height: 20),
-                          _buildFoodsSection(),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
+                                    const SizedBox(height: 20),
+                                    _buildFeaturedHotels(state),
+                                    const SizedBox(height: 20),
+                                    _buildFoodsSection(),
+                                    const SizedBox(height: 20),
+                                  ],
+                                ),
+                              ),
                   )
                 ],
               );
@@ -151,41 +152,53 @@ class _HomeScreenState extends State<HomeScreen> {
   // ── Top Bar ──
   Widget _buildTopBar(HomeState state) {
     final address =
-    state is HomeLoaded ? state.deliveryAddress : 'Select address';
+        state is HomeLoaded ? state.deliveryAddress : 'Select address';
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
         children: [
-          Image.asset(AppAssets.locationPin, width: 24, height: 24),
-          const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'DELIVER TO',
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.error,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1,
-                ),
-              ),
-              Row(
+          Expanded(
+            child: GestureDetector(
+              onTap: () => context.go(AppRouter.nearbyRestaurants),
+              behavior: HitTestBehavior.opaque,
+              child: Row(
                 children: [
-                  Text(
-                    address,
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      fontWeight: FontWeight.w600,
+                  Image.asset(AppAssets.locationPin, width: 24, height: 24),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'DELIVER TO',
+                          style: AppTextStyles.caption.copyWith(
+                            color: AppColors.error,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              address,
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            const Icon(
+                              Icons.keyboard_arrow_down,
+                              size: 18,
+                              color: AppColors.textPrimary,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                  const Icon(
-                    Icons.keyboard_arrow_down,
-                    size: 18,
-                    color: AppColors.textPrimary,
                   ),
                 ],
               ),
-            ],
+            ),
           ),
           const Spacer(),
           //dada seeded from here
@@ -267,8 +280,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCategories(HomeState state) {
     final categories = state is HomeLoaded && state.categories.isNotEmpty
         ? state.categories
-        .map((c) => {'image': c.iconUrl, 'label': c.name})
-        .toList()
+            .map((c) => {'image': c.iconUrl, 'label': c.name})
+            .toList()
         : _categories;
 
     return FadeAnimation(
@@ -387,9 +400,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // ── Featured Hotels ──
   Widget _buildFeaturedHotels(HomeState state) {
     final restaurants =
-    state is HomeLoaded && state.featuredRestaurants.isNotEmpty
-        ? state.featuredRestaurants
-        : null;
+        state is HomeLoaded && state.featuredRestaurants.isNotEmpty
+            ? state.featuredRestaurants
+            : null;
 
     return Column(
       children: [
@@ -417,234 +430,234 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 220,
           child: restaurants != null
               ? ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: restaurants.length,
-            itemBuilder: (context, index) {
-              final rest = restaurants[index];
-              return GestureDetector(
-                onTap: () => context.go(
-                  AppRouter.menuList,
-                  extra: {
-                    'restaurantId': rest.id,
-                    'restaurantName': rest.name,
-                    'restaurantImage': rest.imageUrl,
-                    'restaurantCategory': rest.category,
-                    'restaurantRating': rest.rating,
-                    'restaurantDeliveryTime': rest.deliveryTime,
-                    'restaurantAddress': rest.address,
-                  },
-                ),
-                child: Container(
-                  width: 200,
-                  margin: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius:
-                    BorderRadius.circular(AppConstants.radiusLG),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: AppColors.shadow,
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: restaurants.length,
+                  itemBuilder: (context, index) {
+                    final rest = restaurants[index];
+                    return GestureDetector(
+                      onTap: () => context.go(
+                        AppRouter.menuList,
+                        extra: {
+                          'restaurantId': rest.id,
+                          'restaurantName': rest.name,
+                          'restaurantImage': rest.imageUrl,
+                          'restaurantCategory': rest.category,
+                          'restaurantRating': rest.rating,
+                          'restaurantDeliveryTime': rest.deliveryTime,
+                          'restaurantAddress': rest.address,
+                        },
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
+                      child: Container(
+                        width: 200,
+                        margin: const EdgeInsets.only(right: 16),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius:
+                              BorderRadius.circular(AppConstants.radiusLG),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: AppColors.shadow,
+                              blurRadius: 8,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
                         ),
-                        child: Image.network(
-                          rest.imageUrl,
-                          width: double.infinity,
-                          height: 120,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Image.asset(
-                            AppAssets.rest1,
-                            width: double.infinity,
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(rest.name,
-                                style: AppTextStyles.label,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis),
-                            const SizedBox(height: 2),
-                            Text(rest.address,
-                                style: AppTextStyles.caption,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.star,
-                                    borderRadius:
-                                    BorderRadius.circular(4),
-                                  ),
-                                  child: Row(
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(16),
+                                topRight: Radius.circular(16),
+                              ),
+                              child: Image.network(
+                                rest.imageUrl,
+                                width: double.infinity,
+                                height: 120,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Image.asset(
+                                  AppAssets.rest1,
+                                  width: double.infinity,
+                                  height: 120,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(rest.name,
+                                      style: AppTextStyles.label,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis),
+                                  const SizedBox(height: 2),
+                                  Text(rest.address,
+                                      style: AppTextStyles.caption,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis),
+                                  const SizedBox(height: 6),
+                                  Row(
                                     children: [
-                                      const Icon(Icons.star,
-                                          size: 10,
-                                          color: AppColors.textWhite),
-                                      const SizedBox(width: 2),
-                                      Text(
-                                        rest.rating.toStringAsFixed(1),
-                                        style: AppTextStyles.caption
-                                            .copyWith(
-                                          color: AppColors.textWhite,
-                                          fontWeight: FontWeight.w600,
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 2,
                                         ),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.star,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.star,
+                                                size: 10,
+                                                color: AppColors.textWhite),
+                                            const SizedBox(width: 2),
+                                            Text(
+                                              rest.rating.toStringAsFixed(1),
+                                              style: AppTextStyles.caption
+                                                  .copyWith(
+                                                color: AppColors.textWhite,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        '• ${rest.deliveryTime} min',
+                                        style: AppTextStyles.caption,
                                       ),
                                     ],
                                   ),
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  '• ${rest.deliveryTime} min',
-                                  style: AppTextStyles.caption,
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          )
+                    );
+                  },
+                )
               : ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: 2,
-            itemBuilder: (context, index) {
-              final images = [AppAssets.rest1, AppAssets.rest2];
-              final names = ['Sri Ganapathy Mess', 'White Restaurant'];
-              final addresses = [
-                'Peelamedu house, coimbatore',
-                'Peelamedu, coimbatore'
-              ];
-              return GestureDetector(
-                onTap: () => context.go(
-                  AppRouter.menuList,
-                  extra: {
-                    'restaurantId': 'rest_00${index + 1}',
-                    'restaurantName': names[index],
-                    'restaurantImage': '',
-                    'restaurantCategory': 'Food',
-                    'restaurantRating': 4.2,
-                    'restaurantDeliveryTime': 32,
-                    'restaurantAddress': addresses[index],
-                  },
-                ),
-                child: Container(
-                  width: 200,
-                  margin: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius:
-                    BorderRadius.circular(AppConstants.radiusLG),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: AppColors.shadow,
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: 2,
+                  itemBuilder: (context, index) {
+                    final images = [AppAssets.rest1, AppAssets.rest2];
+                    final names = ['Sri Ganapathy Mess', 'White Restaurant'];
+                    final addresses = [
+                      'Peelamedu house, coimbatore',
+                      'Peelamedu, coimbatore'
+                    ];
+                    return GestureDetector(
+                      onTap: () => context.go(
+                        AppRouter.menuList,
+                        extra: {
+                          'restaurantId': 'rest_00${index + 1}',
+                          'restaurantName': names[index],
+                          'restaurantImage': '',
+                          'restaurantCategory': 'Food',
+                          'restaurantRating': 4.2,
+                          'restaurantDeliveryTime': 32,
+                          'restaurantAddress': addresses[index],
+                        },
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
+                      child: Container(
+                        width: 200,
+                        margin: const EdgeInsets.only(right: 16),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius:
+                              BorderRadius.circular(AppConstants.radiusLG),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: AppColors.shadow,
+                              blurRadius: 8,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
                         ),
-                        child: Image.asset(
-                          images[index],
-                          width: double.infinity,
-                          height: 120,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(names[index],
-                                style: AppTextStyles.label,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis),
-                            const SizedBox(height: 2),
-                            Text(addresses[index],
-                                style: AppTextStyles.caption,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.star,
-                                    borderRadius:
-                                    BorderRadius.circular(4),
-                                  ),
-                                  child: Row(
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(16),
+                                topRight: Radius.circular(16),
+                              ),
+                              child: Image.asset(
+                                images[index],
+                                width: double.infinity,
+                                height: 120,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(names[index],
+                                      style: AppTextStyles.label,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis),
+                                  const SizedBox(height: 2),
+                                  Text(addresses[index],
+                                      style: AppTextStyles.caption,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis),
+                                  const SizedBox(height: 6),
+                                  Row(
                                     children: [
-                                      const Icon(Icons.star,
-                                          size: 10,
-                                          color: AppColors.textWhite),
-                                      const SizedBox(width: 2),
-                                      Text(
-                                        '4.2',
-                                        style: AppTextStyles.caption
-                                            .copyWith(
-                                          color: AppColors.textWhite,
-                                          fontWeight: FontWeight.w600,
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 2,
                                         ),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.star,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.star,
+                                                size: 10,
+                                                color: AppColors.textWhite),
+                                            const SizedBox(width: 2),
+                                            Text(
+                                              '4.2',
+                                              style: AppTextStyles.caption
+                                                  .copyWith(
+                                                color: AppColors.textWhite,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        '• 32 min',
+                                        style: AppTextStyles.caption,
                                       ),
                                     ],
                                   ),
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  '• 32 min',
-                                  style: AppTextStyles.caption,
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
         ),
       ],
     );

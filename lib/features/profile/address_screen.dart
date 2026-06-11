@@ -214,7 +214,21 @@ class _AddressScreenState extends State<AddressScreen> {
                                       ],
                                     ),
                                   ),
-
+                                  GestureDetector(
+                                    onTap: () => context.go(
+                                      AppRouter.editAddress,
+                                      extra: {
+                                        'address': address,
+                                        'addressId': address['id'],
+                                      },
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit_outlined,
+                                      color: AppColors.primary,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
                                   // ── Delete ──
                                   GestureDetector(
                                     onTap: () => _deleteAddress(address),

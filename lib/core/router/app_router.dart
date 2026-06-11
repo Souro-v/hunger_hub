@@ -22,6 +22,7 @@ import '../../features/profile/about_screen.dart';
 import '../../features/profile/address_screen.dart';
 import '../../features/profile/app_settings_screen.dart';
 import '../../features/profile/coupon_screen.dart';
+import '../../features/profile/edit_address_screen.dart';
 import '../../features/profile/favourite_screen.dart';
 import '../../features/profile/payment_history_screen.dart';
 import '../../features/profile/personal_info_screen.dart';
@@ -62,6 +63,7 @@ class AppRouter {
   static const String trackingMap = '/tracking-map';
   static const String addresses = '/addresses';
   static const String profile = '/profile';
+  static const String editAddress = '/edit-address';
   static const String privacyPolicy = '/privacy-policy';
   static const String about = '/about';
   static const String editProfile = '/edit-profile';
@@ -213,6 +215,17 @@ class AppRouter {
         path: addresses,
         name: 'addresses',
         builder: (context, state) => const AddressScreen(),
+      ),
+      GoRoute(
+        path: editAddress,
+        name: 'editAddress',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return EditAddressScreen(
+            existingAddress: extra?['address'],
+            addressId: extra?['addressId'],
+          );
+        },
       ),
       GoRoute(
         path: orderStatus,

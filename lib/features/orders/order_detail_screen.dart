@@ -369,7 +369,33 @@ class OrderDetailScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-
+                //invoice
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: OutlinedButton.icon(
+                    onPressed: () => context.go(
+                      AppRouter.orderInvoice,
+                      extra: {'order': order},
+                    ),
+                    icon: const Icon(Icons.receipt_outlined,
+                        color: AppColors.error),
+                    label: Text(
+                      'View Invoice',
+                      style: AppTextStyles.button.copyWith(
+                        color: AppColors.error,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: AppColors.error),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(AppConstants.radiusMD),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
                 // ── Actions ──
                 if (order.isPending)
                   SizedBox(

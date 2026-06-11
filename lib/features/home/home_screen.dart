@@ -276,7 +276,10 @@ class _HomeScreenState extends State<HomeScreen> {
           itemBuilder: (context, index) {
             final cat = categories[index];
             return GestureDetector(
-              onTap: () {},
+              onTap: () => context.go(
+                AppRouter.foodCategory,
+                extra: {'category': cat['label']},
+              ),
               child: Container(
                 margin: const EdgeInsets.only(right: 16),
                 child: Column(

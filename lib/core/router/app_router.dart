@@ -31,6 +31,7 @@ import '../../features/profile/privacy_policy_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/refer/refer_screen.dart';
+import '../../features/restaurant/food_category_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/restaurant_reviews_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
@@ -52,6 +53,7 @@ class AppRouter {
   static const String home = '/home';
   static const String restaurantReviews = '/restaurant-reviews';
   static const String restaurant = '/restaurant';
+  static const String foodCategory = '/food-category';
   static const String search = '/search';
   static const String favourites = '/favourites';
   static const String menuList = '/menu-list';
@@ -152,6 +154,16 @@ class AppRouter {
         path: restaurant,
         name: 'restaurant',
         builder: (context, state) => const RestaurantScreen(),
+      ),
+      GoRoute(
+        path: foodCategory,
+        name: 'foodCategory',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return FoodCategoryScreen(
+            category: extra?['category'] ?? '',
+          );
+        },
       ),
       GoRoute(
         path: search,

@@ -16,25 +16,33 @@ import '../../features/onboarding/welcome_screen.dart';
 import '../../features/orders/order_cancellation_screen.dart';
 import '../../features/orders/order_detail_screen.dart';
 import '../../features/orders/order_history_screen.dart';
+import '../../features/orders/order_invoice_screen.dart';
 import '../../features/orders/order_status_screen.dart';
+import '../../features/orders/reorder_screen.dart';
 import '../../features/orders/tracking_map_screen.dart';
 import '../../features/profile/about_screen.dart';
 import '../../features/profile/address_screen.dart';
 import '../../features/profile/app_settings_screen.dart';
 import '../../features/profile/change_password_screen.dart';
 import '../../features/profile/coupon_screen.dart';
+import '../../features/profile/delete_account_screen.dart';
 import '../../features/profile/edit_address_screen.dart';
 import '../../features/profile/faq_screen.dart';
 import '../../features/profile/favourite_screen.dart';
+import '../../features/profile/loyalty_points_screen.dart';
 import '../../features/profile/payment_history_screen.dart';
 import '../../features/profile/personal_info_screen.dart';
 import '../../features/profile/privacy_policy_screen.dart';
 import '../../features/profile/profile_screen.dart';
+import '../../features/profile/rate_app_screen.dart';
+import '../../features/profile/report_issue_screen.dart';
+import '../../features/profile/share_app_screen.dart';
 import '../../features/profile/special_offers_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/refer/refer_screen.dart';
 import '../../features/restaurant/food_category_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
+import '../../features/restaurant/nearby_restaurants_screen.dart';
 import '../../features/restaurant/restaurant_reviews_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
 import '../../features/restaurant/search_screen.dart';
@@ -55,11 +63,13 @@ class AppRouter {
   static const String home = '/home';
   static const String restaurantReviews = '/restaurant-reviews';
   static const String restaurant = '/restaurant';
+  static const String nearbyRestaurants = '/nearby-restaurants';
   static const String foodCategory = '/food-category';
   static const String search = '/search';
   static const String favourites = '/favourites';
   static const String menuList = '/menu-list';
   static const String cart = '/cart';
+  static const String orderInvoice = '/order-invoice';
   static const String checkout = '/checkout';
   static const String paymentMethod = '/payment-method';
   static const String addCard = '/add-card';
@@ -72,19 +82,25 @@ class AppRouter {
   static const String addresses = '/addresses';
   static const String profile = '/profile';
   static const String faq = '/faq';
+  static const String reorder = '/reorder';
   static const String editAddress = '/edit-address';
   static const String privacyPolicy = '/privacy-policy';
   static const String about = '/about';
   static const String editProfile = '/edit-profile';
   static const String specialOffers = '/special-offers';
   static const String personalInfo = '/personal-info';
+  static const String loyaltyPoints = '/loyalty-points';
   static const String rating = '/rating';
   static const String review = '/review';
   static const String coupons = '/coupons';
   static const String refer = '/refer';
+  static const String reportIssue = '/report-issue';
   static const String paymentHistory = '/payment-history';
   static const String appSettings = '/app-settings';
+  static const String shareApp = '/share-app';
+  static const String rateApp = '/rate-app';
   static const String help = '/help';
+  static const String deleteAccount = '/delete-account';
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
@@ -237,6 +253,16 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: reorder,
+        name: 'reorder',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return ReorderScreen(
+            order: extra?['order'],
+          );
+        },
+      ),
+      GoRoute(
         path: addresses,
         name: 'addresses',
         builder: (context, state) => const AddressScreen(),
@@ -263,6 +289,16 @@ class AppRouter {
         builder: (context, state) => const OrderHistoryScreen(),
       ),
       GoRoute(
+        path: orderInvoice,
+        name: 'orderInvoice',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return OrderInvoiceScreen(
+            order: extra?['order'],
+          );
+        },
+      ),
+      GoRoute(
         path: trackingMap,
         name: 'trackingMap',
         builder: (context, state) {
@@ -283,9 +319,19 @@ class AppRouter {
         builder: (context, state) => const ChangePasswordScreen(),
       ),
       GoRoute(
+        path: loyaltyPoints,
+        name: 'loyaltyPoints',
+        builder: (context, state) => const LoyaltyPointsScreen(),
+      ),
+      GoRoute(
         path: privacyPolicy,
         name: 'privacyPolicy',
         builder: (context, state) => const PrivacyPolicyScreen(),
+      ),
+      GoRoute(
+        path: shareApp,
+        name: 'shareApp',
+        builder: (context, state) => const ShareAppScreen(),
       ),
       GoRoute(
         path: about,
@@ -321,6 +367,16 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: nearbyRestaurants,
+        name: 'nearbyRestaurants',
+        builder: (context, state) => const NearbyRestaurantsScreen(),
+      ),
+      GoRoute(
+        path: reportIssue,
+        name: 'reportIssue',
+        builder: (context, state) => const ReportIssueScreen(),
+      ),
+      GoRoute(
         path: refer,
         name: 'refer',
         builder: (context, state) => const ReferScreen(),
@@ -346,9 +402,19 @@ class AppRouter {
         builder: (context, state) => const PaymentHistoryScreen(),
       ),
       GoRoute(
+        path: rateApp,
+        name: 'rateApp',
+        builder: (context, state) => const RateAppScreen(),
+      ),
+      GoRoute(
         path: help,
         name: 'help',
         builder: (context, state) => const HelpScreen(),
+      ),
+      GoRoute(
+        path: deleteAccount,
+        name: 'deleteAccount',
+        builder: (context, state) => const DeleteAccountScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

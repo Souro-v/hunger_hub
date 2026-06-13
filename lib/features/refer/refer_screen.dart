@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/router/app_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 
@@ -88,8 +89,20 @@ class ReferScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
+              GestureDetector(
+                onTap: () => context.go(AppRouter.referralDashboard),
+                child: Text(
+                  'View Referral Dashboard →',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.error,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
 
+              const SizedBox(height: 24),
               // ── Refer Link ──
               GestureDetector(
                 onTap: () {

@@ -43,6 +43,7 @@ import '../../features/profile/share_app_screen.dart';
 import '../../features/profile/special_offers_screen.dart';
 import '../../features/rating/rating_screen.dart';
 import '../../features/refer/refer_screen.dart';
+import '../../features/refer/referral_dashboard_screen.dart';
 import '../../features/restaurant/food_category_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/nearby_restaurants_screen.dart';
@@ -103,6 +104,7 @@ class AppRouter {
   static const String review = '/review';
   static const String coupons = '/coupons';
   static const String refer = '/refer';
+  static const String referralDashboard = '/referral-dashboard';
   static const String newArrivals = '/new-arrivals';
   static const String reportIssue = '/report-issue';
   static const String paymentHistory = '/payment-history';
@@ -415,6 +417,11 @@ class AppRouter {
         path: refer,
         name: 'refer',
         builder: (context, state) => const ReferScreen(),
+      ),
+      GoRoute(
+        path: referralDashboard,
+        name: 'referralDashboard',
+        builder: (context, state) => const ReferralDashboardScreen(),
       ),
       GoRoute(
         path: faq,

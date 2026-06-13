@@ -65,7 +65,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 // ── Header ──
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                   child: Row(
                     children: [
                       GestureDetector(
@@ -145,19 +145,19 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                   setState(() => _selectedPayment = method['name']);
                   final userId = LocalStorage.instance.getUserId() ?? '';
                   context.read<OrderBloc>().add(
-                        PlaceOrderEvent(
-                          userId: userId,
-                          restaurantId: 'house_of_bbq',
-                          restaurantName: 'House of BBQ',
-                          deliveryAddress: 'Peelamedu home town',
-                          paymentMethod: method['name'],
-                        ),
-                      );
+                    PlaceOrderEvent(
+                      userId: userId,
+                      restaurantId: 'house_of_bbq',
+                      restaurantName: 'House of BBQ',
+                      deliveryAddress: 'Peelamedu home town',
+                      paymentMethod: method['name'],
+                    ),
+                  );
                 },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 12),
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: _selectedPayment == method['name']
                         ? AppColors.error.withValues(alpha: 0.05)
@@ -217,6 +217,42 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         ),
         const SizedBox(height: 16),
 
+        // ── Delivery Address Section button
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: GestureDetector(
+            onTap: () async {
+              final address = await context.push(AppRouter.addressSelection);
+              if (address != null) {
+                // address selected
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.divider,
+                borderRadius: BorderRadius.circular(AppConstants.radiusMD),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.location_on_outlined,
+                      color: AppColors.error, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Select delivery address',
+                      style: AppTextStyles.bodySmall,
+                    ),
+                  ),
+                  const Icon(Icons.arrow_forward_ios,
+                      size: 14, color: AppColors.textSecondary),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+
         // ── Total ──
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -264,7 +300,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 ),
                 const TextSpan(
                     text:
-                        ', seems you dont\'t\nhave anty card yet.Let\'s\nquickly add one for you.'),
+                    ', seems you dont\'t\nhave anty card yet.Let\'s\nquickly add one for you.'),
               ],
             ),
           ),

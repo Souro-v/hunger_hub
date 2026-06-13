@@ -10,6 +10,7 @@ import '../../features/cart/cart_screen.dart';
 import '../../features/checkout/add_card_screen.dart';
 import '../../features/checkout/payment_method_screen.dart';
 import '../../features/checkout/schedule_order_screen.dart';
+import '../../features/checkout/address_selection_screen.dart';
 import '../../features/delivery/delivery_address_screen.dart';
 import '../../features/help/help_screen.dart';
 import '../../features/home/home_screen.dart';
@@ -87,6 +88,7 @@ class AppRouter {
   static const String faq = '/faq';
   static const String scheduleOrder = '/schedule-order';
   static const String reorder = '/reorder';
+  static const String addressSelection = '/address-selection';
   static const String popularItems = '/popular-items';
   static const String editAddress = '/edit-address';
   static const String privacyPolicy = '/privacy-policy';
@@ -170,6 +172,11 @@ class AppRouter {
         path: deliveryAddress,
         name: 'deliveryAddress',
         builder: (context, state) => const DeliveryAddressScreen(),
+      ),
+      GoRoute(
+        path: addressSelection,
+        name: 'addressSelection',
+        builder: (context, state) => const AddressSelectionScreen(),
       ),
       GoRoute(
         path: home,

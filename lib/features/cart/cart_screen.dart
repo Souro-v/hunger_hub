@@ -221,6 +221,25 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         ),
                         const SizedBox(height: 12),
+                        // ── Schedule payment
+                        GestureDetector(
+                          onTap: () => context.go(AppRouter.scheduleOrder),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.schedule, size: 16, color: AppColors.primary),
+                              const SizedBox(width: 6),
+                              Text(
+                                'Schedule for later',
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
 
                         // ── Continue to Payment ──
                         AppButton(

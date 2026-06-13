@@ -227,12 +227,49 @@ class _CartScreenState extends State<CartScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.schedule, size: 16, color: AppColors.primary),
+                              const Icon(Icons.schedule,
+                                  size: 16, color: AppColors.primary),
                               const SizedBox(width: 6),
                               Text(
                                 'Schedule for later',
                                 style: AppTextStyles.bodySmall.copyWith(
                                   color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // tip payment
+                        GestureDetector(
+                          onTap: () async {
+                            final tip = await context.push(AppRouter.tipScreen);
+                            if (tip != null && context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    tip == 0
+                                        ? 'No tip added'
+                                        : 'Tip of ₹${(tip as double).toStringAsFixed(0)} added!',
+                                  ),
+                                  backgroundColor: AppColors.success,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.favorite_outline,
+                                  size: 16, color: AppColors.secondary),
+                              const SizedBox(width: 6),
+                              Text(
+                                'Add tip for delivery partner',
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: AppColors.secondary,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -368,26 +405,26 @@ class _CartItemTile extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child:item.foodItem.imageUrl.startsWith('assets')
+                child: item.foodItem.imageUrl.startsWith('assets')
                     ? Image.asset(
-                  item.foodItem.imageUrl,
-                  width: 90,
-                  height: 90,
-                  fit: BoxFit.cover,
-                )
+                        item.foodItem.imageUrl,
+                        width: 90,
+                        height: 90,
+                        fit: BoxFit.cover,
+                      )
                     : Image.network(
-                  item.foodItem.imageUrl,
-                  width: 90,
-                  height: 90,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    width: 90,
-                    height: 90,
-                    color: AppColors.divider,
-                    child: const Icon(Icons.fastfood,
-                        color: AppColors.textHint),
-                  ),
-                ),
+                        item.foodItem.imageUrl,
+                        width: 90,
+                        height: 90,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          width: 90,
+                          height: 90,
+                          color: AppColors.divider,
+                          child: const Icon(Icons.fastfood,
+                              color: AppColors.textHint),
+                        ),
+                      ),
               ),
 
               // ── Delete ──

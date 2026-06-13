@@ -11,6 +11,7 @@ import '../../features/checkout/add_card_screen.dart';
 import '../../features/checkout/payment_method_screen.dart';
 import '../../features/checkout/schedule_order_screen.dart';
 import '../../features/checkout/address_selection_screen.dart';
+import '../../features/checkout/tip_screen.dart';
 import '../../features/delivery/delivery_address_screen.dart';
 import '../../features/help/help_screen.dart';
 import '../../features/home/home_screen.dart';
@@ -86,6 +87,7 @@ class AppRouter {
   static const String addresses = '/addresses';
   static const String profile = '/profile';
   static const String faq = '/faq';
+  static const String tipScreen = '/tip';
   static const String scheduleOrder = '/schedule-order';
   static const String reorder = '/reorder';
   static const String addressSelection = '/address-selection';
@@ -192,6 +194,11 @@ class AppRouter {
         path: scheduleOrder,
         name: 'scheduleOrder',
         builder: (context, state) => const ScheduleOrderScreen(),
+      ),
+      GoRoute(
+        path: tipScreen,
+        name: 'tipScreen',
+        builder: (context, state) => const TipScreen(),
       ),
       GoRoute(
         path: foodCategory,

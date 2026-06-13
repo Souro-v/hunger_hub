@@ -43,6 +43,7 @@ import '../../features/refer/refer_screen.dart';
 import '../../features/restaurant/food_category_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/nearby_restaurants_screen.dart';
+import '../../features/restaurant/new_arrivals_screen.dart';
 import '../../features/restaurant/popular_items_screen.dart';
 import '../../features/restaurant/restaurant_reviews_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
@@ -96,6 +97,7 @@ class AppRouter {
   static const String review = '/review';
   static const String coupons = '/coupons';
   static const String refer = '/refer';
+  static const String newArrivals = '/new-arrivals';
   static const String reportIssue = '/report-issue';
   static const String paymentHistory = '/payment-history';
   static const String appSettings = '/app-settings';
@@ -186,6 +188,11 @@ class AppRouter {
             category: extra?['category'] ?? '',
           );
         },
+      ),
+      GoRoute(
+        path: newArrivals,
+        name: 'newArrivals',
+        builder: (context, state) => const NewArrivalsScreen(),
       ),
       GoRoute(
         path: specialOffers,

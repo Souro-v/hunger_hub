@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     _buildBanners(),
                                     const SizedBox(height: 20),
 
-                                    //  GestureDetecto
+                                    //  GestureDetector
                                     GestureDetector(
                                       onTap: () =>
                                           context.go(AppRouter.specialOffers),
@@ -413,7 +413,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Text('Featured hotels', style: AppTextStyles.h3),
               GestureDetector(
-                onTap: () => context.go(AppRouter.restaurant),
+                onTap: () => context.go(AppRouter.newArrivals),
                 child: Text(
                   'See all',
                   style: AppTextStyles.bodySmall.copyWith(

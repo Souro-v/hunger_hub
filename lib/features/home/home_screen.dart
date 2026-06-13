@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     _buildBanners(),
                                     const SizedBox(height: 20),
 
-                                    // আপনার নির্দেশনামতো এখানে GestureDetector দিয়ে উইজেটটি কল করা হয়েছে
+                                    //  GestureDetecto
                                     GestureDetector(
                                       onTap: () =>
                                           context.go(AppRouter.specialOffers),
@@ -674,7 +674,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Text('Foods', style: AppTextStyles.h3),
               GestureDetector(
-                onTap: () {},
+                onTap: () => context.go(AppRouter.popularItems),
                 child: Text(
                   'See all',
                   style: AppTextStyles.bodySmall.copyWith(

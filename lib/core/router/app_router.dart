@@ -43,6 +43,7 @@ import '../../features/refer/refer_screen.dart';
 import '../../features/restaurant/food_category_screen.dart';
 import '../../features/restaurant/menu_list_screen.dart';
 import '../../features/restaurant/nearby_restaurants_screen.dart';
+import '../../features/restaurant/popular_items_screen.dart';
 import '../../features/restaurant/restaurant_reviews_screen.dart';
 import '../../features/restaurant/restaurant_screen.dart';
 import '../../features/restaurant/search_screen.dart';
@@ -83,6 +84,7 @@ class AppRouter {
   static const String profile = '/profile';
   static const String faq = '/faq';
   static const String reorder = '/reorder';
+  static const String popularItems = '/popular-items';
   static const String editAddress = '/edit-address';
   static const String privacyPolicy = '/privacy-policy';
   static const String about = '/about';
@@ -282,6 +284,11 @@ class AppRouter {
         path: orderStatus,
         name: 'orderStatus',
         builder: (context, state) => const OrderStatusScreen(),
+      ),
+      GoRoute(
+        path: popularItems,
+        name: 'popularItems',
+        builder: (context, state) => const PopularItemsScreen(),
       ),
       GoRoute(
         path: orderHistory,

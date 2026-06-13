@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hunger_hub/core/constants/app_assets.dart';
+import '../../core/constants/app_constants.dart';
 import '../../core/router/app_router.dart';
 import '../../core/storage/local_storage.dart';
 import '../../core/theme/app_colors.dart';
@@ -29,21 +30,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       imagePath: AppAssets.onboarding1,
       title: 'All your favorites',
       description:
-          'Get all your loved foods in one once place, you just place the order we do the rest',
+      'Get all your loved foods in one once place, you just place the order we do the rest',
       isLogo: false,
     ),
     _OnboardingData(
       imagePath: AppAssets.onboarding2,
       title: 'Order from chosen chef',
       description:
-          'Get all your loved foods in one once place, you just place the order we do the rest',
+      'Get all your loved foods in one once place, you just place the order we do the rest',
       isLogo: false,
     ),
     _OnboardingData(
       imagePath: AppAssets.onboarding3,
       title: 'Free delivery offers',
       description:
-          'Get all your loved foods in one once place, you just place the order we do the rest',
+      'Get all your loved foods in one once place, you just place the order we do the rest',
       isLogo: false,
     ),
   ];
@@ -76,80 +77,98 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           body: SafeArea(
             child: BlocBuilder<OnboardingCubit, int>(
               builder: (context, currentPage) {
-                return Column(
+                return Stack(
                   children: [
-                    // ── PageView ──
-                    Expanded(
-                      child: PageView.builder(
-                        controller: _pageController,
-                        onPageChanged: (index) {
-                          context.read<OnboardingCubit>().skipTo(index);
-                        },
-                        itemCount: _pages.length,
-                        itemBuilder: (context, index) {
-                          return _OnboardingPage(data: _pages[index]);
-                        },
-                      ),
-                    ),
+                    Column(
+                      children: [
+                        // ── PageView ──
+                        Expanded(
+                          child: PageView.builder(
+                            controller: _pageController,
+                            onPageChanged: (index) {
+                              context.read<OnboardingCubit>().skipTo(index);
+                            },
+                            itemCount: _pages.length,
+                            itemBuilder: (context, index) {
+                              return _OnboardingPage(data: _pages[index]);
+                            },
+                          ),
+                        ),
 
-                    // ── Dots ──
-                    if (currentPage != 0) ...[
-                      _DotsIndicator(
-                        count: 3,
-                        current: currentPage - 1,
-                      ),
-                      const SizedBox(height: 32),
-                    ],
+                        // ── Dots ──
+                        if (currentPage != 0) ...[
+                          _DotsIndicator(
+                            count: 3,
+                            current: currentPage - 1,
+                          ),
+                          const SizedBox(height: 32),
+                        ],
 
-                    // ── Buttons ──
-                    if (currentPage != 0)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          children: [
-                            // NEXT Button
-                            SizedBox(
-                              width: double.infinity,
-                              height: 54,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (currentPage == 3) {
-                                    _goToSignIn(context);
-                                  } else {
-                                    context.read<OnboardingCubit>().nextPage();
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.secondary,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                        // ── Buttons ──
+                        if (currentPage != 0)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Column(
+                              children: [
+                                // NEXT / GET STARTED Button
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 54,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      if (currentPage == 3) {
+                                        _goToSignIn(context); // Handles setFirstTime(false) and navigation
+                                      } else {
+                                        context.read<OnboardingCubit>().nextPage();
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.secondary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      currentPage == 3 ? 'GET STARTED' : 'NEXT',
+                                      style: AppTextStyles.button,
+                                    ),
                                   ),
                                 ),
-                                child: Text(
-                                  currentPage == 3 ? 'GET STARTED' : 'NEXT',
-                                  style: AppTextStyles.button,
-                                ),
-                              ),
+                                const SizedBox(height: 40),
+                              ],
                             ),
-                            const SizedBox(height: 16),
+                          ),
 
-                            // Skip
-                            GestureDetector(
-                              onTap: () => _goToSignIn(context),
-                              child: Text(
-                                'Skip',
-                                style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
+                        // ── Screen 1 spacing ──
+                        if (currentPage == 0) const SizedBox(height: 80),
+                      ],
+                    ),
+
+                    // ── Top Right Skip Button ──
+                    if (currentPage != 0)
+                      Positioned(
+                        top: 16,
+                        right: 20,
+                        child: GestureDetector(
+                          onTap: () => _goToSignIn(context),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.divider,
+                              borderRadius: BorderRadius.circular(
+                                  AppConstants.radiusCircle),
+                            ),
+                            child: Text(
+                              'Skip',
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const SizedBox(height: 24),
-                          ],
+                          ),
                         ),
                       ),
-
-                    // ── Screen 1 no buttons ──
-                    if (currentPage == 0) const SizedBox(height: 80),
                   ],
                 );
               },
@@ -161,7 +180,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 }
 
-// ── Onboarding Page ──
+// ── Onboarding Page Item ──
 class _OnboardingPage extends StatelessWidget {
   final _OnboardingData data;
 
@@ -184,13 +203,12 @@ class _OnboardingPage extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      // ← wrap করো
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 60), // Space to avoid overlap with top Skip button
             // ── Illustration ──
             Image.asset(
               data.imagePath!,

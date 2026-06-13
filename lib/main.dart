@@ -23,7 +23,6 @@ void main() async {
   // ── Dependencies Init ──
   await configureDependencies();
 
-
   runApp(const HungryHubApp());
 }
 

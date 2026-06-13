@@ -75,7 +75,7 @@ class FirebaseAuthService {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      throw _handleAuthException(e);
+      throw AuthException(e.message ?? 'Reset password failed');
     }
   }
 
